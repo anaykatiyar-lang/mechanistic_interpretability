@@ -1,0 +1,22 @@
+
+ { 
+    "id": 1,
+    "prompt": "3 + 5 =",
+    "target": " 8",
+    "corrupt": " 9",
+    "difficulty": "Easy (1-step)"
+ },
+  {
+    "id": 2,
+    "prompt": "14 + 27 =",
+    "target": " 41",
+    "corrupt": " 31",
+    "difficulty": "Medium (2-step w/ carry)"
+  },
+  {
+    "id": 3,
+    "prompt": "158 + 274 =",
+    "target": " 432",
+    "corrupt": " 422",
+    "difficulty": "Hard (3-step w/ multi-carry)"
+  }
