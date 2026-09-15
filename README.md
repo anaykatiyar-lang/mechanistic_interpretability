@@ -23,41 +23,85 @@ The repository is organized to enhance clarity, reproducibility, and collaborati
 ├── notebooks/     # Jupyter & Google Colab notebooks for exploratory analysis
 ├── results/       # Generated outputs, figures, tables, and model checkpoints
 └── docs/          # Additional project documentation and notes
-⚙️ Setup & Installation
-To set up the local environment and install the necessary dependencies, run the following commands:
+# 🔬 Mechanistic Interpretability: Transformer Internal Representations
 
-Bash
-# 1. Clone the repository
-git clone <repository_url>
-cd <repository_name>
+<p align="center">
+  <img src="[https://img.shields.io/badge/Models-GPT--2%20Small%20%7C%20Phi--3-blue?style=flat-square](https://img.shields.io/badge/Models-GPT--2%20Small%20%7C%20Phi--3-blue?style=flat-square)" alt="Models">
+  <img src="[https://img.shields.io/badge/Focus-Mechanistic%20Interpretability-purple?style=flat-square](https://img.shields.io/badge/Focus-Mechanistic%20Interpretability-purple?style=flat-square)" alt="Focus">
+  <img src="[https://img.shields.io/badge/Toolkit-TransformerLens-green?style=flat-square](https://img.shields.io/badge/Toolkit-TransformerLens-green?style=flat-square)" alt="TransformerLens">
+  <img src="[https://img.shields.io/badge/Status-Active%20Research-orange?style=flat-square](https://img.shields.io/badge/Status-Active%20Research-orange?style=flat-square)" alt="Status">
+</p>
 
-# 2. Create and activate a virtual environment (recommended)
-python -m venv venv
-source venv/bin/activate  # On Windows use: venv\Scripts\activate
+## 📌 Project Overview
 
-# 3. Install dependencies
-pip install -r requirements.txt
-🚀 Usage
-Running Notebooks
-All exploratory analysis and experiments are conducted within self-contained notebooks located in the notebooks/ directory.
+This repository houses a mechanistic interpretability research project aimed at reverse-engineering the internal mechanisms of pre-trained language models. Moving beyond black-box evaluations, this work investigates how models process information internally, tracking specific computational sub-graphs and failure modes.
 
-Navigate to the notebooks/ directory.
+---
 
-Open your preferred environment (Jupyter Lab or upload to Google Colab with GPU runtime).
+## 🔍 Core Research Areas
 
-Execute the cells sequentially.
+* **Activation Patching:** Causal intervention experiments to localize where specific information is computed and transmitted across layers and heads.
+* **Logit Lens & Circuit Tracing:** Mapping intermediate residual stream states directly to vocabulary space to observe how predictions evolve across network depth.
+* **Attention Drift & Failure Taxonomies:** Analyzing attention pattern anomalies and routing failures under distribution shifts or specific prompt structures.
+* **Target Models:** Primary experimentation on `GPT-2 Small` with extension to `Phi-3-mini-4k-instruct`.
 
-Running Scripts
-For reusable modules, validation scripts, or specific analyses:
+---
 
-Bash
+## 📂 Repository Structure
+
+The repository is organized to enhance clarity, reproducibility, and collaboration:
+
+```text
+├── src/           # Modular Python scripts (patching hooks, metrics, utils)
+├── data/          # Evaluation datasets and prompt templates
+├── notebooks/     # Exploratory analysis & interactive experiment notebooks
+├── results/       # Generated figures, attention heatmaps, and metrics logs
+└── docs/          # Extended write-ups, failure taxonomies, and pre-print drafts
+```
+
+---
+
+## ⚙️ Setup & Installation
+
+To set up the local environment and install the necessary dependencies, please follow these steps:
+
+1. **Clone the repository:**
+   ```bash
+   git clone <repository_url>
+   cd <repository_name>
+   ```
+
+2. **Install dependencies:** Make sure you have Python 3.8+ installed. It is recommended to use a virtual environment.
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows use: venv\Scripts\activate
+   pip install -r requirements.txt
+   ```
+
+---
+
+## 🚀 How to Run
+
+### Running Notebooks
+All exploratory analysis and experiments are conducted within Jupyter/Colab notebooks located in the `notebooks/` directory. To run them:
+1. Navigate to the `notebooks/` directory.
+2. Open the desired notebook in Jupyter or upload it to Google Colab with a GPU runtime.
+3. Execute the cells sequentially.
+
+### Running Scripts
+For reusable functions, validation scripts, or specific analyses, Python scripts can be found in the `src/` directory. To run a script:
+```bash
 python src/your_script_name.py
-📈 Reproducibility
-To replicate the results and findings presented in this project:
+```
 
-Ensure all dependencies are installed following the Setup & Installation instructions.
+---
 
-Run the experiment notebooks sequentially inside notebooks/.
+## 📈 Reproducibility
+
+To reproduce the results presented in this project:
+1. Ensure you have followed the Setup instructions to install all dependencies.
+2. Run the notebooks in the `notebooks/` directory. Each notebook is designed to be self-contained for its specific analysis.
+3. Refer to the `results/` directory for generated outputs and figures that might be referenced in any documentation or papers.
 
 Inspect generated figures, evaluation tables, and outputs under the results/ directory.
 
