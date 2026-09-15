@@ -23,3 +23,42 @@ The repository is organized to enhance clarity, reproducibility, and collaborati
 ├── notebooks/     # Jupyter & Google Colab notebooks for exploratory analysis
 ├── results/       # Generated outputs, figures, tables, and model checkpoints
 └── docs/          # Additional project documentation and notes
+⚙️ Setup & Installation
+To set up the local environment and install the necessary dependencies, run the following commands:
+
+Bash
+# 1. Clone the repository
+git clone <repository_url>
+cd <repository_name>
+
+# 2. Create and activate a virtual environment (recommended)
+python -m venv venv
+source venv/bin/activate  # On Windows use: venv\Scripts\activate
+
+# 3. Install dependencies
+pip install -r requirements.txt
+🚀 Usage
+Running Notebooks
+All exploratory analysis and experiments are conducted within self-contained notebooks located in the notebooks/ directory.
+
+Navigate to the notebooks/ directory.
+
+Open your preferred environment (Jupyter Lab or upload to Google Colab with GPU runtime).
+
+Execute the cells sequentially.
+
+Running Scripts
+For reusable modules, validation scripts, or specific analyses:
+
+Bash
+python src/your_script_name.py
+📈 Reproducibility
+To replicate the results and findings presented in this project:
+
+Ensure all dependencies are installed following the Setup & Installation instructions.
+
+Run the experiment notebooks sequentially inside notebooks/.
+
+Inspect generated figures, evaluation tables, and outputs under the results/ directory.
+
+This structured approach aims to make the research process transparent, modular, and verifiable for upcoming arXiv pre-print submissions [cite: topic-Structured a Mechanistic Interpretability research project analyzing failure taxonomies, attention drift, activation patching, logit lens, and circuit tracing in language models such as GPT-2 Small and Phi-3-mini-4k-instruct, setting up an arXiv pre-print and GitHub repository].
