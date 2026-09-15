@@ -1,38 +1,25 @@
-Research Project: Transformer Interpretability
-Overview
-This project explores the interpretability of Transformer models, focusing on understanding how these models process and generate information. We utilize techniques such as activation patching to investigate the internal workings of pre-trained language models, specifically GPT-2 small.
+# 🔬 Transformer Interpretability Research
 
-Repository Structure
-This repository is organized to enhance clarity, reproducibility, and collaboration. Below is an overview of the key directories:
+<p align="center">
+  <img src="https://img.shields.io/badge/Model-GPT--2%20Small-blue?style=flat-square" alt="Model">
+  <img src="https://img.shields.io/badge/Focus-Mechanistic%20Interpretability-purple?style=flat-square" alt="Focus">
+  <img src="https://img.shields.io/badge/Python-3.8%2B-green?style=flat-square" alt="Python">
+  <img src="https://img.shields.io/badge/License-MIT-yellow?style=flat-square" alt="License">
+</p>
 
-src/: Contains all Python source code files for reusable functions, classes, and scripts.
-data/: Stores raw and processed datasets.
-notebooks/: Houses all Jupyter/Colab notebooks for exploratory analysis and experimentation.
-results/: Dedicated to storing outputs from analyses, model runs, and visualizations (e.g., figures, tables, trained models).
-docs/: For additional project documentation.
-Setup
-To set up the environment and install the necessary dependencies, please follow these steps:
+## 📌 Overview
 
-Clone the repository (if applicable):
-git clone <repository_url>
-cd <repository_name>
-Install dependencies: Make sure you have Python 3.8+ installed. It is recommended to use a virtual environment.
-pip install -r requirements.txt
-How to Run
-Running Notebooks
-All exploratory analysis and experiments are conducted within Jupyter/Colab notebooks located in the notebooks/ directory. To run them:
+This project explores the interpretability of Transformer models, focusing on understanding how these models process and generate information. We utilize advanced techniques such as **activation patching**, logit lens, and circuit tracing to investigate the internal workings of pre-trained language models [cite: topic-Structured a Mechanistic Interpretability research project analyzing failure taxonomies, attention drift, activation patching, logit lens, and circuit tracing in language models such as GPT-2 Small and Phi-3-mini-4k-instruct, setting up an arXiv pre-print and GitHub repository], specifically **GPT-2 Small**.
 
-Navigate to the notebooks/ directory.
-Open the desired notebook in Jupyter or upload it to Google Colab.
-Execute the cells sequentially.
-Running Scripts
-For reusable functions or specific analyses, Python scripts can be found in the src/ directory. To run a script:
+---
 
-python src/your_script_name.py
-Reproducibility
-To reproduce the results presented in this project:
+## 📂 Repository Structure
 
-Ensure you have followed the Setup instructions to install all dependencies.
-Run the notebooks in the notebooks/ directory. Each notebook is designed to be self-contained for its specific analysis.
-Refer to the results/ directory for generated outputs and figures that might be referenced in any documentation or papers.
-This structured approach aims to make the research process transparent and verifiable.
+The repository is organized to enhance clarity, reproducibility, and collaboration:
+
+```text
+├── src/           # Python source code files (reusable functions, classes, and scripts)
+├── data/          # Raw and processed datasets
+├── notebooks/     # Jupyter & Google Colab notebooks for exploratory analysis
+├── results/       # Generated outputs, figures, tables, and model checkpoints
+└── docs/          # Additional project documentation and notes
