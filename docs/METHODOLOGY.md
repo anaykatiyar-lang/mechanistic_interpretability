@@ -46,10 +46,10 @@ Evaluates equal addends (`a + a =`) against all valid single-digit non-double sp
 
 ### 3.1 Logit Difference and Symmetric Logit Difference
 For output logits $L \in \mathbb{R}^{d_{\text{vocab}}}$ at final position:
-$$\text{logit\_diff} = L[\text{target}] - L[\text{foil}]$$
+$$\text{logit\\_diff} = L[\text{target}] - L[\text{foil}]$$
 
 For symmetric evaluations with target $\pm 1$ neighbors:
-$$\text{sym\_diff} = L[T] - \frac{L[T-1] + L[T+1]}{2}$$
+$$\text{sym\\_diff} = L[T] - \frac{L[T-1] + L[T+1]}{2}$$
 
 ### 3.2 Mean-of-Neighbors Doubles Score and Advantage
 For any prompt evaluating target $T$:
@@ -74,10 +74,10 @@ $$\text{adv}/\text{SD} = \frac{\overline{\text{Advantage}}}{s_{\text{pooled}}}$$
 ### 4.1 Mathematically Rigorous Direct Logit Attribution (DLA)
 Direct projection of pre-LayerNorm residual activations into unembedding space introduces a $14\times$ to $40\times$ distortion. Corrected attribution enforces:
 $$\text{DLA}_i = \left( \frac{x_i}{\sigma_{\text{final}}} \right) \cdot \left( W_U[:, \text{target}] - W_U[:, \text{foil}] \right)$$
-where $\sigma_{\text{final}} = \text{ln\_final.hook\_scale}$ is the standard deviation across residual dimensions at the final position.
+where $\sigma_{\text{final}} = \text{ln\\_final.hook\\_scale}$ is the standard deviation across residual dimensions at the final position.
 
 The exact residual identity must be satisfied to within numerical tolerance ($< 10^{-3}$):
-$$\sum_{i=1}^{159} \text{DLA}_i + \left( b_U[\text{target}] - b_U[\text{foil}] \right) = \text{logit\_diff}$$
+$$\sum_{i=1}^{159} \text{DLA}_i + \left( b_U[\text{target}] - b_U[\text{foil}] \right) = \text{logit\\_diff}$$
 (Decomposed over 144 attention heads, 12 MLP blocks, embedding, positional embedding, and folded LayerNorm bias).
 
 ### 4.2 Mean-Ablation vs Zero-Ablation Protocol
