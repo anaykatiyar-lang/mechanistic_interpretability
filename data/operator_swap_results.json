@@ -1,0 +1,66 @@
+{
+  "metadata": {
+    "experiment": "Operator and Connector Swaps on Doubles Advantage",
+    "model": "gpt2-small",
+    "prompt_length_tokens": 5,
+    "scoring_target": "sum_token_of_double",
+    "positive_targets": [8, 10, 12, 16],
+    "null_targets": [6, 14],
+    "df_positive_control_variance": 18,
+    "df_null_control_variance": 6,
+    "source_reference": "PROJECT_MEMORY.md §7 E11, R13"
+  },
+  "results": {
+    "plus": {
+      "operator": "+",
+      "positive_advantage": 0.418,
+      "positive_control_sd": 0.080,
+      "positive_adv_over_sd": 5.22,
+      "null_advantage": 0.005,
+      "null_control_sd": 0.099,
+      "null_adv_over_sd": 0.05
+    },
+    "times": {
+      "operator": "*",
+      "positive_advantage": 0.224,
+      "positive_control_sd": 0.092,
+      "positive_adv_over_sd": 2.43,
+      "null_advantage": 0.022,
+      "null_control_sd": 0.113,
+      "null_adv_over_sd": 0.20
+    },
+    "minus": {
+      "operator": "-",
+      "positive_advantage": 0.323,
+      "positive_control_sd": 0.052,
+      "positive_adv_over_sd": 6.15,
+      "null_advantage": 0.003,
+      "null_control_sd": 0.056,
+      "null_adv_over_sd": 0.05
+    },
+    "and": {
+      "operator": "and",
+      "positive_advantage": 0.469,
+      "positive_control_sd": 0.095,
+      "positive_adv_over_sd": 4.95,
+      "null_advantage": 0.081,
+      "null_control_sd": 0.094,
+      "null_adv_over_sd": 0.86
+    },
+    "then": {
+      "operator": "then",
+      "positive_advantage": 0.549,
+      "positive_control_sd": 0.120,
+      "positive_adv_over_sd": 4.56,
+      "null_advantage": 0.113,
+      "null_control_sd": 0.082,
+      "null_adv_over_sd": 1.38
+    }
+  },
+  "key_findings": {
+    "operator_blindness": true,
+    "strongest_condition": "minus",
+    "strongest_adv_over_sd": 6.15,
+    "interpretation": "The doubles advantage does not compute arithmetic addition; it tracks equal operand tokens regardless of operator (+, -, *, and, then), persisting strongest under subtraction where a - a = 2a is mathematically false."
+  }
+}

@@ -1,0 +1,107 @@
+# Research Methodology and Experimental Design
+
+This document details the rigorous experimental design, mathematical formalisms, control protocols, and metric specifications developed to investigate the GPT-2 Small arithmetic doubling anomaly.
+
+---
+
+## 1. Model and Architectural Environment
+
+- **Target Architecture**: GPT-2 Small (124M parameters, 12 layers, 12 attention heads per layer, $d_{\text{model}} = 768$, $d_{\text{head}} = 64$, $d_{\text{vocab}} = 50,257$).
+- **Tooling**: TransformerLens library (`HookedTransformer.from_pretrained("gpt2-small")`).
+- **Weight Folding**: Executed under default `fold_ln=True`, whereby LayerNorm gain and bias are folded directly into adjacent projection weights. Consequently, `ln_final` has no learnable weight, but dynamic scaling factor `hook_scale` is actively extracted at run time.
+- **Tokenization Conventions**: All target and foil numbers carry an explicit leading space (e.g., `' 8'` = token 807, `' 16'` = token 4121). Tokens without leading whitespace represent distinct vocabulary indices.
+
+---
+
+## 2. Experimental Cohorts and Prompt Design
+
+### 2.1 Single-Prompt Intensive Cohort
+- **Prompt**: `"3 + 5 ="` (tokens: `[BOS, "3", " +", " 5", " ="]`, positions 0 to 4).
+- **Evaluation Targets**: Target `' 8'`, foil `' 9'` (or `' 6'`).
+- **Few-Shot Prompt**: 23 tokens with prefix `"1 + 1 = 2\n2 + 2 = 4\n5 + 3 = 8\n"`.
+
+### 2.2 Population-Scale Cohort ($N=84$)
+Designed to test whether single-prompt mechanistic observations generalize across the arithmetic space:
+- **Easy Tier ($N=36$)**: Single-digit addends with sum $< 10$ ($a, b \in [1, 8]$, no carry).
+- **Medium Tier ($N=43$)**: Single-digit addends with sum $\ge 10$ ($a, b \in [2, 9]$, single carry).
+- **Hard Tier ($N=5$)**: Two-digit addends with multi-digit carries (`18+25`, `28+37`, `46+78`, `39+85`, `57+68`).
+- **79-Cell Addition Grid**: Systematic evaluation across single-digit pairs $a \times b \in [1, 9]^2$ (excluding edge pairs `1+9` and `9+1`).
+
+### 2.3 Non-Arithmetic Filler Controls
+Used to decouple true mathematical computation from static surface heuristics:
+1. `"The object in the box ="`
+2. `"The word on the page ="`
+3. `"Yesterday at the store ="`
+4. `"The item sequence number ="`
+
+### 2.4 Doubles Dense-Scan Cohort
+Evaluates equal addends (`a + a =`) against all valid single-digit non-double split pairs ($a + b = T$, $a \ne b$) for even targets $T \in [4, 16]$:
+- Both operand orders ($a+b$ and $b+a$) are evaluated to eliminate ordering biases.
+- Target tokens: `' 4'`, `' 6'`, `' 8'`, `' 10'`, `' 12'`, `' 14'`, `' 16'`.
+- Symmetric foils: $T - 1$ and $T + 1$.
+
+---
+
+## 3. Mathematical Definitions of Metrics
+
+### 3.1 Logit Difference and Symmetric Logit Difference
+For output logits $L \in \mathbb{R}^{d_{\text{vocab}}}$ at final position:
+$$\text{logit\_diff} = L[\text{target}] - L[\text{foil}]$$
+
+For symmetric evaluations with target $\pm 1$ neighbors:
+$$\text{sym\_diff} = L[T] - \frac{L[T-1] + L[T+1]}{2}$$
+
+### 3.2 Mean-of-Neighbors Doubles Score and Advantage
+For any prompt evaluating target $T$:
+$$\text{Score}(P, T) = L_P[T] - \frac{L_P[T-1] + L_P[T+1]}{2}$$
+
+The raw doubles advantage is defined as:
+$$\text{Advantage}(T) = \text{Score}(d+d, T) - \frac{1}{|C_T|} \sum_{c \in C_T} \text{Score}(c, T)$$
+where $C_T$ is the complete set of matched split controls yielding sum $T$.
+
+### 3.3 Pooled Control Variance and Normalized Advantage ($adv/\text{SD}$)
+Because raw advantage scales with vocabulary variance across presentation formats (digits vs words), normalized advantage is computed relative to pooled control standard deviation:
+$$s_{\text{pooled}} = \sqrt{\frac{\sum_{k} (n_k - 1) s_k^2}{\sum_{k} (n_k - 1)}}$$
+where $k \in \{8, 10, 12, 16\}$ represents positive target sums ($df = 18$).
+$$\text{adv}/\text{SD} = \frac{\overline{\text{Advantage}}}{s_{\text{pooled}}}$$
+
+---
+
+## 4. Mechanistic Attribution and Intervention Protocols
+
+### 4.1 Mathematically Rigorous Direct Logit Attribution (DLA)
+Direct projection of pre-LayerNorm residual activations into unembedding space introduces a $14\times$ to $40\times$ distortion. Corrected attribution enforces:
+$$\text{DLA}_i = \left( \frac{x_i}{\sigma_{\text{final}}} \right) \cdot \left( W_U[:, \text{target}] - W_U[:, \text{foil}] \right)$$
+where $\sigma_{\text{final}} = \text{ln\_final.hook\_scale}$ is the standard deviation across residual dimensions at the final position.
+
+The exact residual identity must be satisfied to within numerical tolerance ($< 10^{-3}$):
+$$\sum_{i=1}^{159} \text{DLA}_i + \left( b_U[\text{target}] - b_U[\text{foil}] \right) = \text{logit\_diff}$$
+(Decomposed over 144 attention heads, 12 MLP blocks, embedding, positional embedding, and folded LayerNorm bias).
+
+### 4.2 Mean-Ablation vs Zero-Ablation Protocol
+- **Zero-Ablation Invalidation**: Setting head output $z \leftarrow 0$ drives total residual norm $\sigma$ off-distribution ($19.20 \to 23.13$), uniformly depressing all tracked logits by $\approx 1.0$.
+- **Mean-Ablation Standard**: Causal interventions replace activation $z$ with its mean activation $\mu_z$ computed across 5 diverse non-arithmetic reference sentences:
+$$z_{\text{ablated}} = \frac{1}{M} \sum_{m=1}^M z(\text{ref}_m)$$
+Under mean-ablation, residual variance remains on-distribution ($\sigma = 19.0148$).
+
+### 4.3 Attention-Pattern Blocking With Renormalization
+To test causal information routing from operand positions without zeroing self-attention mass:
+1. Extract attention pattern $A_{l, h} \in \mathbb{R}^{S \times S}$.
+2. Zero column corresponding to operand 1 (position 1): $A_{l, h}[:, 1] \leftarrow 0$.
+3. Renormalize remaining attention rows:
+$$A_{l, h}[i, j] \leftarrow \frac{A_{l, h}[i, j]}{\sum_{k \ne 1} A_{l, h}[i, k]}$$
+
+---
+
+## 5. Falsification Protocols
+
+### 5.1 Operator-Swap Battery
+To test whether the doubling effect represents genuine addition or an operator-blind surface association, addends are coupled via 5 distinct operators and syntactic connectors:
+`"d + d ="`, `"d - d ="`, `"d * d ="`, `"d and d ="`, `"d then d ="`
+Evaluation tracks logits on the sum token $2d$. Complete operator blindness is demonstrated if advantage persists strongly under non-addition operators (especially subtraction, where $d - d = 2d$ is mathematically false).
+
+### 5.2 Corpus N-Gram Frequency Audit Protocol
+- **API**: Infini-gram (`https://api.infini-gram.io/`).
+- **Index**: `v4_dolma-v1_7_llama` (3 trillion tokens).
+- **Queries**: Joint exact string (`"a + b = T"`) and prompt prefix (`"a + b ="`).
+- **Reliability Floor**: Minimum joint count threshold of $\ge 20$ combined instances across targets. If higher targets fall below threshold, frequency hypothesis is categorized as inconclusive rather than artificially accepted or rejected.
