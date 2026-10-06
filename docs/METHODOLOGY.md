@@ -123,4 +123,4 @@ Use the labels consistently:
 - **[HYPOTHESIS]** for an untested proposed mechanism.
 - **[LIMITATION]** for scope, design, tokenization, corpus, or provenance boundaries.
 
-Literature is methodological context; it is not a source of this project's experimental values. For the source-to-claim boundaries and headline-number provenance, see [LITERATURE_MAP.md](LITERATURE_MAP.md). If a run-level artifact is unavailable, cite the audit/manuscript as the reported source and leave the originating run provenance marked unresolved.
+Literature is methodological context; it is not a source of this project's experimental values. For the source-to-claim boundaries and headline-number provenance, see [LITERATURE_MAP.md](LITERATURE_MAP.md). If a run-level artifact is unavailable, cite the research log/manuscript as the reported source and leave the originating run provenance marked unresolved.
