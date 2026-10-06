@@ -1,4 +1,4 @@
-# Deconstructing Arithmetic in Small Language Models: Falsification of Circuit Hypotheses and the Operator-Blind Doubling Anomaly
+# Deconstructing Arithmetic in Small Language Models: Falsification of Circuit Hypotheses and the Cross-Operator Doubling Anomaly
 
 **Anay Katiyar**  
 Independent Researcher  
@@ -7,7 +7,7 @@ Independent Researcher
 
 ## Abstract
 
-Mechanistic interpretability investigations often search for localized circuits responsible for discrete algorithmic capabilities, such as arithmetic addition in autoregressive language models. In this work, we conduct a rigorous forensic audit and empirical evaluation of arithmetic prompt processing in GPT-2 Small (124M parameters). We establish three primary findings: First, under the tested evaluation suite, GPT-2 Small does not exhibit evidence of a general, reliably functioning addition mechanism; its zero-shot top-1 accuracy on single-digit sums ($a + b =$) is approximately 6.2%, performing strictly at or below naive constant-guess baselines (25%). Much of the apparent preference for true sums is driven by token-level output biases—specifically numerical parity alignment (accounting for ~87% of baseline signs) and static unembedding biases ($b_U$). Second, early claims of dedicated circuits (such as late-layer suppressor heads or non-additive interactions) dissolve when correcting for LayerNorm scaling overshoots ($14\times$–$40\times$) and replacing off-distribution zero-ablations with distribution-preserving mean-ablations. Third, we isolate a robust, target-dependent anomaly: prompts with identical addends (`a + a =`) systematically elevate logits for their sum token ($2a$) relative to matched split controls ($a + b = 2a$, $a \ne b$) across targets 8, 10, 12, and 16 (mean advantage $+0.418$, normalized $adv/\text{SD} = 5.22$). However, through systematic operator and connector swaps ($\times$, $-$, 'and', 'then'), we falsify the hypothesis that this effect represents arithmetic addition: the doubling advantage persists across all non-mathematical connectors and is strongest under subtraction ($-$), where $a - a = 2a$ is mathematically false ($adv/\text{SD} = 6.15$). Our results illustrate how surface associative heuristics and token-level geometry can masquerade as algorithmic reasoning in small language models, providing a methodological blueprint for falsification in mechanistic interpretability.
+Mechanistic interpretability investigations often search for localized circuits responsible for discrete algorithmic capabilities, such as arithmetic addition in autoregressive language models. In this work, we conduct a rigorous forensic audit and empirical evaluation of arithmetic prompt processing in GPT-2 Small (124M parameters). We establish three primary findings: First, under the tested evaluation suite, GPT-2 Small does not exhibit evidence of a general, reliably functioning addition mechanism; its zero-shot top-1 accuracy on single-digit sums ($a + b =$) is approximately 6.2%, performing strictly at or below naive constant-guess baselines (25%). Much of the apparent preference for true sums is driven by token-level output biases—specifically numerical parity alignment (accounting for ~87% of baseline signs) and static unembedding biases ($b_U$). Second, early claims of dedicated circuits (such as late-layer suppressor heads or non-additive interactions) dissolve when correcting for LayerNorm scaling overshoots ($14\times$–$40\times$) and replacing off-distribution zero-ablations with distribution-preserving mean-ablations. Third, we isolate a robust, target-dependent anomaly: prompts with identical addends (`a + a =`) systematically elevate logits for their sum token ($2a$) relative to matched split controls ($a + b = 2a$, $a \ne b$) across targets 8, 10, 12, and 16 (mean advantage $+0.418$, normalized $adv/\text{SD} = 5.22$). However, through systematic operator and connector swaps ($\times$, $-$, 'and', 'then'), the effect is not restricted to arithmetic addition under the tested prompt formats: the doubling advantage persists across the tested operators and connectors and is strongest under subtraction ($-$), where $a - a = 2a$ is mathematically false ($adv/\text{SD} = 6.15$). Because the operator-patching metric was not anchored to a corrupt baseline (A19), these results argue against an addition-specific interpretation but do not constitute a universal falsification of operator-sensitive mechanisms. Our results illustrate how surface associative heuristics and token-level geometry can masquerade as algorithmic reasoning in small language models, providing a methodological blueprint for falsification in mechanistic interpretability.
 
 ---
 
@@ -91,7 +91,7 @@ When replaced with distribution-preserving mean-ablation across 5 neutral refere
 
 ## 4. The Doubling Anomaly
 
-Having established that GPT-2 Small lacks a general addition circuit, we investigated structured sub-patterns across the addition grid. Across 79 single-digit cells, prompts of the form `a + a =` exhibited anomalously high target logits relative to matched split controls.
+Because the tested benchmark provides no positive evidence for a general, reliably functioning addition mechanism, we investigated structured sub-patterns across the addition grid. Across 79 single-digit cells, prompts of the form `a + a =` exhibited anomalously high target logits relative to matched split controls.
 
 ![Figure 1: 79-Cell Addition Grid Symmetric Logit Difference Heatmap](figures/addition_grid_heatmap.svg)
 *Figure 1: Heatmap of symmetric logit differences across all 79 single-digit cells ($a \times b \in [1, 9]^2$). A clear parity checkerboard emerges (Blue = Even/Positive, Red = Odd/Negative). Cells along the doubles diagonal ($a = b$, bordered) show elevated scores, but their signs remain strongly governed by output parity.*
@@ -133,7 +133,7 @@ While raw advantage grows with verbalization ($+0.418 \to +1.349$), the control 
 Does the doubling advantage provide evidence for arithmetic addition? If the model performs mathematical doubling ($2 \times a$), replacing the addition operator (`+`) with non-addition operators or non-mathematical syntactic connectors should abolish the advantage on the sum token $2a$.
 
 ![Figure 2: Operator Swaps and Normalized adv/SD Ratio](figures/operator_swap_heatmap.svg)
-*Figure 2: Normalized advantage ($adv/\text{SD}$) on the sum token $2a$ across operators and syntactic connectors. The global maximum occurs under subtraction ($-$), where $a - a = 2a$ is mathematically false ($adv/\text{SD} = 6.15$), decisively falsifying addition-specific computation.*
+*Figure 2: Normalized advantage ($adv/\text{SD}$) on the sum token $2a$ across operators and syntactic connectors. The largest tested normalized value occurs under subtraction ($-$), where $a - a = 2a$ is mathematically false ($adv/\text{SD} = 6.15$). This cross-operator persistence argues against a simple addition-specific interpretation but does not by itself establish universal operator blindness.*
 
 We evaluated all double and control prompts across 5 operator configurations, tracking logits strictly on the sum token $2a$:
 1. Addition (`+`): `d + d =`
@@ -155,7 +155,7 @@ We evaluated all double and control prompts across 5 operator configurations, tr
 ### The Subtraction Result
 Under subtraction (`-`), the model is evaluated on prompts such as `"4 - 4 ="` against controls like `"5 - 3 ="`, scoring the token `' 8'`. Mathematically, $4 - 4 = 0$, not $8$. Yet, the advantage of the double prompt over controls on the sum token reaches its global maximum under subtraction: **$adv/\text{SD} = +6.15$**. 
 
-The result argues against a simple addition-specific explanation for the doubling anomaly. The advantage persists across the tested operators and connectors, but this limited battery does not establish universal operator blindness or rule out broader memorization, token-frequency, training-distribution, or learned-heuristic explanations.
+The result argues against a simple addition-specific explanation for the doubling anomaly. The advantage persists across the tested operators and connectors, but this limited battery does not establish universal operator blindness or rule out broader memorization, token-frequency, training-distribution, or learned-heuristic explanations. In particular, A19 means the operator-position patching experiment cannot independently establish that operator binding was falsified.
 
 ---
 
@@ -188,13 +188,13 @@ This investigation highlights three indispensable methodological safeguards:
 
 ## 8. Conclusion
 
-Through systematic empirical auditing and falsification experiments, the tested evaluation suite does not provide evidence for a general, reliably functioning addition mechanism in GPT-2 Small. Several early mechanistic claims were weakened or rejected after correcting LayerNorm handling, static unembedding bias, tokenization, parity confounds, ablation procedures, and statistical interpretation. A separate equal-operand/doubles advantage persists across the tested operators and connectors, so it is not sufficient evidence for an addition-specific computation. The experiments do not establish the absence of arithmetic-related representations or operator-sensitive mechanisms elsewhere in the model.
+Through systematic empirical auditing and methodological correction, the tested evaluation suite does not provide evidence for a general, reliably functioning addition mechanism in GPT-2 Small. Several early mechanistic claims were weakened or rejected after correcting LayerNorm handling, static unembedding bias, tokenization, parity confounds, ablation procedures, and statistical interpretation. A separate equal-operand/doubles advantage persists across the tested operators and connectors, so it is not sufficient evidence for an addition-specific computation. The experiments do not establish the absence of arithmetic-related representations or operator-sensitive mechanisms elsewhere in the model.
 
 ---
 
 ## References
 
-- Bolukbasi, T., et al. (2021). An Interpretability Illusion for BERT. *arXiv preprint arXiv:2104.07143*.
+- Bolukbasi, T., et al. (2021). An Interpretability Illusion for BERT. *research draft arXiv:2104.07143*.
 - Elhage, N., et al. (2021). A Mathematical Framework for Transformer Circuits. *Transformer Circuits Thread*.
 - Hase, P., et al. (2024). Does Localization Inform Editing? Surprising Differences in Where Information is Stored vs. Used. *NeurIPS*.
 - Nanda, N., et al. (2023). Progress measures for grokking via mechanistic interpretability. *ICLR*.
