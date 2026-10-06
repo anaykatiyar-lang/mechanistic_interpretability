@@ -70,3 +70,14 @@ The external corpus-frequency analysis was inconclusive. Sparse joint-query coun
 5. **Parity Confound**: Digit-level output comparisons can inherit parity-related token biases. Because neighboring foil tokens can differ in parity from the target, part of the measured target-vs-neighbor preference can reflect static or contextual parity effects rather than arithmetic computation. Parity-preserving controls and filler prompts are therefore necessary when interpreting these measurements.
 
 6. **Round-Number / Target-Token Bias**: Target-specific baseline effects are substantial for some numbers, particularly round-number tokens such as `10`. Target-specific baseline controls are therefore treated as necessary for interpreting mechanistic measurements.
+
+
+---
+
+## 6. Literature and Data-Provenance Boundaries
+
+The cited mechanistic studies use different tasks and, in several cases, different training regimes. They motivate questions about task definition, controls, and causal validation; they do not independently corroborate this project's results. In particular, trained modular-addition transformers and GPT-2 Small greater-than results should not be presented as direct evidence for pretrained GPT-2 Small decimal addition. See [LITERATURE_MAP.md](LITERATURE_MAP.md) for source-by-source boundaries.
+
+The repository's audit trail preserves headline measurements and corrections, but the conversation materials available for this integration did not expose all originating notebook cells or run-level outputs. The exact row-level link from each headline number to its original execution is therefore not fully verified. Where a committed data artifact exists, it is the primary provenance record; where it does not, the value remains explicitly reported from the audit/manuscript pending a traceable run artifact.
+
+The supplied research recommendations discuss AI-use disclosures, but they do not establish a complete author-verified inventory of AI assistance across the project. No factual disclosure about the project's actual AI use should be inferred from policy examples. Before submission, document the tools and tasks actually used and check the target venue's current policy.
