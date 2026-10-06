@@ -184,6 +184,6 @@ These changes correct claim strength and interpretation only; experimental numer
 
 The final research flow is recorded separately from the chronological correction history in [RESEARCH_FLOW.md](RESEARCH_FLOW.md). It links each stage's question and prediction to the measurement, reported result, interpretation, limitation, and next step. The final causal validation of the equal-operand effect is listed as proposed work, not as a completed experiment.
 
-Source relevance and source-to-claim boundaries are mapped in [LITERATURE_MAP.md](LITERATURE_MAP.md). That map covers the manuscript bibliography and source recommendations in the supplied project materials. It distinguishes literature-derived methodological context from this project's own data, records the Hase et al. reference correction, and identifies unverified run-level provenance.
+Source relevance and source-to-claim boundaries are mapped in [LITERATURE_MAP.md](LITERATURE_MAP.md). It distinguishes literature-derived methodological context from project data and identifies unverified run-level provenance. The detailed method and code history is recorded in [audit_trail.md](audit_trail.md).
 
-No numerical measurements were changed in this integration. The existing entries A01–A29 remain the chronological audit record; the new map points from headline value families to the relevant artifacts and audit entries without replacing or reconciling their values.
+No numerical measurements were changed in this integration. The existing entries A01–A29 in [audit_trail.md](audit_trail.md) remain the detailed audit record; this log summarizes that chronology. The literature map points from headline value families to relevant artifacts and audit entries without replacing or reconciling their values.
