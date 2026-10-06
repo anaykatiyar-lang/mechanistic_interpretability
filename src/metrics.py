@@ -6,7 +6,7 @@ All metrics faithfully implement the definitions established in PROJECT_MEMORY.m
     - symmetric logit diff = logit(target) − mean(logit(foils))
     - doubles score = logit(T) − mean(logit(T−1), logit(T+1))
     - doubles advantage = score(double) − mean(score(controls))
-    - adv/SD = mean(advantage) / pooled_control_SD
+    - adv/SD = mean(advantage) / pooled_control_SD (a project-defined descriptive normalized effect measure)
 """
 
 from __future__ import annotations
@@ -116,7 +116,8 @@ def adv_over_sd(
         control_scores_by_target: {target_sum: [score_1, score_2, ...]}
 
     Returns:
-        adv/SD ratio.
+        Descriptive normalized advantage ratio. This is not a conventional Student's
+        t-statistic, p-value, or standalone test of statistical significance.
     """
     mean_adv = float(np.mean(advantages))
     pooled_sd = pooled_control_sd(control_scores_by_target)
