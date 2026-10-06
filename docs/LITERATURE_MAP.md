@@ -1,6 +1,6 @@
 # Literature-to-Claim Map
 
-This map separates published literature from this repository's measurements. A cited paper motivates a question or method; it does not verify any result reported here. Project measurements remain governed by the data artifacts and audit trail listed in [Data provenance](#data-provenance-and-project-evidence).
+This map separates published literature from this repository's measurements. A cited paper motivates a question or method; it does not verify any result reported here. Project measurements remain governed by committed data artifacts and the A01–A29 chronology in `docs/RESEARCH_LOG.md`, as mapped in [Data provenance](#data-provenance-and-project-evidence). The standalone audit attachment discussed in the supplied conversation has not yet been added to the repository.
 
 ## Sources cited in the manuscript
 
@@ -33,9 +33,9 @@ No experimental values, p-values, corpus counts, or interpretations in this repo
 
 | Claim or number family | Primary repository record | Audit/interpretation record | Provenance status |
 |---|---|---|---|
-| Behavioral benchmark, including zero-shot 6.2% and constant-guess 25.0% | `data/` benchmark artifacts and associated evaluation code, where present | `docs/RESEARCH_LOG.md` A25 | The headline values are repeated in the manuscript and audit. No dedicated M1 results file or originating notebook/run file was found in the repository paths inspected; the values are recorded in the manuscript and RESEARCH_LOG A25. |
-| Corrected DLA sums, LayerNorm scaling, and unembedding-bias terms | `data/` diagnostics and `src/metrics.py`, where present | A01–A03 in `docs/RESEARCH_LOG.md` | Exact headline values are preserved. The audit records calculation corrections; originating notebook cell/run artifacts are not fully visible in the supplied materials. |
-| Ablation and candidate-head results | Intervention scripts and data artifacts, where present | A06–A18, A25 in the audit trail and research log | Treat single-prompt effects as descriptive where the audit says so; do not promote invalid or unanchored interventions to causal findings. |
+| Behavioral benchmark, including zero-shot 6.2% and constant-guess 25.0% | `data/` benchmark artifacts and associated evaluation code, where present | `docs/RESEARCH_LOG.md` A25 | The headline values are recorded in the manuscript and RESEARCH_LOG A25. No dedicated M1 results file or originating notebook/run file was found in the repository paths inspected; the values are recorded in the manuscript and RESEARCH_LOG A25. |
+| Corrected DLA sums, LayerNorm scaling, and unembedding-bias terms | `src/metrics.py` for the DLA identity helper; run-specific values are in the manuscript and RESEARCH_LOG A01–A03 | A01–A03 in `docs/RESEARCH_LOG.md` | Exact headline values are preserved. RESEARCH_LOG records the calculation corrections; the originating notebook cell/run artifacts were not found in the repository. |
+| Ablation and candidate-head results | Intervention scripts and data artifacts, where present | A06–A18 and A25 in `docs/RESEARCH_LOG.md` | Treat single-prompt effects as descriptive where the audit says so; do not promote invalid or unanchored interventions to causal findings. |
 | 79-cell parity grid | `data/addition_grid_79cell.csv` and `figures/addition_grid_heatmap.svg` | `docs/RESEARCH_LOG.md` A20–A21 | Grid has repeated target sums; cells are not independent replications. |
 | Doubles/operator/connector values, including Adv/SD | `data/operator_swap_results.json`, `data/variance_scaling.csv`, and `figures/operator_swap_heatmap.svg` | `docs/RESEARCH_LOG.md` sections 5 / A23–A24 | Adv/SD is descriptive, not a t-statistic or significance test. The effect is target-dependent and the format sweep has a forking-paths caveat. |
 | Corpus-frequency audit and retracted `ρ=+0.82, p=0.023` | `data/corpus_frequencies.json` and `src/frequency_audit.py`, where present | `docs/RESEARCH_LOG.md` A26; `docs/LIMITATIONS.md` section 5 | Final analysis is inconclusive; the earlier correlation is explicitly retracted and must not be cited as a finding. |
@@ -43,4 +43,4 @@ No experimental values, p-values, corpus counts, or interpretations in this repo
 
 ### Provenance rule
 
-For a result, cite the committed data row or reproducible script output first, then its audit entry, and only then the narrative interpretation. If the source artifact is absent, mark the result as reported in the RESEARCH_LOG/manuscript and identify the missing run-level source; do not reconstruct or silently reconcile it from prose. The audit trail preserves superseded and retracted values for history, but they are not current findings.
+For a result, cite the committed data row or reproducible script output first, then its `docs/RESEARCH_LOG.md` entry, and only then the narrative interpretation. If the source artifact is absent, mark the result as reported in the manuscript/research log and identify the missing run-level source; do not reconstruct or silently reconcile it from prose. The research log preserves superseded and retracted values for history, but they are not current findings. When the separate audit attachment is supplied later, its claims and provenance can be compared against this map.
