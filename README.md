@@ -56,7 +56,7 @@ gpt2-doubling-falsification/
 │   ├── draft_paper.md             # Complete conference-style paper (NeurIPS/ICLR format)
 │   └── figures/                   # Paper-embedded figures
 ├── docs/
-│   ├── audit_trail.md             # Detailed method/code audit and A01–A29 records
+│   ├── audit_trail.md             # Detailed method and result-validity audit
 │   ├── RESEARCH_LOG.md            # Condensed research chronology
 │   ├── METHODOLOGY.md             # Experimental design, mathematical metrics, and controls
 │   └── LIMITATIONS.md             # Token geometry quirks, noise-floor limits, and scale bounds
