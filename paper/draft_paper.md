@@ -7,7 +7,7 @@ Independent Researcher
 
 ## Abstract
 
-Mechanistic interpretability investigations often search for localized circuits responsible for discrete algorithmic capabilities, such as arithmetic addition in autoregressive language models. In this work, we conduct a rigorous forensic audit and empirical evaluation of arithmetic prompt processing in GPT-2 Small (124M parameters). We establish three primary findings: First, GPT-2 Small possesses no general addition circuit; its zero-shot top-1 accuracy on single-digit sums ($a + b =$) is approximately 6.2%, performing strictly at or below naive constant-guess baselines (25%). Much of the apparent preference for true sums is driven by token-level output biases—specifically numerical parity alignment (accounting for ~87% of baseline signs) and static unembedding biases ($b_U$). Second, early claims of dedicated circuits (such as late-layer suppressor heads or non-additive interactions) dissolve when correcting for LayerNorm scaling overshoots ($14\times$–$40\times$) and replacing off-distribution zero-ablations with distribution-preserving mean-ablations. Third, we isolate a robust, target-dependent anomaly: prompts with identical addends (`a + a =`) systematically elevate logits for their sum token ($2a$) relative to matched split controls ($a + b = 2a$, $a \ne b$) across targets 8, 10, 12, and 16 (mean advantage $+0.418$, normalized $adv/\text{SD} = 5.22$). However, through systematic operator and connector swaps ($\times$, $-$, 'and', 'then'), we falsify the hypothesis that this effect represents arithmetic addition: the doubling advantage persists across all non-mathematical connectors and is strongest under subtraction ($-$), where $a - a = 2a$ is mathematically false ($adv/\text{SD} = 6.15$). Our results illustrate how surface associative heuristics and token-level geometry can masquerade as algorithmic reasoning in small language models, providing a methodological blueprint for falsification in mechanistic interpretability.
+Mechanistic interpretability investigations often search for localized circuits responsible for discrete algorithmic capabilities, such as arithmetic addition in autoregressive language models. In this work, we conduct a rigorous forensic audit and empirical evaluation of arithmetic prompt processing in GPT-2 Small (124M parameters). We establish three primary findings: First, under the tested evaluation suite, GPT-2 Small does not exhibit evidence of a general, reliably functioning addition mechanism; its zero-shot top-1 accuracy on single-digit sums ($a + b =$) is approximately 6.2%, performing strictly at or below naive constant-guess baselines (25%). Much of the apparent preference for true sums is driven by token-level output biases—specifically numerical parity alignment (accounting for ~87% of baseline signs) and static unembedding biases ($b_U$). Second, early claims of dedicated circuits (such as late-layer suppressor heads or non-additive interactions) dissolve when correcting for LayerNorm scaling overshoots ($14\times$–$40\times$) and replacing off-distribution zero-ablations with distribution-preserving mean-ablations. Third, we isolate a robust, target-dependent anomaly: prompts with identical addends (`a + a =`) systematically elevate logits for their sum token ($2a$) relative to matched split controls ($a + b = 2a$, $a \ne b$) across targets 8, 10, 12, and 16 (mean advantage $+0.418$, normalized $adv/\text{SD} = 5.22$). However, through systematic operator and connector swaps ($\times$, $-$, 'and', 'then'), we falsify the hypothesis that this effect represents arithmetic addition: the doubling advantage persists across all non-mathematical connectors and is strongest under subtraction ($-$), where $a - a = 2a$ is mathematically false ($adv/\text{SD} = 6.15$). Our results illustrate how surface associative heuristics and token-level geometry can masquerade as algorithmic reasoning in small language models, providing a methodological blueprint for falsification in mechanistic interpretability.
 
 ---
 
@@ -22,7 +22,7 @@ Our initial investigations appeared to support a structured heuristic addition p
 2. **Zero-Ablation Off-Distribution Shifts**: Forcing activation tensors to zero, which inflates residual stream standard deviation $\sigma$ from $19.20$ to $23.13$ and uniformly depresses all tracked logits by $\approx 1.0$, creating spurious "suppressor" heads.
 3. **Token Geometry and Parity Confounds**: Conflating task-specific computation with intrinsic token-level biases, such as numerical parity preferences and static unembedding biases ($b_U$).
 
-Upon resolving these methodological issues, we uncovered an unexpected empirical anomaly: when presented with identical operands (`a + a =`), the model assigns substantially higher logits to the sum token ($2a$) than when presented with non-identical split addends ($a + b = 2a$) matched for the same target sum. We subject this "doubling anomaly" to a comprehensive battery of falsification experiments across verbal formats, operator swaps, and pretraining corpus audits. We demonstrate that this phenomenon is entirely **operator-blind**, providing clear evidence of non-arithmetic associative retrieval in language models.
+Upon resolving these methodological issues, we uncovered an unexpected empirical anomaly: when presented with identical operands (`a + a =`), the model assigns substantially higher logits to the sum token ($2a$) than when presented with non-identical split addends ($a + b = 2a$) matched for the same target sum. We subject this "doubling anomaly" to a comprehensive battery of falsification experiments across verbal formats, operator swaps, and pretraining corpus audits. The cross-operator results show that this phenomenon is not restricted to `+` under the tested prompt formats, providing evidence against an addition-specific interpretation. Broader operator-sensitive mechanisms and other explanations remain possible.
 
 ---
 
@@ -50,7 +50,7 @@ Although the logit difference between target (` 8`) and foil (` 9`) is positive 
 | **Constant Guess Guessing "9"** | **25.0%** (8/32) | **25.0%** (8/32) | **25.0%** |
 | **Strict Correctness Filter ($\tau=1.0$)** | 1 / 36 (2.8%) | 5 / 33 (15.2%) | — |
 
-GPT-2 Small's top-1 accuracy (6.2%) falls drastically below a trivial constant-guess baseline (guessing "9" achieves 25.0%). Applying an outcome filter (retaining only prompts where the model outputs the correct answer) artificially biases attribution samples to isolated outliers ($N=1$). Consequently, **GPT-2 Small does not execute a general addition algorithm.**
+GPT-2 Small's top-1 accuracy (6.2%) falls drastically below a trivial constant-guess baseline (guessing "9" achieves 25.0%). Applying an outcome filter (retaining only prompts where the model outputs the correct answer) artificially biases attribution samples to isolated outliers ($N=1$). Consequently, the tested benchmark provides no positive evidence for a general, reliably functioning addition mechanism. This does not establish that GPT-2 Small contains no addition-related representations or computations.
 
 ---
 
@@ -124,13 +124,13 @@ To test whether the doubling effect is driven by token-level repetition of ident
 | **digit + word** (`4 + four =`) | +1.129 | +0.378 | +0.750 | 0.171 | **4.40** |
 | **word + word** (`four + four =`) | +1.682 | +0.333 | +1.349 | 0.273 | **4.93** |
 
-While raw advantage grows with verbalization ($+0.418 \to +1.349$), the control variance expands proportionally ($0.080 \to 0.273$). The normalized metric $adv/\text{SD}$ remains invariant ($5.22 \approx 4.40 \approx 4.93$). Critically, because `'4 + four ='` contains no repeated surface token, the anomaly cannot be explained by low-level byte-pair copy suppression.
+While raw advantage grows with verbalization ($+0.418 \to +1.349$), the control variance expands proportionally ($0.080 \to 0.273$). The normalized metric $adv/\text{SD}$ remains similar across the tested formats ($5.22 \approx 4.40 \approx 4.93$). These are descriptive normalized effect measures, not conventional Student's t-statistics, p-values, or formal evidence of statistical significance. Critically, because `'4 + four ='` contains no repeated surface token, the anomaly cannot be explained by low-level byte-pair copy suppression.
 
 ---
 
 ## 5. Falsification: Operator and Connector Swaps
 
-Does the doubling advantage reflect arithmetic addition? If the model performs mathematical doubling ($2 \times a$), replacing the addition operator (`+`) with non-addition operators or non-mathematical syntactic connectors should abolish the advantage on the sum token $2a$.
+Does the doubling advantage provide evidence for arithmetic addition? If the model performs mathematical doubling ($2 \times a$), replacing the addition operator (`+`) with non-addition operators or non-mathematical syntactic connectors should abolish the advantage on the sum token $2a$.
 
 ![Figure 2: Operator Swaps and Normalized adv/SD Ratio](figures/operator_swap_heatmap.svg)
 *Figure 2: Normalized advantage ($adv/\text{SD}$) on the sum token $2a$ across operators and syntactic connectors. The global maximum occurs under subtraction ($-$), where $a - a = 2a$ is mathematically false ($adv/\text{SD} = 6.15$), decisively falsifying addition-specific computation.*
@@ -152,20 +152,22 @@ We evaluated all double and control prompts across 5 operator configurations, tr
 | **and** | +0.469 | 0.095 | **+4.95** | +0.081 | 0.094 | +0.86 |
 | **then** | +0.549 | 0.120 | **+4.56** | +0.113 | 0.082 | +1.38 |
 
-### The Subtraction Anomaly
+### The Subtraction Result
 Under subtraction (`-`), the model is evaluated on prompts such as `"4 - 4 ="` against controls like `"5 - 3 ="`, scoring the token `' 8'`. Mathematically, $4 - 4 = 0$, not $8$. Yet, the advantage of the double prompt over controls on the sum token reaches its global maximum under subtraction: **$adv/\text{SD} = +6.15$**. 
 
-This decisively falsifies the hypothesis that the doubling anomaly reflects arithmetic addition. GPT-2 Small is **operator-blind**: when exposed to identical operand tokens separated by an operator or connector, the model activates an associative prior for their doubled sum token regardless of mathematical context.
+The result argues against a simple addition-specific explanation for the doubling anomaly. The advantage persists across the tested operators and connectors, but this limited battery does not establish universal operator blindness or rule out broader memorization, token-frequency, training-distribution, or learned-heuristic explanations.
 
 ---
 
 ## 6. Pretraining Corpus Frequency Audit
 
+The external corpus-frequency analysis is inconclusive. Sparse joint-query counts and the mismatch between the available proxy corpus and GPT-2's exact training distribution prevent strong conclusions about memorization. The results should therefore not be used either to establish or to rule out a memorization-based explanation.
+
 We investigated whether the doubling anomaly is driven by verbatim co-occurrence frequencies in pretraining text. Using the Infini-gram API, we audited the open 3-trillion-token Dolma v1.7 corpus (`v4_dolma-v1_7_llama`) across all 7 target sums.
 
 **Methodological Retraction**: An early preliminary query indicated a correlation between joint prompt-answer counts and model advantage ($\rho = +0.82$, $p = 0.023$). Audit inspection revealed that query tokenization formatting had produced 0 joint matches for higher targets, collapsing the ratio into a prompt-frequency artifact.
 
-**Final Audit Finding**: Enforcing a reliability floor of $\ge 20$ combined joint occurrences (`a + b = T`), only targets 4 and 6 met the threshold (166 and 42 matches). Higher targets (8, 10, 12, 14, 16) were extremely sparse in exact formulaic form ($< 20$ matches). Consequently, the corpus frequency hypothesis is formally **inconclusive**. However, because the doubling advantage appears with equal or greater strength under subtraction (`4 - 4 = 8`), which does not occur in natural text, surface n-gram memorization cannot serve as the primary explanation.
+**Final Audit Finding**: Enforcing a reliability floor of $\ge 20$ combined joint occurrences (`a + b = T`), only targets 4 and 6 met the threshold (166 and 42 matches). Higher targets (8, 10, 12, 14, 16) were extremely sparse in exact formulaic form ($< 20$ matches). Consequently, the corpus frequency hypothesis is formally **inconclusive**. The subtraction result is inconsistent with a purely addition-specific surface-form explanation, but the corpus analysis remains inconclusive and does not rule out broader memorization or distributional explanations.
 
 ---
 
@@ -186,7 +188,7 @@ This investigation highlights three indispensable methodological safeguards:
 
 ## 8. Conclusion
 
-Through systematic empirical auditing and falsification experiments, we have demonstrated that GPT-2 Small possesses no general addition circuit. Apparent addition capabilities reflect a mixture of static unembedding biases, numerical parity heuristics, and an operator-blind doubling association that persists across non-mathematical syntactic connectors. These results emphasize that rigorous controls, exact numerical identities, and adversarial falsification batteries are essential prerequisites for mechanistic claims in language model interpretability.
+Through systematic empirical auditing and falsification experiments, the tested evaluation suite does not provide evidence for a general, reliably functioning addition mechanism in GPT-2 Small. Several early mechanistic claims were weakened or rejected after correcting LayerNorm handling, static unembedding bias, tokenization, parity confounds, ablation procedures, and statistical interpretation. A separate equal-operand/doubles advantage persists across the tested operators and connectors, so it is not sufficient evidence for an addition-specific computation. The experiments do not establish the absence of arithmetic-related representations or operator-sensitive mechanisms elsewhere in the model.
 
 ---
 
