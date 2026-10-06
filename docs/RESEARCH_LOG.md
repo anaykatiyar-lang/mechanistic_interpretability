@@ -1,6 +1,6 @@
-# Comprehensive Chronological Research Audit Log
+# Research Audit Log
 
-This document records the complete chronological audit trail of investigations, corrections, and falsification milestones for the GPT-2 Small arithmetic addition and doubling anomaly research.
+This document summarizes the research stages and methodological corrections that affect the validity or interpretation of the GPT-2 Small arithmetic addition and doubling analyses. Operational issues and third-party review history are not included.
 
 Each entry details: **Initial State**, **Methodological Flaw**, **Applied Correction**, **Impact on Empirical Conclusion**, and **Exact Verified Numbers**.
 
@@ -24,7 +24,7 @@ Each entry details: **Initial State**, **Methodological Flaw**, **Applied Correc
 
 ---
 
-## 2. Chronological Ledger of Methodological Audits (A01–A29)
+## 2. Selected Methodological Audit Entries
 
 ### A01. Direct Logit Attribution Without Final LayerNorm Scaling
 - **Original**: Component activations from `get_full_resid_decomposition` projected directly onto $W_U[:, \text{target}] - W_U[:, \text{foil}]$.
@@ -49,12 +49,6 @@ Each entry details: **Initial State**, **Methodological Flaw**, **Applied Correc
 - **Problem**: Interactive notebook state pollution across sessions.
 - **Correction**: Decode and reprint token IDs prior to forward pass; fresh restart of kernel.
 - **Effect**: Erroneous baseline claims cleared from experimental record.
-
-### A05. Hook and TransformerLens API Issues
-- **Original**: `hook_result` missing unless `set_use_attn_result(True)` enabled; `ln_final.weight` returning `None` under `fold_ln=True`.
-- **Problem**: API errors under default HookedTransformer configurations.
-- **Correction**: Explicit flags set; utilized `hook_scale` directly.
-- **Effect**: Numerical stability guaranteed without crashes.
 
 ### A06. Zero-Ablation Off-Distribution Artifacts
 - **Original**: Zero-ablation of L11H0 caused $\Delta +0.0658$ logit diff boost; L11H0 labeled a "circuit suppressor". Double ablation of L11H0 + MLP10 claimed non-additive.
@@ -109,10 +103,6 @@ Each entry details: **Initial State**, **Methodological Flaw**, **Applied Correc
 - **Correction**: Applied per-item LayerNorm scaling; corrected mean $+0.0064$ ($\text{SD}=0.0279$).
 - **Effect**: Top head $t \approx 2.1$, entirely consistent with the maximum of 144 null normal draws ($\approx 2.6$). No single head drives the task.
 
-### A17. Colab CPU RAM Crashes
-- **Original**: Full cache collection on every prompt without gradient disabling.
-- **Correction**: Applied `torch.no_grad()`, `names_filter`, and explicit garbage collection.
-
 ### A18. Pooled Null Masking Tier-Stratified Effect
 - **Original**: Pooled position-1 attention blocking test showed null ($p \approx 0.08$).
 - **Correction**: Stratified analysis by arithmetic difficulty tiers.
@@ -153,14 +143,12 @@ Each entry details: **Initial State**, **Methodological Flaw**, **Applied Correc
 - **Correction**: Rewrote API query client with correct parameters and count floor ($\ge 20$).
 - **Effect**: Established that Dolma v1.7 counts are too sparse for higher sums; test formally classified as inconclusive.
 
-### A27. Rebuttal of Third-Party External Audit Errors
-- Corrected misstatements in external AI audits (e.g., claims of single filler template when four were run; mislabeled logit values).
-
 ### A28. Deconstruction of Premature Framing Overreach
 - Retired early theoretical concepts ("Sign Inversion Paradox", "Attention Sinks as Information Movers") that lacked causal grounding.
 
-### A29. Audit Trail Harmonization and Provenance Archiving
-- Synchronized all empirical logs, ensuring every preserved figure is tied to reproducible notebook cells.
+### A29. Cross-file value and labeling discrepancies
+- The reported `' 8'` rank differs between Run 2 / a table and the controlled matrix. The DLA target/foil label differs between the research log and session record. L11H0 values −0.0448 (Run 1) and −0.1188 (Run 2) refer to different runs.
+- These source-label discrepancies remain unresolved until the corresponding run outputs are available; they are not silently reconciled.
 
 
 ## 30. Final Claim-Strength Harmonization
@@ -186,4 +174,4 @@ The final research flow is recorded separately from the chronological correction
 
 Source relevance and source-to-claim boundaries are mapped in [LITERATURE_MAP.md](LITERATURE_MAP.md). It distinguishes literature-derived methodological context from project data and identifies unverified run-level provenance. The detailed method and code history is recorded in [audit_trail.md](audit_trail.md).
 
-No numerical measurements were changed in this integration. The existing entries A01–A29 in [audit_trail.md](audit_trail.md) remain the detailed audit record; this log summarizes that chronology. The literature map points from headline value families to relevant artifacts and audit entries without replacing or reconciling their values.
+No numerical measurements were changed in this integration. The numbered entries retained in [audit_trail.md](audit_trail.md) are the detailed audit record; this log summarizes the research-relevant chronology. The literature map points from headline value families to relevant artifacts and audit entries without replacing or reconciling their values.
