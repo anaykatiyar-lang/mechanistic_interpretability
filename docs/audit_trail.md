@@ -1,6 +1,7 @@
 AUDIT_TRAIL.md
 Methodological and code-audit history of the GPT-2 Small addition project.
 Each entry: Original, Problem, Correction, Effect on conclusion, Numbers.
+Entries focus on issues that affect result validity, interpretation, or unresolved evidence. Numbered identifiers are retained for cross-document references.
 Tags: [VERIFIED RESULT] [INTERPRETATION] [HYPOTHESIS] [LIMITATION].
 Project status: CLOSED.
 ## A01. Direct Logit Attribution without final LayerNorm scaling
@@ -21,16 +22,10 @@ Project status: CLOSED.
 - Problem: call-order and shape assumption. Debug shapes showed input and output both `[159, 1, 23, 768]` (4D), so the comment was wrong.
 - Correction: pass the full 4D stack, slice after.
 - Effect: Run 2 DLA sum +0.6761 (buggy) → +0.8382 (fixed), closing a −0.1642 gap to residual 0.0001. Run 1 was nearly unaffected (short prompt).
-## A04. Stale variables, typos and mislabeled quantities
-- Original: `arget_id` typo (paste artifact acknowledged by the author); `corrupt_id` reused across pairs; an identical bias value (+0.1782) for two different pairs; a "Clean Logit Diff −0.3539" baseline in an ablation test; "Actual Logit Diff −2.7162".
-- Problem: stale notebook state. −0.3539 was the Run 2 buggy expected value, not a measurement. −2.7162 was never traced.
-- Correction: reprint and decode IDs before every comparison; recompute baselines fresh; restart the kernel.
-- Effect: no conclusion depended on them after correction. [LIMITATION] −2.7162 remains unexplained. The earlier −0.3539 residual analysis was a bookkeeping artifact.
-## A05. Hook and API issues
-- `hook_result` is not cached unless `set_use_attn_result(True)`: a `KeyError` risk.
-- Manual `ln_final.weight`: `None` under `fold_ln=True` (`TypeError`). Fix: use `apply_ln_to_stack` or `hook_scale`.
-- A "head results already cached" warning was benign.
-- Effect: none on conclusions.
+## A04. Stale state and untraced values
+- Problem: stale token IDs and baselines produced mislabeled outputs. The −0.3539 value was a buggy Run 2 expectation, not a measurement; −2.7162 was never traced. An identical +0.1782 bias was also assigned to different pairs.
+- Correction: regenerate token IDs and baselines from fresh run state before comparison.
+- Effect: no final conclusion depends on the invalid −0.3539 analysis. The −2.7162 value remains unexplained.
 ## A06. Zero-ablation artifacts
 - Original: zero-ablation of L11H0 and MLP10; double ablation judged "non-additive" (rank 8). L11H0 declared a suppressor and later a "key circuit controller."
 - Problem: zero-ablation moves the residual off-distribution; σ rose from 19.2002 to 23.1286 and every tracked logit fell by ≈1.0 (' 8' −0.9995, ' 9' −1.0653, ' 2' −0.9988, ' 1' −1.0297). The top-1 flip landed on different tokens by method (' 2' zero, ' 4' mean) among near-tied tokens.
@@ -81,10 +76,6 @@ Project status: CLOSED.
 - Original: top head L9H1 +0.1199 (SD 0.5370), without LayerNorm correction.
 - Correction: per-item LayerNorm scale. Result +0.0064 (SD 0.0279). Mean/SD ratio unchanged (~0.23), so the shrink alone is not evidence of noise.
 - Effect: conclusion unchanged ("no reliably dominant head"); the sound argument is that t ≈ 2.1 (CALC) for the best of 144 heads is what null draws give (~2.6). [LIMITATION] Approximate; prompts not independent; dataset DLA has no b_U (valid for ranking only).
-## A17. Memory crashes (CPU RAM)
-- Original: unfiltered `run_with_cache` on every prompt; no `torch.no_grad()`; `evaluate_dataset_pos1_ablation` built a full cache it never used (RAM 7.7 → 11.7 GB).
-- Correction: `names_filter`, `no_grad`, plain forward passes where no cache is needed, `gc.collect()`.
-- Effect: none on results.
 ## A18. Pooled null masking a real effect
 - Original: pooled position-1 test (t≈1.76, p≈0.08; sign test p≈0.44) called "closed."
 - Problem: sign tests are weaker; pooling mixed tiers.
@@ -126,18 +117,13 @@ Project status: CLOSED.
 - Problems: the field is `index`, so an error would have silently returned 0; counting the prompt alone ignores whether the answer follows; first corrected run's leading-space anchor produced `▁▁` queries with tiny counts; with zero joint counts the conditional ratio reduces to a ratio of prompt counts, which produced an artifactual ρ = +0.82 (p=0.023) that crossed the pre-set threshold.
 - Correction: `index` field, errors raised, joint and conditional counts, no extra anchor, a minimum-count floor (≥20), joint ratio as the primary statistic.
 - Result: usable targets [4, 6], so **inconclusive**. Reasoning kept: frequency is neither supported nor excluded; the minus-form result and the target pattern (8/10/12/16, not 4/6/14) are inference from other experiments.
-## A27. External audit documents contained errors
-- An external verification PDF stated: S6 "only one filler template" (actually four); M1 "baseline logit diff is negative" (varies by pair; pooled ≈0); M2 "predicted accuracy 0.8131 vs 0.8127" (logit diffs, two components, one prompt); S1 "no causal effect" from the shrink (shrink is the LayerNorm rescale; DLA is attribution); S3 as "plus sign falsified" (the test restored the operator-position residual at layers 0 to 3); "missing 7+7" (it was tested); a Gantt chart marked the dense scan "done" before it was run; its equality-vs-repetition controls (`7 + 7 = 7`, `cat + cat = cat`) were ill-posed.
-- Effect: critique labels (M1 to m3) were re-derived in FINAL_RESEARCH_STATE rather than copied from EXT.
 ## A28. Manuscript framing overreach
 - Original: a literature and novelty outline built around the "Sign Inversion Paradox" and "late-layer attention sinks masquerading as information movers."
 - Problems: "sign inversion" named two different phenomena (static-bias override; local-vs-causal mismatch); the sink claim rests on L9H9, whose indirect-routing path patch was invalid (A12); the single-prompt basis was later superseded by the N=84 collapse and token-bias controls.
 - Effect: neither is a supported headline finding (see FINAL_RESEARCH_STATE). Related literature surfaced in searches (greater-than circuit, IOI, copy suppression, attention-sink papers) was not systematically verified.
-## A29. Documentation inconsistencies
-- ' 8' rank 4 (Run 2 and one table) vs rank 7 (controlled matrix); the original DLA table described as ` 8`/` 6` in the LOG but ` 8`/` 9` in the session; L11H0 −0.0448 (Run 1) vs −0.1188 (Run 2) were once treated as one unresolved value (they are different runs).
-- A supplementary technical log was truncated at its limitations section.
-- A consolidated log file contains a typo ("−00008", should be −0.0008).
-- Effect: none on conclusions; unresolved provenance items listed in FINAL_RESEARCH_STATE section 8.
+## A29. Cross-file value and labeling discrepancies
+- The reported rank for `' 8'` differs across Run 2 and a table (rank 4) versus the controlled matrix (rank 7). The original DLA table is labeled `' 8'`/`' 6'` in the research log but `' 8'`/`' 9'` in a session record. L11H0 values −0.0448 (Run 1) and −0.1188 (Run 2) refer to different runs and must remain separate.
+- Effect: these source-label discrepancies remain unresolved pending the corresponding run outputs; they are not silently reconciled.
 ## Summary table: did the correction change the conclusion?
 | Issue | Changed conclusion? |
 |---|---|
@@ -152,4 +138,4 @@ Project status: CLOSED.
 | A23, A24 (doubles design and tokenization) | Yes (v1 artifact retired; effect corroborated, not confirmed) |
 | A25 (M1) | Closed as limitation |
 | A26 (frequency) | Inconclusive; ρ = +0.82 discarded |
-| A04, A05, A07, A08 to A10, A12, A13, A17, A20, A27 to A29 | No, or limitation only |
+| A04, A07–A10, A12–A13, A20, A29 | No change to the surviving claim; data-integrity limits retained |
