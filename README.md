@@ -3,7 +3,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![Framework: TransformerLens](https://img.shields.io/badge/framework-TransformerLens-purple.svg)](https://github.com/TransformerLensOrg/TransformerLens)
-[![Status: Closed / Published](https://img.shields.io/badge/status-closed%20%2F%20reproducible-brightgreen.svg)]()
+[![Status: Analysis closed / reproducible](https://img.shields.io/badge/status-analysis%20closed%20%2F%20reproducible-brightgreen.svg)]()
 
 > **Forensic mechanistic audit and empirical falsification toolkit for arithmetic prompt processing in GPT-2 Small (124M).**
 
@@ -13,11 +13,11 @@
 
 Do autoregressive language models execute genuine algorithmic circuits when answering arithmetic prompts like `3 + 5 =`? 
 
-This repository provides the complete, publication-ready research artifacts, experimental datasets, forensic audit logs, and Python evaluation scripts that deconstruct arithmetic processing in **GPT-2 Small**. We establish:
+This repository provides the reproducible research artifacts, experimental datasets, forensic audit logs, and Python evaluation scripts for studying arithmetic prompt processing in **GPT-2 Small**. The final analysis establishes:
 
-1. **No General Addition Circuit**: GPT-2 Small achieves only **6.2%** zero-shot top-1 accuracy on single-digit sums ($a + b =$), performing well below naive constant-guess baselines (**25.0%**).
+1. **No evidence of a general, reliably functioning addition mechanism under the tested suite**: GPT-2 Small achieves only **6.2%** zero-shot top-1 accuracy on single-digit sums ($a + b =$), below the tested constant-guess baseline (**25.0%**). This does not establish the absence of every addition-related representation or computation.
 2. **Methodological Artifacts in Early Circuit Claims**: Early indications of dedicated circuits (such as late-layer suppressor heads or non-additive interactions) dissolve when correcting for LayerNorm scaling overshoots ($14\times$–$40\times$) and replacing off-distribution zero-ablations with distribution-preserving mean-ablations.
-3. **The Doubling Anomaly is Operator-Blind**: Identical operands (`a + a =`) systematically elevate logits for their sum token ($2a$) relative to matched split controls across targets 8, 10, 12, and 16 ($adv/\text{SD} = 5.22$). However, through systematic operator and connector swaps ($\times$, $-$, 'and', 'then'), we falsify the arithmetic addition hypothesis: the effect persists across all non-mathematical connectors and reaches its global maximum under subtraction (**$adv/\text{SD} = 6.15$**), proving complete operator blindness.
+3. **A reproducible equal-operand/doubles advantage**: Identical operands (`a + a =`) systematically elevate logits for their sum token ($2a$) relative to matched split controls across targets 8, 10, 12, and 16 ($adv/\text{SD} = 5.22$). The effect persists across the tested operator and connector swaps, so it is not sufficient evidence for an addition-specific mechanism.
 
 ---
 
@@ -30,8 +30,8 @@ Across the $a \times b$ single-digit addition grid, ~87% of symmetric logit diff
   <img src="figures/addition_grid_heatmap.svg" alt="79-Cell Addition Grid Heatmap" width="620"/>
 </p>
 
-### 2. Operator Swap Falsification: Operator-Blind Doubling
-Tracking the sum token $2d$ when operands are coupled via non-addition operators and syntactic connectors. The effect reaches its global maximum under subtraction ($-$) where $a - a = 2a$ is mathematically false ($adv/\text{SD} = 6.15$), decisively falsifying arithmetic addition.
+### 2. Operator Swap: Equal-Operand Persistence Across Operators
+Tracking the sum token $2d$ when operands are coupled via non-addition operators and syntactic connectors. The effect reaches its largest tested normalized value under subtraction ($-$), but this is evidence within the tested design rather than a universal statement about operator blindness.
 
 <p align="center">
   <img src="figures/operator_swap_heatmap.svg" alt="Operator Swap Heatmap" width="650"/>
@@ -100,7 +100,7 @@ Evaluating double prompts (`d [op] d =`) and matched split controls against the 
 | **and** | $+0.469$ | $0.095$ | **$+4.95$** | Non-mathematical conjunction |
 | **then** | $+0.549$ | $0.120$ | **$+4.56$** | Non-mathematical sequence |
 
-Because $4 - 4 = 8$ is mathematically false, the fact that the advantage peaks under subtraction ($adv/\text{SD} = 6.15$) establishes that the model is **operator-blind**.
+These values describe the magnitude of the observed doubles advantage relative to pooled control variability. They are descriptive normalized effect measures, not conventional hypothesis-test statistics. The cross-operator persistence argues against a simple addition-specific surface-form explanation, but does not establish universal operator blindness.
 
 ---
 
@@ -134,6 +134,22 @@ python -m src.frequency_audit --floor 20 --output data/corpus_frequency_audit_ru
 ```
 
 ---
+
+## Project status
+
+**Analysis closed — reproducible research artifacts available.**
+
+This repository contains the code, audit trail, experimental results, limitations, and draft manuscript associated with the study. The manuscript is a research draft and should not be described as a published paper unless an external publication record exists.
+
+## Research summary
+
+This project investigates whether apparent arithmetic behavior in GPT-2 Small corresponds to a general addition mechanism. The final analysis does not identify a general, reliably functioning addition mechanism under the tested evaluation suite. Instead, it finds a reproducible equal-operand/doubles advantage that persists across multiple tested operators and connectors.
+
+### Claim hierarchy
+
+- **[VERIFIED RESULT]** The corrected experiments measure an equal-operand/doubles advantage that persists across the tested operators and connectors.
+- **[INTERPRETATION]** The observed effect is not sufficient evidence for an addition-specific circuit under the tested conditions.
+- **[LIMITATION]** The experiments do not establish that GPT-2 Small has no arithmetic representations, no arithmetic-related circuits, or no operator-sensitive mechanisms elsewhere in the model.
 
 ## Citation
 
