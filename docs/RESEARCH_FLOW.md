@@ -30,5 +30,5 @@ The first eight stages are completed or closed at the status indicated below. Th
 
 The experiment did not move from a clean hypothesis to a single confirming test. An initial addition-circuit interpretation motivated component analysis. Numerical checks then showed that raw DLA magnitudes were mis-scaled and that a static unembedding term mattered. Better baselines and distribution-preserving interventions weakened specific head claims. The repeated-operand effect survived as a narrower behavioral result, while operator substitutions showed that it was not unique to addition in the tested setup. The corpus audit could not resolve memorization because its proxy counts were sparse.
 
-This sequence explains why the final claim is narrower than the starting hypothesis. The detailed correction history remains in [RESEARCH_LOG.md](RESEARCH_LOG.md), which contains the A01–A29 chronology. This document presents the final reasoning path rather than retelling every debugging step.
+This sequence explains why the final claim is narrower than the starting hypothesis. The detailed correction history is in [audit_trail.md](audit_trail.md) (A01–A29); the condensed chronology is in [RESEARCH_LOG.md](RESEARCH_LOG.md). This document presents the final reasoning path rather than retelling every debugging step.
 
