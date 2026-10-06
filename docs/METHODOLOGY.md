@@ -109,3 +109,18 @@ The corpus analysis is intended as contextual evidence rather than a direct meas
 - **Index**: `v4_dolma-v1_7_llama` (3 trillion tokens).
 - **Queries**: Joint exact string (`"a + b = T"`) and prompt prefix (`"a + b ="`).
 - **Reliability Floor**: Minimum joint count threshold of $\ge 20$ combined instances across targets. If higher targets fall below threshold, the frequency hypothesis is categorized as inconclusive rather than artificially accepted or rejected. The results should not be used either to establish or to rule out broader memorization or training-distribution effects.
+
+
+---
+
+## 6. Research Flow and Evidence Labels
+
+The study's final reasoning path is behavioral baseline → matched controls → token and unembedding baselines → corrected DLA → candidate interventions → doubles comparison → operator/connector substitutions → corpus proxy audit. Causal validation of the surviving doubles effect remains proposed work, not a completed result. The full stage record uses the same fields at each step: question, prediction, measurement, result, interpretation, limitation, and next step. See [RESEARCH_FLOW.md](RESEARCH_FLOW.md).
+
+Use the labels consistently:
+- **[VERIFIED RESULT]** for a measurement tied to a committed data artifact or explicitly reported audit result.
+- **[INTERPRETATION]** for what that measurement supports within the tested design.
+- **[HYPOTHESIS]** for an untested proposed mechanism.
+- **[LIMITATION]** for scope, design, tokenization, corpus, or provenance boundaries.
+
+Literature is methodological context; it is not a source of this project's experimental values. For the source-to-claim boundaries and headline-number provenance, see [LITERATURE_MAP.md](LITERATURE_MAP.md). If a run-level artifact is unavailable, cite the audit/manuscript as the reported source and leave the originating run provenance marked unresolved.
