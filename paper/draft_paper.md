@@ -73,11 +73,11 @@ Direct Logit Attribution (DLA) projects component activations onto the unembeddi
 
 This discrepancy arose because component activations were extracted prior to final LayerNorm. Under `fold_ln=True`, final LayerNorm computes:
 $$x_{\text{normalized}} = \frac{x - \mu}{\sigma_{\text{final}}}$$
-where $\sigma_{\text{final}} = \text{ln\_final.hook\_scale}$. Omitting division by $\sigma_{\text{final}}$ inflated raw component magnitudes by $14\times$ to $40\times$ (e.g., MLP 11 raw attribution $+2.6263 \to$ corrected $+0.1368$).
+where $\sigma_{\text{final}} = \text{ln\\_final.hook\\_scale}$. Omitting division by $\sigma_{\text{final}}$ inflated raw component magnitudes by $14\times$ to $40\times$ (e.g., MLP 11 raw attribution $+2.6263 \to$ corrected $+0.1368$).
 
 Furthermore, the static unembedding bias term $b_U[\text{target}] - b_U[\text{foil}]$ sits outside residual decomposition. Incorporating both corrections satisfies the exact sum identity to within $< 10^{-3}$:
 
-$$\sum_{i=1}^{159} \text{DLA}_i + \left( b_U[\text{target}] - b_U[\text{foil}] \right) = \text{logit\_diff}$$
+$$\sum_{i=1}^{159} \text{DLA}_i + \left( b_U[\text{target}] - b_U[\text{foil}] \right) = \text{logit\\_diff}$$
 
 **Table 2: Corrected DLA decomposition on prompt `"3 + 5 ="` (Target `' 8'`, Foil `' 9'`).**
 
@@ -208,7 +208,7 @@ Through systematic empirical auditing and methodological correction, the tested 
 
 ## AI Use Disclosure
 
-Claude Sonnet 5.5, ChatGPT, and Gemini 3.1 Pro were used as research-assistance tools during the development of this project. Their assistance included literature exploration, research planning, methodological discussion, code assistance, analysis and interpretation support, and drafting or revising text. AI-generated suggestions were treated as provisional. The author cross-checked reported data, calculations, citations, and substantive claims against the available project records, code, audit trail, and cited sources. Any remaining provenance gaps or unresolved discrepancies are documented in the repository. The author made the final research decisions and is responsible for the experimental data, analyses, claims, citations, and manuscript.
+Claude Sonnet 5.5, ChatGPT, and Gemini 3.1 Pro were used as research-assistance tools during the development of this project. Their assistance included literature exploration, code assistance and drafting or revising text. AI-generated suggestions were treated as provisional. The author cross-checked reported data, calculations, citations, and substantive claims against the available project records, code, audit trail, and cited sources. Any remaining provenance gaps or unresolved discrepancies are documented in the repository. The author made the final research decisions and is responsible for the experimental data, analyses, claims, citations, and manuscript.
 
 ---
 
