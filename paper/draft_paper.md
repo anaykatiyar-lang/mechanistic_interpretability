@@ -32,7 +32,7 @@ This study asks whether GPT-2 Small's apparent preference for correct answers on
 
 The investigation began with an apparent addition-related signal. Correcting the attribution calculation changed its scale; separating the unembedding bias changed how some net outputs were interpreted; broader controls weakened several component-specific explanations. A target-dependent equal-operand advantage remained, but it also appeared under the tested non-addition operators and connectors. That result narrows the addition-specific interpretation without identifying the mechanism behind the remaining effect.
 
-The experimental order was: behavioral baseline, matched controls, token and unembedding baselines, corrected Direct Logit Attribution (DLA), candidate interventions, doubles comparison, operator and connector substitutions, and a corpus-proxy audit. The final causal validation step remains proposed work. The question, prediction, measurement, result, interpretation, limitation, and next step for each stage are summarized in [docs/RESEARCH_FLOW.md](../docs/RESEARCH_FLOW.md). The paper-to-claim and data-provenance mapping is in [docs/LITERATURE_MAP.md](../docs/LITERATURE_MAP.md); the chronological correction record remains in [docs/RESEARCH_LOG.md](../docs/RESEARCH_LOG.md).
+The experimental order was: behavioral baseline, matched controls, token and unembedding baselines, corrected Direct Logit Attribution (DLA), candidate interventions, doubles comparison, operator and connector substitutions, and a corpus-proxy audit. The final causal validation step remains proposed work. The question, prediction, measurement, result, interpretation, limitation, and next step for each stage are summarized in [docs/RESEARCH_FLOW.md](../docs/RESEARCH_FLOW.md). The paper-to-claim and data-provenance mapping is in [docs/LITERATURE_MAP.md](../docs/LITERATURE_MAP.md); the detailed correction record is in [docs/audit_trail.md](../docs/audit_trail.md), with a condensed chronology in [docs/RESEARCH_LOG.md](../docs/RESEARCH_LOG.md).
 
 The closest published comparison is Hanna et al.'s analysis of a different mathematical behavior in GPT-2 Small: greater-than prediction in year-like contexts. Work on trained modular-addition transformers supplies useful methodological and conceptual comparisons, but those settings differ from this pretrained decimal-addition benchmark. These sources motivate careful task definition and validation; they do not supply evidence for the measurements reported here.
 
@@ -208,7 +208,7 @@ Through systematic empirical auditing and methodological correction, the tested 
 
 ## References
 
-This bibliography provides methodological context, not the provenance for project measurements. See [the literature-to-claim map](../docs/LITERATURE_MAP.md) for the specific relevance and scope of each source, and [the provenance table](../docs/LITERATURE_MAP.md#data-provenance-and-project-evidence) for project evidence.
+This bibliography provides methodological context, not the provenance for project measurements. See [the literature-to-claim map](../docs/LITERATURE_MAP.md) for each source's relevance and scope, [the provenance table](../docs/LITERATURE_MAP.md#data-provenance-and-project-evidence) for project evidence, and [the audit trail](../docs/audit_trail.md) for method corrections and result status.
 
 - Bolukbasi, T., et al. (2021). An Interpretability Illusion for BERT. *research draft arXiv:2104.07143*.
 - Elhage, N., et al. (2021). A Mathematical Framework for Transformer Circuits. *Transformer Circuits Thread*.
