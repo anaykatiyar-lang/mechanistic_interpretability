@@ -208,7 +208,7 @@ Through systematic empirical auditing and methodological correction, the tested 
 
 ## AI Use Disclosure
 
-Claude Sonnet 5.5, ChatGPT, and Gemini 3.1 Pro were used as research-assistance tools during the development of this project. Their assistance included literature exploration, research planning, methodological discussion, code assistance, analysis and interpretation support, and drafting or revising text. AI-generated suggestions were treated as provisional. The author made the final research decisions and is responsible for the experimental data, analyses, claims, citations, and manuscript.
+Claude Sonnet 5.5, ChatGPT, and Gemini 3.1 Pro were used as research-assistance tools during the development of this project. Their assistance included literature exploration, research planning, methodological discussion, code assistance, analysis and interpretation support, and drafting or revising text. AI-generated suggestions were treated as provisional. The author cross-checked reported data, calculations, citations, and substantive claims against the available project records, code, audit trail, and cited sources. Any remaining provenance gaps or unresolved discrepancies are documented in the repository. The author made the final research decisions and is responsible for the experimental data, analyses, claims, citations, and manuscript.
 
 ---
 
