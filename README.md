@@ -56,7 +56,8 @@ gpt2-doubling-falsification/
 │   ├── draft_paper.md             # Complete conference-style paper (NeurIPS/ICLR format)
 │   └── figures/                   # Paper-embedded figures
 ├── docs/
-│   ├── RESEARCH_LOG.md            # Comprehensive chronological audit trail (A01–A29)
+│   ├── audit_trail.md             # Detailed method/code audit and A01–A29 records
+│   ├── RESEARCH_LOG.md            # Condensed research chronology
 │   ├── METHODOLOGY.md             # Experimental design, mathematical metrics, and controls
 │   └── LIMITATIONS.md             # Token geometry quirks, noise-floor limits, and scale bounds
 ├── data/
@@ -149,7 +150,7 @@ The investigation began with an apparent addition-related signal in GPT-2 Small.
 
 Behavioral baseline → matched controls → token and unembedding baselines → corrected DLA → candidate interventions → doubles comparison → operator and connector substitutions → corpus proxy audit → proposed causal validation.
 
-The detailed question, prediction, measurement, result, limitation, and next step for each stage are recorded in [docs/RESEARCH_FLOW.md](docs/RESEARCH_FLOW.md). Paper-to-claim boundaries and numeric provenance are in [docs/LITERATURE_MAP.md](docs/LITERATURE_MAP.md).
+The detailed question, prediction, measurement, result, limitation, and next step for each stage are recorded in [docs/RESEARCH_FLOW.md](docs/RESEARCH_FLOW.md). Paper-to-claim boundaries and numeric provenance are in [docs/LITERATURE_MAP.md](docs/LITERATURE_MAP.md). The detailed correction and verification record is [docs/audit_trail.md](docs/audit_trail.md).
 
 ### Claim hierarchy
 
