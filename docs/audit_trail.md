@@ -1,7 +1,7 @@
 AUDIT_TRAIL.md
 Methodological and code-audit history of the GPT-2 Small addition project.
 Each entry: Original, Problem, Correction, Effect on conclusion, Numbers.
-Tags: [VERIFIED RESULT] [INTERPRETATION] [HYPOTHESIS] [LIMITATION]. Provenance codes as in PROJECT_MEMORY.md.
+Tags: [VERIFIED RESULT] [INTERPRETATION] [HYPOTHESIS] [LIMITATION].
 Project status: CLOSED.
 ## A01. Direct Logit Attribution without final LayerNorm scaling
 - Original: component outputs from `get_full_resid_decomposition` projected directly onto W_U[:,target] − W_U[:,foil].
@@ -127,7 +127,7 @@ Project status: CLOSED.
 - Correction: `index` field, errors raised, joint and conditional counts, no extra anchor, a minimum-count floor (≥20), joint ratio as the primary statistic.
 - Result: usable targets [4, 6], so **inconclusive**. Reasoning kept: frequency is neither supported nor excluded; the minus-form result and the target pattern (8/10/12/16, not 4/6/14) are inference from other experiments.
 ## A27. External audit documents contained errors
-- A ChatGPT verification PDF stated: S6 "only one filler template" (actually four); M1 "baseline logit diff is negative" (varies by pair; pooled ≈0); M2 "predicted accuracy 0.8131 vs 0.8127" (logit diffs, two components, one prompt); S1 "no causal effect" from the shrink (shrink is the LayerNorm rescale; DLA is attribution); S3 as "plus sign falsified" (the test restored the operator-position residual at layers 0 to 3); "missing 7+7" (it was tested); a Gantt chart marked the dense scan "done" before it was run; its equality-vs-repetition controls (`7 + 7 = 7`, `cat + cat = cat`) were ill-posed.
+- An external verification PDF stated: S6 "only one filler template" (actually four); M1 "baseline logit diff is negative" (varies by pair; pooled ≈0); M2 "predicted accuracy 0.8131 vs 0.8127" (logit diffs, two components, one prompt); S1 "no causal effect" from the shrink (shrink is the LayerNorm rescale; DLA is attribution); S3 as "plus sign falsified" (the test restored the operator-position residual at layers 0 to 3); "missing 7+7" (it was tested); a Gantt chart marked the dense scan "done" before it was run; its equality-vs-repetition controls (`7 + 7 = 7`, `cat + cat = cat`) were ill-posed.
 - Effect: critique labels (M1 to m3) were re-derived in FINAL_RESEARCH_STATE rather than copied from EXT.
 ## A28. Manuscript framing overreach
 - Original: a literature and novelty outline built around the "Sign Inversion Paradox" and "late-layer attention sinks masquerading as information movers."
@@ -135,7 +135,7 @@ Project status: CLOSED.
 - Effect: neither is a supported headline finding (see FINAL_RESEARCH_STATE). Related literature surfaced in searches (greater-than circuit, IOI, copy suppression, attention-sink papers) was not systematically verified.
 ## A29. Documentation inconsistencies
 - ' 8' rank 4 (Run 2 and one table) vs rank 7 (controlled matrix); the original DLA table described as ` 8`/` 6` in the LOG but ` 8`/` 9` in the session; L11H0 −0.0448 (Run 1) vs −0.1188 (Run 2) were once treated as one unresolved value (they are different runs).
-- A supplementary document of the conversation's technical log was truncated at its limitations section.
+- A supplementary technical log was truncated at its limitations section.
 - A consolidated log file contains a typo ("−00008", should be −0.0008).
 - Effect: none on conclusions; unresolved provenance items listed in FINAL_RESEARCH_STATE section 8.
 ## Summary table: did the correction change the conclusion?
