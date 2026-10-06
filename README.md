@@ -1,4 +1,4 @@
-# Deconstructing Arithmetic in Small Language Models: Falsification of Circuit Hypotheses and the Operator-Blind Doubling Anomaly
+# Deconstructing Arithmetic in Small Language Models: Falsification of Circuit Hypotheses and the Cross-Operator Doubling Anomaly
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
@@ -89,14 +89,14 @@ $$\sum_{i=1}^{159} \text{DLA}_i + \left( b_U[\text{target}] - b_U[\text{foil}] \
 
 > *Static Bias Override*: In Run 2, the internal circuit dynamically favors the correct answer (`+0.8382`), but the static vocabulary bias (`-1.0303`) flips the net logit output negative.
 
-### 2. Operator Swaps Falsify Arithmetic Addition
+### 2. Operator Swaps: Cross-Operator Persistence
 Evaluating double prompts (`d [op] d =`) and matched split controls against the sum token $2d$:
 
 | Operator / Connector | Positive Target Advantage | Pooled Control SD | Normalized $adv/\text{SD}$ | Theoretical Status |
 |:---:|:---:|:---:|:---:|:---:|
 | **plus (`+`)** | $+0.418$ | $0.080$ | **$+5.22$** | Baseline arithmetic |
 | **times (`*`)** | $+0.224$ | $0.092$ | **$+2.43$** | Operator-swapped |
-| **minus (`-`)** | $+0.323$ | $0.052$ | **$+6.15$** | **Global Maximum (Falsification)** |
+| **minus (`-`)** | $+0.323$ | $0.052$ | **$+6.15$** | **Largest tested normalized value** |
 | **and** | $+0.469$ | $0.095$ | **$+4.95$** | Non-mathematical conjunction |
 | **then** | $+0.549$ | $0.120$ | **$+4.56$** | Non-mathematical sequence |
 
@@ -155,9 +155,9 @@ This project investigates whether apparent arithmetic behavior in GPT-2 Small co
 
 ```bibtex
 @article{katiyar2026deconstructing,
-  title={Deconstructing Arithmetic in Small Language Models: Falsification of Circuit Hypotheses and the Operator-Blind Doubling Anomaly},
+  title={Deconstructing Arithmetic in Small Language Models: Falsification of Circuit Hypotheses and the Cross-Operator Doubling Anomaly},
   author={Katiyar, Anay},
-  journal={arXiv preprint},
+  journal={Research draft},
   year={2026}
 }
 ```
