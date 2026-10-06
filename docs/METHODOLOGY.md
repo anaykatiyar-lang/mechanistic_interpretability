@@ -60,6 +60,8 @@ $$\text{Advantage}(T) = \text{Score}(d+d, T) - \frac{1}{|C_T|} \sum_{c \in C_T} 
 where $C_T$ is the complete set of matched split controls yielding sum $T$.
 
 ### 3.3 Pooled Control Variance and Normalized Advantage ($adv/\text{SD}$)
+
+`Adv/SD` is a project-defined normalized effect-size statistic. It should not be interpreted as a conventional Student's t-statistic, a p-value, or formal evidence of statistical significance. Because observations are structured and partially repeated across targets, operands, and operators, formal inferential claims require an appropriate paired/permutation/bootstrap analysis rather than relying on `adv/SD` alone.
 Because raw advantage scales with vocabulary variance across presentation formats (digits vs words), normalized advantage is computed relative to pooled control standard deviation:
 $$s_{\text{pooled}} = \sqrt{\frac{\sum_{k} (n_k - 1) s_k^2}{\sum_{k} (n_k - 1)}}$$
 where $k \in \{8, 10, 12, 16\}$ represents positive target sums ($df = 18$).
@@ -98,10 +100,12 @@ $$A_{l, h}[i, j] \leftarrow \frac{A_{l, h}[i, j]}{\sum_{k \ne 1} A_{l, h}[i, k]}
 ### 5.1 Operator-Swap Battery
 To test whether the doubling effect represents genuine addition or an operator-blind surface association, addends are coupled via 5 distinct operators and syntactic connectors:
 `"d + d ="`, `"d - d ="`, `"d * d ="`, `"d and d ="`, `"d then d ="`
-Evaluation tracks logits on the sum token $2d$. Complete operator blindness is demonstrated if advantage persists strongly under non-addition operators (especially subtraction, where $d - d = 2d$ is mathematically false).
+Evaluation tracks logits on the sum token $2d$. Persistence under the tested non-addition operators is evidence against a simple addition-specific explanation. It does not establish universal operator blindness.
 
 ### 5.2 Corpus N-Gram Frequency Audit Protocol
+
+The corpus analysis is intended as contextual evidence rather than a direct measurement of GPT-2's training exposure. Dolma v1.7 is a proxy corpus, not the exact GPT-2 training corpus. Sparse exact-match counts therefore limit any conclusion about memorization.
 - **API**: Infini-gram (`https://api.infini-gram.io/`).
 - **Index**: `v4_dolma-v1_7_llama` (3 trillion tokens).
 - **Queries**: Joint exact string (`"a + b = T"`) and prompt prefix (`"a + b ="`).
-- **Reliability Floor**: Minimum joint count threshold of $\ge 20$ combined instances across targets. If higher targets fall below threshold, frequency hypothesis is categorized as inconclusive rather than artificially accepted or rejected.
+- **Reliability Floor**: Minimum joint count threshold of $\ge 20$ combined instances across targets. If higher targets fall below threshold, the frequency hypothesis is categorized as inconclusive rather than artificially accepted or rejected. The results should not be used either to establish or to rule out broader memorization or training-distribution effects.
