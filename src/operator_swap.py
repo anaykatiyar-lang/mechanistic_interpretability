@@ -10,9 +10,13 @@ Prompts evaluated across 5 operators / connectors:
 for targets 4, 6, 8, 10, 12, 14, 16.
 
 Empirical finding (PROJECT_MEMORY.md §7 E11, R13):
-    The advantage persists across all operators and is strongest under minus
-    (adv/SD = 6.15 vs 5.22 for plus), demonstrating complete operator blindness.
+    The advantage persists across the tested operators and is strongest under minus
+    (adv/SD = 6.15 vs 5.22 for plus). This is evidence against a simple addition-specific explanation,
+    not a universal proof of operator blindness.
 """
+
+Interpretation note: the reported adv/SD values are descriptive normalized effect
+measures, not conventional t-statistics or p-values.
 
 from __future__ import annotations
 
