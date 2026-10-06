@@ -176,3 +176,14 @@ The final interpretation is intentionally narrower than several early formulatio
 - **[LIMITATION]** The 79-cell grid contains repeated target sums and related prompt structures, so cells are not fully independent replications.
 
 These changes correct claim strength and interpretation only; experimental numerical results, DLA values, operator-swap measurements, parity measurements, ablation measurements, corpus counts, token norms, and retired-result documentation remain unchanged.
+
+
+---
+
+## 31. Literature, Narrative, and Provenance Integration
+
+The final research flow is recorded separately from the chronological correction history in [RESEARCH_FLOW.md](RESEARCH_FLOW.md). It links each stage's question and prediction to the measurement, reported result, interpretation, limitation, and next step. The final causal validation of the equal-operand effect is listed as proposed work, not as a completed experiment.
+
+Source relevance and source-to-claim boundaries are mapped in [LITERATURE_MAP.md](LITERATURE_MAP.md). That map covers the manuscript bibliography and source recommendations in the supplied project materials. It distinguishes literature-derived methodological context from this project's own data, records the Hase et al. reference correction, and identifies unverified run-level provenance.
+
+No numerical measurements were changed in this integration. The existing entries A01–A29 remain the chronological audit record; the new map points from headline value families to the relevant artifacts and audit entries without replacing or reconciling their values.
