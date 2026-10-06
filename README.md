@@ -81,7 +81,7 @@ gpt2-doubling-falsification/
 ### 1. Direct Logit Attribution Sum Identity
 Pre-LayerNorm activations produce unphysical attribution magnitudes ($14\times$–$40\times$ overshoot). Factoring in dynamic LayerNorm standard deviation $\sigma_{\text{final}}$ and static unembedding bias $b_U$ satisfies the exact decomposition identity to $< 10^{-3}$:
 
-$$\sum_{i=1}^{159} \text{DLA}_i + \left( b_U[\text{target}] - b_U[\text{foil}] \right) = \text{logit\_diff}$$
+$$\sum\_{i=1}^{159} \text{DLA}\_i + \left( b\_U[\text{target}] - b\_U[\text{foil}] \right) = \text{logit\_diff}$$
 
 | Condition | Raw DLA Sum | Corrected DLA Sum | Static Bias Term $\Delta b_U$ | Measured Logit Diff | Residual |
 |---|---|---|---|---|---|
