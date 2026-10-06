@@ -161,3 +161,18 @@ Each entry details: **Initial State**, **Methodological Flaw**, **Applied Correc
 
 ### A29. Audit Trail Harmonization and Provenance Archiving
 - Synchronized all empirical logs, ensuring every preserved figure is tied to reproducible notebook cells.
+
+
+## 30. Final Claim-Strength Harmonization
+
+The final interpretation is intentionally narrower than several early formulations. The corrected experiments preserve the numerical results and audit history while distinguishing measured results from interpretations and hypotheses.
+
+- **[VERIFIED RESULT]** The corrected experiments measure an equal-operand/doubles advantage that persists across the tested operators and connectors.
+- **[INTERPRETATION]** The observed effect is not sufficient evidence for an addition-specific circuit under the tested conditions.
+- **[LIMITATION]** The M1 benchmark is scoped to the evaluated task distribution, prompt formats, tokenization scheme, and target range; it does not establish the absence of every arithmetic-related representation or mechanism in GPT-2 Small.
+- **[LIMITATION]** Adv/SD is a project-defined descriptive normalized effect-size measure, not a conventional Student's t-statistic, p-value, or formal significance test.
+- **[LIMITATION]** The operator-swap experiment uses a limited set of target values and matched control structures, so cross-operator persistence is not a universal statement about all operators or contexts.
+- **[LIMITATION]** The external corpus-frequency analysis is inconclusive and uses Dolma v1.7 only as a proxy rather than GPT-2's exact training corpus.
+- **[LIMITATION]** The 79-cell grid contains repeated target sums and related prompt structures, so cells are not fully independent replications.
+
+These changes correct claim strength and interpretation only; experimental numerical results, DLA values, operator-swap measurements, parity measurements, ablation measurements, corpus counts, token norms, and retired-result documentation remain unchanged.
