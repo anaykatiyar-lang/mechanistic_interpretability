@@ -1,6 +1,6 @@
 # Literature-to-Claim Map
 
-This map separates published literature from this repository's measurements. A cited paper motivates a question or method; it does not verify any result reported here. Project measurements remain governed by committed data artifacts and the A01–A29 chronology in `docs/RESEARCH_LOG.md`, as mapped in [Data provenance](#data-provenance-and-project-evidence). The standalone audit attachment discussed in the supplied conversation has not yet been added to the repository.
+This map separates published literature from this repository's measurements. A cited paper motivates a question or method; it does not verify any result reported here. Project measurements are governed by committed data artifacts and the A01–A29 chronology in `docs/RESEARCH_LOG.md`, as mapped in [Data provenance](#data-provenance-and-project-evidence).
 
 ## Sources cited in the manuscript
 
@@ -17,30 +17,22 @@ This map separates published literature from this repository's measurements. A c
 | Bolukbasi et al. (2021), [An Interpretability Illusion for BERT](https://arxiv.org/abs/2104.07143) | How apparent neuron concepts can depend on representation geometry and the examined data. | Motivates testing candidate interpretations on multiple datasets and controls. | This is an arXiv research draft about BERT; it is a cautionary analogy, not direct evidence about GPT-2 arithmetic. |
 | Hase et al. (2023), [Does Localization Inform Editing?](https://proceedings.neurips.cc/paper_files/paper/2023/hash/3927bbdcf0e8d1fa8aa23c26f358a281-Abstract-Conference.html) | The relationship between causal localization and knowledge editing in language models. | Cautions that locating an effect and establishing how a manipulation changes behavior are distinct questions. | The paper studies fact editing, not arithmetic circuits. It does not directly validate or invalidate the repository's interventions. The manuscript's prior “Hase et al. (2024)” venue/year label is corrected to NeurIPS 2023. |
 
-## Sources discussed in the earlier research recommendations
+## Additional methodological comparisons
 
-These sources were named as structural or methodological comparisons in the supplied conversation materials. They are recorded separately from the manuscript's bibliography so readers can see which informed recommendations but were not previously cited in the draft.
-
-| Source | Recommended use | Boundary |
-|---|---|---|
-| ICLR 2027 [AI Policy for Authors](https://iclr.cc/Conferences/2027/AIPolicyForAuthors) | Venue-specific example of a detailed disclosure requirement for AI assistance with research and writing. | Applies to ICLR 2027 submissions; it is not a universal publication rule or scientific source. |
-| ACM RESPECT 2026 [Policies on Generative AI, LLMs, and Related Tools](https://respect.acm.org/2026/index.php/policies-on-generative-ai-llms-and-related-tools/) | Venue-specific disclosure guidance. | Applies to that conference and its policies; do not present it as a general ACM-wide rule without checking the relevant ACM policy. |
-| Nature Computational Science (2026), [Responsible and transparent use of AI in scientific publishing](https://www.nature.com/articles/s43588-026-01043-4) | Editorial discussion of transparent AI-use disclosure. | Editorial guidance is not evidence about this project's experiments and may not govern a target venue. |
-
-No experimental values, p-values, corpus counts, or interpretations in this repository are derived from these papers or policies.
+Hanna et al.'s GPT-2 Small greater-than study, Conmy et al.'s circuit-discovery work, and Nanda et al.'s modular-addition analysis are mapped above with the manuscript references. Their relevance is methodological and task-specific; none supplies evidence for the measurements reported in this repository.
 
 ## Data provenance and project evidence
 
 | Claim or number family | Primary repository record | Audit/interpretation record | Provenance status |
 |---|---|---|---|
-| Behavioral benchmark, including zero-shot 6.2% and constant-guess 25.0% | `data/` benchmark artifacts and associated evaluation code, where present | `docs/RESEARCH_LOG.md` A25 | The headline values are recorded in the manuscript and RESEARCH_LOG A25. No dedicated M1 results file or originating notebook/run file was found in the repository paths inspected. The paper table pairs 6.2% with 2/36, although 2/36 is about 5.6%; the reported percentage and count are preserved and the discrepancy remains unresolved pending the source run. |
-| Corrected DLA sums, LayerNorm scaling, and unembedding-bias terms | `src/metrics.py` for the DLA identity helper; run-specific values are in the manuscript and RESEARCH_LOG A01–A03 | A01–A03 in `docs/RESEARCH_LOG.md` | Exact headline values are preserved. RESEARCH_LOG records the calculation corrections; the originating notebook cell/run artifacts were not found in the repository. |
-| Ablation and candidate-head results | Intervention scripts and data artifacts, where present | A06–A18 and A25 in `docs/RESEARCH_LOG.md` | Treat single-prompt effects as descriptive where the audit says so; do not promote invalid or unanchored interventions to causal findings. |
+| Behavioral benchmark, including zero-shot 6.2% and constant-guess 25.0% | manuscript and `docs/RESEARCH_LOG.md` A25; no dedicated M1 results file was found in the repository | `docs/RESEARCH_LOG.md` A25 | The headline values are recorded in the manuscript and RESEARCH_LOG A25. No dedicated M1 results file or originating notebook/run file was found in the repository paths inspected. The paper table pairs 6.2% with 2/36, although 2/36 is about 5.6%; the reported percentage and count are preserved and the discrepancy remains unresolved pending the source run. |
+| Corrected DLA sums, LayerNorm scaling, and unembedding-bias terms | `src/metrics.py` for the DLA identity helper; run-specific values are recorded in the manuscript and `docs/RESEARCH_LOG.md` A01–A03 | A01–A03 in `docs/RESEARCH_LOG.md` | Exact headline values are preserved. RESEARCH_LOG records the calculation corrections; the originating notebook cell/run artifacts were not found in the repository. |
+| Ablation and candidate-head results | manuscript and `docs/RESEARCH_LOG.md` A06–A18 | A06–A18 and A25 in `docs/RESEARCH_LOG.md` | Treat single-prompt effects as descriptive where the audit says so; do not promote invalid or unanchored interventions to causal findings. |
 | 79-cell parity grid | `data/addition_grid_79cell.csv` and `figures/addition_grid_heatmap.svg` | `docs/RESEARCH_LOG.md` A20–A21 | Grid has repeated target sums; cells are not independent replications. |
 | Doubles/operator/connector values, including Adv/SD | `data/operator_swap_results.json`, `data/variance_scaling.csv`, and `figures/operator_swap_heatmap.svg` | `docs/RESEARCH_LOG.md` sections 5 / A23–A24 | Adv/SD is descriptive, not a t-statistic or significance test. The effect is target-dependent and the format sweep has a forking-paths caveat. |
-| Corpus-frequency audit and retracted `ρ=+0.82, p=0.023` | `data/corpus_frequencies.json` and `src/frequency_audit.py`, where present | `docs/RESEARCH_LOG.md` A26; `docs/LIMITATIONS.md` section 5 | Final analysis is inconclusive; the earlier correlation is explicitly retracted and must not be cited as a finding. |
-| Token/unembedding diagnostics | `src/token_diagnostics.py` and its generated report, where present | A21 and the tokenization/bias limitations | Runtime-generated reports may not be committed. Verify the exact artifact before relying on a value outside the documented examples. |
+| Corpus-frequency audit and retracted `ρ=+0.82, p=0.023` | `data/corpus_frequencies.json` and `src/frequency_audit.py` | `docs/RESEARCH_LOG.md` A26; `docs/LIMITATIONS.md` section 5 | Final analysis is inconclusive; the earlier correlation is explicitly retracted and must not be cited as a finding. |
+| Token/unembedding diagnostics | `src/token_diagnostics.py` and its generated report, where present | A21 and the tokenization/bias limitations | The diagnostic script is present, but no generated report was found in the repository paths inspected. |
 
 ### Provenance rule
 
-For a result, cite the committed data row or reproducible script output first, then its `docs/RESEARCH_LOG.md` entry, and only then the narrative interpretation. If the source artifact is absent, mark the result as reported in the manuscript/research log and identify the missing run-level source; do not reconstruct or silently reconcile it from prose. The research log preserves superseded and retracted values for history, but they are not current findings. When the separate audit attachment is supplied later, its claims and provenance can be compared against this map.
+For a result, cite the committed data row or reproducible script output first, then its `docs/RESEARCH_LOG.md` entry, and only then the narrative interpretation. If the source artifact is absent, mark the result as reported in the manuscript/research log and identify the missing run-level source; do not reconstruct or silently reconcile it from prose. The research log preserves superseded and retracted values for history, but they are not current findings. 
