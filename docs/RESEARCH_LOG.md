@@ -18,9 +18,9 @@ Each entry details: **Initial State**, **Methodological Flaw**, **Applied Correc
 | **Phase F** | Scaled population testing ($N=84$) was deployed across Easy, Medium, and Hard cohorts. | Population baseline collapsed to $-0.0058 \pm 0.2819$; top head L9H1 was consistent with null draws ($t \approx 2.1$). Parity confound identified and fixed. | Falsified |
 | **Phase G** | Attention-pattern blocking at position 1 appeared null when pooled. | Tier stratification showed Easy tier (no-carry) has a statistically significant drop ($+0.0852$, $p=0.0116$), while Medium is null ($p=0.724$). | Nuanced |
 | **Phase H** | Output preferences were attributed to arithmetic reasoning. | Parity grid (87% predictable by parity) and filler prompts proved baseline preferences are driven by static token bias ($b_U$, parity, round numbers). | Verified |
-| **Phase I** | Prompts of the form `a + a =` showed higher logits for the sum token than matched non-doubles. | Effect persisted across formats (`4 + four =`) and operator swaps ($\times$, $-$, 'and', 'then'), peaking under subtraction ($adv/\text{SD} = 6.15$), proving operator blindness. | Corroborated |
-| **Phase J** | M1 benchmark test: evaluated if GPT-2 Small answers addition correctly. | Zero-shot top-1 accuracy is $\approx 6\%$, below the constant-guess baseline (25%). Model does not perform algorithmic addition. | Limitation Closed |
-| **Phase K** | External corpus n-gram frequency audit (Infini-gram / Dolma v1.7). | Higher target sums lacked sufficient occurrences ($<20$ floor); test concluded inconclusive, but operator swaps rule out surface memorization. | Inconclusive |
+| **Phase I** | Prompts of the form `a + a =` showed higher logits for the sum token than matched non-doubles. | Effect persisted across formats (`4 + four =`) and operator swaps ($\times$, $-$, 'and', 'then'), peaking under subtraction ($adv/\text{SD} = 6.15$). This supports a cross-operator persistence interpretation; it does not establish universal operator blindness. | Corroborated |
+| **Phase J** | M1 benchmark test: evaluated if GPT-2 Small answers addition correctly. | Zero-shot top-1 accuracy is $\approx 6\%$, below the constant-guess baseline (25%). The tested benchmark provides no positive evidence for a general, reliably functioning addition mechanism. | Limitation Closed |
+| **Phase K** | External corpus n-gram frequency audit (Infini-gram / Dolma v1.7). | Higher target sums lacked sufficient occurrences ($<20$ floor); the test concluded inconclusive. The operator-swap results argue against a simple addition-specific surface-form explanation, but do not rule out broader memorization or distributional explanations. | Inconclusive |
 
 ---
 
@@ -146,7 +146,7 @@ Each entry details: **Initial State**, **Methodological Flaw**, **Applied Correc
 ### A25. M1 Benchmark: Baseline Accuracy Assessment
 - **Original**: Proposed subset filtering to correctly answered prompts.
 - **Correction**: Evaluated model across full vocabulary and constant-guess baselines.
-- **Effect**: Zero-shot top-1 accuracy is $\approx 6.2\%$, well below constant guess of $25\%$. General addition circuit hypothesis rejected.
+- **Effect**: Zero-shot top-1 accuracy is $\approx 6.2\%$, well below constant guess of $25\%$. General addition mechanism hypothesis not supported under the tested benchmark.
 
 ### A26. External Frequency Audit Methodology Fixes
 - **Original**: Used incorrect API payload (`"corpus"` instead of `"index"`), anchored queries with leading space producing spurious $\rho = +0.82$.
