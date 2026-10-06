@@ -26,6 +26,18 @@ Upon resolving these methodological issues, we uncovered an unexpected empirical
 
 ---
 
+## Research Question and Evidence Path
+
+This study asks whether GPT-2 Small's apparent preference for correct answers on simple addition prompts reflects a general, addition-specific internal mechanism. The competing explanations include token-level output preferences, prompt structure, repeated operands, and other learned associations. The experiments were intended to distinguish these accounts rather than to treat every positive logit difference as evidence of a circuit.
+
+The investigation began with an apparent addition-related signal. Correcting the attribution calculation changed its scale; separating the unembedding bias changed how some net outputs were interpreted; broader controls weakened several component-specific explanations. A target-dependent equal-operand advantage remained, but it also appeared under the tested non-addition operators and connectors. That result narrows the addition-specific interpretation without identifying the mechanism behind the remaining effect.
+
+The experimental order was: behavioral baseline, matched controls, token and unembedding baselines, corrected Direct Logit Attribution (DLA), candidate interventions, doubles comparison, operator and connector substitutions, and a corpus-proxy audit. The final causal validation step remains proposed work. The question, prediction, measurement, result, interpretation, limitation, and next step for each stage are summarized in [docs/RESEARCH_FLOW.md](../docs/RESEARCH_FLOW.md). The paper-to-claim and data-provenance mapping is in [docs/LITERATURE_MAP.md](../docs/LITERATURE_MAP.md); the chronological correction record remains in [docs/RESEARCH_LOG.md](../docs/RESEARCH_LOG.md).
+
+The closest published comparison is Hanna et al.'s analysis of a different mathematical behavior in GPT-2 Small: greater-than prediction in year-like contexts. Work on trained modular-addition transformers supplies useful methodological and conceptual comparisons, but those settings differ from this pretrained decimal-addition benchmark. These sources motivate careful task definition and validation; they do not supply evidence for the measurements reported here.
+
+---
+
 ## 2. Baseline Competence: The M1 Benchmark
 
 Before attributing internal representations to an "addition circuit", one must establish whether the model actually solves the task. We evaluated GPT-2 Small across a standardized cohort of single-digit addition prompts ($N=36$, $a, b \in [1, 9]$, $a + b < 10$).
@@ -173,6 +185,8 @@ We investigated whether the doubling anomaly is driven by verbatim co-occurrence
 
 ## 7. Discussion and Related Work
 
+The cited literature is used as methodological context, not as evidence for the present measurements. In particular, previous circuit studies show examples of mechanistic explanations on other behaviors; they do not establish that the same mechanism is present in this addition benchmark. See [the literature-to-claim map](../docs/LITERATURE_MAP.md) for source-by-source scope.
+
 ### 7.1 Static Heuristics vs. Algorithmic Circuits
 Our findings intersect with growing literature urging caution in interpreting internal transformer representations (Bolukbasi et al., 2021; Hase et al., 2024). In small models, apparent task performance is frequently scaffolded by static heuristics:
 - **Parity Bias**: 87% of baseline signs in single-digit addition are predictable from target parity, a bias that replicates on non-arithmetic filler prompts.
@@ -194,10 +208,14 @@ Through systematic empirical auditing and methodological correction, the tested 
 
 ## References
 
+This bibliography provides methodological context, not the provenance for project measurements. See [the literature-to-claim map](../docs/LITERATURE_MAP.md) for the specific relevance and scope of each source, and [the provenance table](../docs/LITERATURE_MAP.md#data-provenance-and-project-evidence) for project evidence.
+
 - Bolukbasi, T., et al. (2021). An Interpretability Illusion for BERT. *research draft arXiv:2104.07143*.
 - Elhage, N., et al. (2021). A Mathematical Framework for Transformer Circuits. *Transformer Circuits Thread*.
-- Hase, P., et al. (2024). Does Localization Inform Editing? Surprising Differences in Where Information is Stored vs. Used. *NeurIPS*.
-- Nanda, N., et al. (2023). Progress measures for grokking via mechanistic interpretability. *ICLR*.
+- Hase, P., Bansal, M., Kim, B., and Ghandeharioun, A. (2023). Does Localization Inform Editing? Surprising Differences in Causality-Based Localization vs. Knowledge Editing in Language Models. *NeurIPS 2023*.
+- Hanna, M., Liu, O., and Variengien, A. (2023). How does GPT-2 compute greater-than? Interpreting mathematical abilities in a pre-trained language model. *NeurIPS 2023*.
+- Conmy, A., et al. (2023). Towards Automated Circuit Discovery for Mechanistic Interpretability. *NeurIPS 2023*.
+- Nanda, N., Chan, L., Lieberum, T., Smith, J., and Steinhardt, J. (2023). Progress Measures for Grokking via Mechanistic Interpretability. *ICLR 2023*.
 - Olsson, C., et al. (2022). In-context Learning and Induction Heads. *Transformer Circuits Thread*.
 - Radford, A., et al. (2019). Language Models are Unsupervised Multitask Learners. *OpenAI Technical Report*.
 - Wang, K., et al. (2022). Interpretability in the Wild: a Circuit for Indirect Object Identification in GPT-2 small. *ICLR*.
