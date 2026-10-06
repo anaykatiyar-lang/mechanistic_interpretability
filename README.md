@@ -143,13 +143,23 @@ This repository contains the code, audit trail, experimental results, limitation
 
 ## Research summary
 
-This project investigates whether apparent arithmetic behavior in GPT-2 Small corresponds to a general addition mechanism. The final analysis does not identify a general, reliably functioning addition mechanism under the tested evaluation suite. Instead, it finds a reproducible equal-operand/doubles advantage that persists across multiple tested operators and connectors.
+The investigation began with an apparent addition-related signal in GPT-2 Small. Follow-up checks asked whether that signal survived behavioral baselines, corrected attribution, controlled interventions, and changes to the prompt structure. Several early circuit interpretations weakened after those checks. The result that remains is narrower: the tested suite does not identify a general, reliably functioning addition mechanism, while an equal-operand/doubles advantage persists across the tested operators and connectors. Its mechanism remains unresolved.
+
+### Research path
+
+Behavioral baseline → matched controls → token and unembedding baselines → corrected DLA → candidate interventions → doubles comparison → operator and connector substitutions → corpus proxy audit → proposed causal validation.
+
+The detailed question, prediction, measurement, result, limitation, and next step for each stage are recorded in [docs/RESEARCH_FLOW.md](docs/RESEARCH_FLOW.md). Paper-to-claim boundaries and numeric provenance are in [docs/LITERATURE_MAP.md](docs/LITERATURE_MAP.md).
 
 ### Claim hierarchy
 
 - **[VERIFIED RESULT]** The corrected experiments measure an equal-operand/doubles advantage that persists across the tested operators and connectors.
 - **[INTERPRETATION]** The observed effect is not sufficient evidence for an addition-specific circuit under the tested conditions.
 - **[LIMITATION]** The experiments do not establish that GPT-2 Small has no arithmetic representations, no arithmetic-related circuits, or no operator-sensitive mechanisms elsewhere in the model.
+
+## Research references and provenance
+
+The literature map distinguishes methodological context from this project's evidence and points to the authoritative data artifacts, audit entries, and unresolved source gaps. It corrects the Hase et al. reference year/venue and records why modular-addition and greater-than studies do not directly establish claims about this pretrained GPT-2 addition benchmark.
 
 ## Citation
 
