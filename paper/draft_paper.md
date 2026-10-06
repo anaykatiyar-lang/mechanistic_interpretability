@@ -206,6 +206,12 @@ Through systematic empirical auditing and methodological correction, the tested 
 
 ---
 
+## AI Use Disclosure
+
+Claude Sonnet 5.5, ChatGPT, and Gemini 3.1 Pro were used as research-assistance tools during the development of this project. Their assistance included literature exploration, research planning, methodological discussion, code assistance, analysis and interpretation support, and drafting or revising text. AI-generated suggestions were treated as provisional. The author made the final research decisions and is responsible for the experimental data, analyses, claims, citations, and manuscript.
+
+---
+
 ## References
 
 This bibliography provides methodological context, not the provenance for project measurements. See [the literature-to-claim map](../docs/LITERATURE_MAP.md) for each source's relevance and scope, [the provenance table](../docs/LITERATURE_MAP.md#data-provenance-and-project-evidence) for project evidence, and [the audit trail](../docs/audit_trail.md) for method corrections and result status.
