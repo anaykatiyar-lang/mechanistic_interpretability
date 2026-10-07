@@ -9,7 +9,7 @@ This document details the rigorous experimental design, mathematical formalisms,
 - **Target Architecture**: GPT-2 Small (124M parameters, 12 layers, 12 attention heads per layer, $d_{\text{model}} = 768$, $d_{\text{head}} = 64$, $d_{\text{vocab}} = 50,257$).
 - **Tooling**: TransformerLens library (`HookedTransformer.from_pretrained("gpt2-small")`).
 - **Weight Folding**: Executed under default `fold_ln=True`, whereby LayerNorm gain and bias are folded directly into adjacent projection weights. Consequently, `ln_final` has no learnable weight, but dynamic scaling factor `hook_scale` is actively extracted at run time.
-- **Tokenization Conventions**: All target and foil numbers carry an explicit leading space (e.g., `' 8'` = token 807, `' 16'` = token 4121). Tokens without leading whitespace represent distinct vocabulary indices.
+- **Tokenization Conventions**: Target and foil strings include explicit leading spaces (for example, `' 8'`). Whitespace is part of the GPT-2 byte-pair tokenization and must be preserved. Exact token IDs for all targets/foils should be regenerated from the selected model; the originating token-diagnostic output is not committed.
 
 ---
 
@@ -72,7 +72,7 @@ $$\text{adv}/\text{SD} = \frac{\overline{\text{Advantage}}}{s_{\text{pooled}}}$$
 ## 4. Mechanistic Attribution and Intervention Protocols
 
 ### 4.1 Mathematically Rigorous Direct Logit Attribution (DLA)
-Direct projection of pre-LayerNorm residual activations into unembedding space introduces a $14\times$ to $40\times$ distortion. Corrected attribution enforces:
+The raw/corrected component pairs shown in the manuscript imply a scale factor near $19.2$. The broader $14\times$–$40\times$ range in earlier wording is not supported by those displayed pairs. Corrected attribution enforces:
 $$\text{DLA}_i = \left( \frac{x_i}{\sigma_{\text{final}}} \right) \cdot \left( W_U[:, \text{target}] - W_U[:, \text{foil}] \right)$$
 where $\sigma_{\text{final}} = \text{ln\\_final.hook\\_scale}$ is the standard deviation across residual dimensions at the final position.
 
@@ -95,20 +95,18 @@ $$A_{l, h}[i, j] \leftarrow \frac{A_{l, h}[i, j]}{\sum_{k \ne 1} A_{l, h}[i, k]}
 
 ---
 
-## 5. Falsification Protocols
+## 5. Operator and Corpus Comparisons
 
 ### 5.1 Operator-Swap Battery
-To test whether the doubling effect represents genuine addition or an operator-blind surface association, addends are coupled via 5 distinct operators and syntactic connectors:
-`"d + d ="`, `"d - d ="`, `"d * d ="`, `"d and d ="`, `"d then d ="`
-Evaluation tracks logits on the sum token $2d$. Persistence under the tested non-addition operators is evidence against a simple addition-specific explanation. It does not establish universal operator blindness.
+To test whether the reported equal-operand preference appears only with addition, addends are coupled via five operator strings. The research log records `+`, `−`, `×`, `and`, and `then`. The earlier committed script used ASCII `-` and `*`; original prompt-level run records are absent, so glyph identity for the legacy aggregates is unresolved. The corrected script defaults to the Unicode forms and can run ASCII forms as a separate sensitivity condition. Evaluation tracks logits on token $2d$. The legacy aggregates are not independently reproduced in this repository and do not establish universal operator blindness.
 
 ### 5.2 Corpus N-Gram Frequency Audit Protocol
 
 The corpus analysis is intended as contextual evidence rather than a direct measurement of GPT-2's training exposure. Dolma v1.7 is a proxy corpus, not the exact GPT-2 training corpus. Sparse exact-match counts therefore limit any conclusion about memorization.
 - **API**: Infini-gram (`https://api.infini-gram.io/`).
-- **Index**: `v4_dolma-v1_7_llama` (3 trillion tokens).
+- **Index**: `v4_dolma-v1_7_llama`. Corpus-size claims require a source citation and are not used here.
 - **Queries**: Joint exact string (`"a + b = T"`) and prompt prefix (`"a + b ="`).
-- **Reliability Floor**: Minimum joint count threshold of $\ge 20$ combined instances across targets. If higher targets fall below threshold, the frequency hypothesis is categorized as inconclusive rather than artificially accepted or rejected. The results should not be used either to establish or to rule out broader memorization or training-distribution effects.
+- **Reliability Floor**: The historical files disagree on how to apply the $\ge 20$ count floor (double query alone, double plus mean controls, or double plus summed controls). The originating notebook and per-control counts are absent. `src/frequency_audit.py` now reports all three bases separately and marks API failures explicitly; until the historical rule is resolved, no usable-target count or inferential correlation is asserted. Dolma is a proxy rather than GPT-2's exact training data, so these counts cannot establish or exclude broader memorization or distributional effects.
 
 
 ---

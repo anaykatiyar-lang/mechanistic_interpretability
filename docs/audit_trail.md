@@ -120,7 +120,7 @@ Project status: CLOSED.
 ## A28. Manuscript framing overreach
 - Original: a literature and novelty outline built around the "Sign Inversion Paradox" and "late-layer attention sinks masquerading as information movers."
 - Problems: "sign inversion" named two different phenomena (static-bias override; local-vs-causal mismatch); the sink claim rests on L9H9, whose indirect-routing path patch was invalid (A12); the single-prompt basis was later superseded by the N=84 collapse and token-bias controls.
-- Effect: neither is a supported headline finding (see FINAL_RESEARCH_STATE). Related literature surfaced in searches (greater-than circuit, IOI, copy suppression, attention-sink papers) was not systematically verified.
+- Effect: neither is a supported headline finding (see [RESEARCH_FLOW.md](RESEARCH_FLOW.md) and [LIMITATIONS.md](LIMITATIONS.md)). The cited literature is now mapped by source, relevance, and scope in [LITERATURE_MAP.md](LITERATURE_MAP.md); literature remains methodological context, not evidence for project measurements.
 ## A29. Cross-file value and labeling discrepancies
 - The reported rank for `' 8'` differs across Run 2 and a table (rank 4) versus the controlled matrix (rank 7). The original DLA table is labeled `' 8'`/`' 6'` in the research log but `' 8'`/`' 9'` in a session record. L11H0 values −0.0448 (Run 1) and −0.1188 (Run 2) refer to different runs and must remain separate.
 - Effect: these source-label discrepancies remain unresolved pending the corresponding run outputs; they are not silently reconciled.
@@ -139,3 +139,15 @@ Project status: CLOSED.
 | A25 (M1) | Closed as limitation |
 | A26 (frequency) | Inconclusive; ρ = +0.82 discarded |
 | A04, A07–A10, A12–A13, A20, A29 | No change to the surviving claim; data-integrity limits retained |
+
+## Repository artifact audit addendum
+
+This addendum records checks of the committed scripts, tables, figures, and citations. It does not replace the historical entries above or alter their experimental values.
+
+- The former `src/operator_swap.py` had a syntax error and generated incomplete positive-target control sets. The replacement compiles and defines all ordered unequal single-digit splits. The legacy aggregate remains unchanged; it has no prompt-level scores, and no model rerun was completed in this environment.
+- The former `src/frequency_audit.py` substituted zero counts when queries failed. The replacement retains failures as errors and emits per-query records with multiple candidate floor definitions. The historical artifact remains unchanged and unverified; the external API was not queried in this environment.
+- `data/addition_grid_79cell.csv` contains 79 data rows, including `(9, 5)`. No numerical rows were added or edited. Parity agreement was recomputed from the CSV; repeated target sums mean cells are not independent.
+- The operator figure is generated from the legacy aggregate. It is not a fresh model result. The corpus artifact has no committed figure.
+- Run-level notebooks or equivalent source outputs remain absent for M1, N=84, DLA, ablations, and token diagnostics. The single-operand comparison has no committed result. The M1 percentage/count and cohort discrepancies, and the word+word pooled-SD mismatch, remain unresolved pending source records.
+- The script now separates the Unicode operator strings recorded in the research log from an ASCII sensitivity condition. The exact glyphs used for the legacy aggregate remain unresolved because its original prompts are unavailable.
+- The manuscript bibliography's Wang et al. entry is dated 2023 to match the ICLR 2023 venue; the existing literature map already cites the paper as 2023.

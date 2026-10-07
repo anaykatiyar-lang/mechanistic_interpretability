@@ -1,182 +1,145 @@
-"""
-plot_heatmaps.py — Generate publication-grade heatmaps for the addition grid
-and operator swap falsification experiments.
-
-Generates:
-    1. figures/addition_grid_parity_heatmap.png / .svg
-       (79-cell a x b grid showing parity bias and the doubling diagonal)
-    2. figures/operator_swap_heatmap.png / .svg
-       (Operator-blindness comparison across +, -, *, and, then)
-"""
+"""Build the committed SVG figures directly from the data artifacts."""
 
 from __future__ import annotations
 
 import argparse
+import csv
+import html
+import json
 from pathlib import Path
-import numpy as np
-import pandas as pd
+from typing import Any
 
 
-def generate_addition_grid_svg(csv_path: str, output_path: str):
-    """
-    Generate a standalone, high-precision SVG heatmap for the 79-cell addition grid.
-    Colors cells using a diverging palette:
-        Red/Warm (< 0, typically odd sums)
-        Blue/Cool (> 0, typically even sums)
-    """
-    df = pd.read_csv(csv_path)
-    grid = np.full((9, 9), np.nan)
-    for _, row in df.iterrows():
-        a = int(row["a"]) - 1
-        b = int(row["b"]) - 1
-        grid[a, b] = float(row["symmetric_logit_diff"])
+def generate_addition_grid_svg(csv_path: str, output_path: str) -> None:
+    """Render the 1–9 addition grid and report parity agreement by sum range."""
+    grid = [[None for _ in range(9)] for _ in range(9)]
+    rows: list[dict[str, str]] = []
+    with open(csv_path, newline="", encoding="utf-8") as handle:
+        for row in csv.DictReader(handle):
+            rows.append(row)
+            a, b = int(row["a"]), int(row["b"])
+            grid[a - 1][b - 1] = float(row["symmetric_logit_diff"])
 
-    cell_size = 56
-    padding_x = 90
-    padding_y = 90
-    width = padding_x + 9 * cell_size + 60
-    height = padding_y + 9 * cell_size + 80
+    def agreement(selected: list[dict[str, str]]) -> tuple[int, int]:
+        correct = sum(
+            (float(row["symmetric_logit_diff"]) > 0) == (row["parity"] == "even")
+            for row in selected
+        )
+        return correct, len(selected)
 
-    svg_parts = [
-        f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}" width="{width}" height="{height}" style="background-color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, Helvetica, Arial, sans-serif;">',
-        '<style>',
-        '  .title { font-size: 16px; font-weight: bold; fill: #111827; }',
-        '  .subtitle { font-size: 12px; fill: #4b5563; }',
-        '  .axis-label { font-size: 13px; font-weight: 600; fill: #374151; }',
-        '  .tick-label { font-size: 12px; font-weight: 500; fill: #6b7280; }',
-        '  .cell-text { font-size: 11px; font-weight: 600; text-anchor: middle; dominant-baseline: central; }',
-        '  .diag-border { stroke: #1e3a8a; stroke-width: 2.5px; fill: none; }',
-        '</style>',
-        f'<text x="{width/2}" y="32" text-anchor="middle" class="title">GPT-2 Small Addition Grid (79 Cells): Symmetric Logit Difference</text>',
-        f'<text x="{width/2}" y="52" text-anchor="middle" class="subtitle">Checkerboard pattern reveals parity bias (Blue = Even/Positive, Red = Odd/Negative). Bold outline = Doubles diagonal.</text>',
+    overall = agreement(rows)
+    lower = agreement([row for row in rows if int(row["target_sum"]) <= 13])
+    upper = agreement([row for row in rows if int(row["target_sum"]) >= 14])
+
+    cell_size, padding_x, padding_y = 56, 90, 100
+    width, height = padding_x + 9 * cell_size + 60, padding_y + 9 * cell_size + 80
+    svg = [
+        f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}" width="{width}" height="{height}" style="background:#fff;font-family:Arial,sans-serif">',
+        '<style>.title{font-size:16px;font-weight:bold;fill:#111827}.subtitle{font-size:11px;fill:#4b5563}.axis{font-size:13px;font-weight:600;fill:#374151}.tick{font-size:12px;fill:#6b7280}.value{font-size:11px;font-weight:600;text-anchor:middle;dominant-baseline:central}</style>',
+        f'<text x="{width/2}" y="28" text-anchor="middle" class="title">GPT-2 Small Addition Grid ({len(rows)} cells): Symmetric Logit Difference</text>',
+        f'<text x="{width/2}" y="48" text-anchor="middle" class="subtitle">Parity sign agreement: {overall[0]}/{overall[1]} overall; {lower[0]}/{lower[1]} for sums ≤13; {upper[0]}/{upper[1]} for sums ≥14.</text>',
+        f'<text x="{width/2}" y="66" text-anchor="middle" class="subtitle">Repeated target sums mean cells are not independent; parity alignment is weaker and changes at higher sums.</text>',
+        f'<text x="{padding_x + 4.5 * cell_size}" y="{padding_y - 30}" text-anchor="middle" class="axis">Second Operand (b)</text>',
+        f'<text x="25" y="{padding_y + 4.5 * cell_size}" text-anchor="middle" transform="rotate(-90 25 {padding_y + 4.5 * cell_size})" class="axis">First Operand (a)</text>',
     ]
+    for index in range(9):
+        svg.append(f'<text x="{padding_x + index*cell_size + cell_size/2}" y="{padding_y-10}" text-anchor="middle" class="tick">{index+1}</text>')
+        svg.append(f'<text x="{padding_x-15}" y="{padding_y + index*cell_size + cell_size/2}" text-anchor="end" class="tick">{index+1}</text>')
 
-    # Column headers (Operand b)
-    svg_parts.append(f'<text x="{padding_x + 4.5 * cell_size}" y="{padding_y - 30}" text-anchor="middle" class="axis-label">Second Operand (b)</text>')
-    for j in range(9):
-        x = padding_x + j * cell_size + cell_size / 2
-        svg_parts.append(f'<text x="{x}" y="{padding_y - 10}" text-anchor="middle" class="tick-label">{j + 1}</text>')
-
-    # Row headers (Operand a)
-    svg_parts.append(f'<text x="25" y="{padding_y + 4.5 * cell_size}" text-anchor="middle" transform="rotate(-90 25 {padding_y + 4.5 * cell_size})" class="axis-label">First Operand (a)</text>')
-    for i in range(9):
-        y = padding_y + i * cell_size + cell_size / 2
-        svg_parts.append(f'<text x="{padding_x - 15}" y="{y}" text-anchor="end" class="tick-label">{i + 1}</text>')
-
-    # Draw cells
     for i in range(9):
         for j in range(9):
-            val = grid[i, j]
-            x = padding_x + j * cell_size
-            y = padding_y + i * cell_size
-
-            if np.isnan(val):
-                # Empty cell (e.g. 1+9 or 9+1)
-                svg_parts.append(f'<rect x="{x}" y="{y}" width="{cell_size-2}" height="{cell_size-2}" fill="#f3f4f6" rx="4" />')
-                svg_parts.append(f'<text x="{x + cell_size/2}" y="{y + cell_size/2}" class="cell-text" fill="#9ca3af">—</text>')
+            value = grid[i][j]
+            x, y = padding_x + j * cell_size, padding_y + i * cell_size
+            if value is None:
+                svg.append(f'<rect x="{x}" y="{y}" width="{cell_size-2}" height="{cell_size-2}" fill="#f3f4f6" rx="4"/>')
+                svg.append(f'<text x="{x+cell_size/2}" y="{y+cell_size/2}" class="value" fill="#9ca3af">—</text>')
                 continue
-
-            # Color mapping
-            # Max expected magnitude ~ 0.72
-            norm = np.clip(val / 0.75, -1.0, 1.0)
+            norm = max(-1.0, min(1.0, value / 0.75))
             if norm >= 0:
-                # Cool Blue
-                r = int(255 - norm * (255 - 37))
-                g = int(255 - norm * (255 - 99))
-                b = int(255 - norm * (255 - 235))
-                text_color = "#ffffff" if norm > 0.45 else "#1e3a8a"
+                rgb = (int(255-norm*218), int(255-norm*156), int(255-norm*20))
+                text_color = "#fff" if norm > 0.45 else "#1e3a8a"
             else:
-                # Warm Red
-                anorm = abs(norm)
-                r = int(255 - anorm * (255 - 220))
-                g = int(255 - anorm * (255 - 38))
-                b = int(255 - anorm * (255 - 38))
-                text_color = "#ffffff" if anorm > 0.45 else "#7f1d1d"
-
-            fill_hex = f"#{r:02x}{g:02x}{b:02x}"
-            is_diag = (i == j)
-            svg_parts.append(f'<rect x="{x}" y="{y}" width="{cell_size-2}" height="{cell_size-2}" fill="{fill_hex}" rx="4" />')
-
-            if is_diag:
-                svg_parts.append(f'<rect x="{x}" y="{y}" width="{cell_size-2}" height="{cell_size-2}" class="diag-border" rx="4" />')
-
-            sign_str = f"{val:+.3f}"
-            svg_parts.append(f'<text x="{x + cell_size/2}" y="{y + cell_size/2}" class="cell-text" fill="{text_color}">{sign_str}</text>')
-
-    svg_parts.append('</svg>')
-
-    out_file = Path(output_path)
-    out_file.parent.mkdir(parents=True, exist_ok=True)
-    with open(out_file, "w", encoding="utf-8") as f:
-        f.write("\n".join(svg_parts))
-    print(f"Generated Addition Grid Heatmap SVG at: {out_file}")
+                magnitude = abs(norm)
+                rgb = (int(255-magnitude*35), int(255-magnitude*217), int(255-magnitude*217))
+                text_color = "#fff" if magnitude > 0.45 else "#7f1d1d"
+            fill = "#%02x%02x%02x" % rgb
+            svg.append(f'<rect x="{x}" y="{y}" width="{cell_size-2}" height="{cell_size-2}" fill="{fill}" rx="4"/>')
+            if i == j:
+                svg.append(f'<rect x="{x}" y="{y}" width="{cell_size-2}" height="{cell_size-2}" stroke="#1e3a8a" stroke-width="2.5" fill="none" rx="4"/>')
+            svg.append(f'<text x="{x+cell_size/2}" y="{y+cell_size/2}" class="value" fill="{text_color}">{value:+.3f}</text>')
+    svg.append("</svg>")
+    out = Path(output_path)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text("\n".join(svg), encoding="utf-8")
 
 
-def generate_operator_swap_svg(output_path: str):
-    """
-    Generate an SVG heatmap comparing operators (+, -, *, and, then)
-    across normalized adv/SD metrics.
-    """
-    data = [
-        ("plus (+)", 5.22, 0.418, 0.080),
-        ("times (*)", 2.43, 0.224, 0.092),
-        ("minus (-)", 6.15, 0.323, 0.052),
-        ("and", 4.95, 0.469, 0.095),
-        ("then", 4.56, 0.549, 0.120),
+def _operator_rows(data_path: str, variant: str) -> list[dict[str, Any]]:
+    data = json.loads(Path(data_path).read_text(encoding="utf-8"))
+    results = data.get("results", {})
+    if variant in results and isinstance(results[variant], dict):
+        results = results[variant]
+    rows = []
+    for key, item in results.items():
+        if not isinstance(item, dict) or "positive_adv_over_sd" not in item:
+            continue
+        adv_sd = item["positive_adv_over_sd"]
+        raw_adv = item.get("positive_advantage")
+        operator = item.get("operator_string", item.get("operator", key))
+        if adv_sd is None or raw_adv is None:
+            continue
+        rows.append({"label": key, "operator": operator, "adv_sd": float(adv_sd), "raw_adv": float(raw_adv)})
+    if not rows:
+        raise ValueError(f"No compatible aggregate operator rows found in {data_path!r} for {variant!r}.")
+    return rows
+
+
+def generate_operator_swap_svg(data_path: str, output_path: str, variant: str) -> None:
+    """Render operator summaries from their JSON source, not duplicated constants."""
+    rows = _operator_rows(data_path, variant)
+    raw_max = max(rows, key=lambda row: row["raw_adv"])
+    normalized_max = max(rows, key=lambda row: row["adv_sd"])
+    width, height = 720, 110 + 54 * len(rows)
+    svg = [
+        f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}" width="{width}" height="{height}" style="background:#fff;font-family:Arial,sans-serif">',
+        '<style>.title{font-size:16px;font-weight:bold;fill:#111827}.subtitle{font-size:11px;fill:#4b5563}.label{font-size:13px;fill:#1f2937}.bar{font-size:12px;font-weight:bold;fill:#fff}.value{font-size:11px;fill:#4b5563}</style>',
+        f'<text x="{width/2}" y="28" text-anchor="middle" class="title">Reported Doubles Advantage Under Operator Substitutions</text>',
+        f'<text x="{width/2}" y="48" text-anchor="middle" class="subtitle">Descriptive adv/SD summary. Largest raw advantage: {html.escape(raw_max["label"])} ({raw_max["raw_adv"]:+.3f}); largest adv/SD: {html.escape(normalized_max["label"])} ({normalized_max["adv_sd"]:.2f}).</text>',
+        '<text x="360" y="72" class="subtitle">Legacy aggregate; not reproduced from prompt-level scores. adv/SD is not a significance test.</text>',
     ]
-
-    width = 680
-    height = 360
-    svg_parts = [
-        f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}" width="{width}" height="{height}" style="background-color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, Helvetica, Arial, sans-serif;">',
-        '<style>',
-        '  .title { font-size: 16px; font-weight: bold; fill: #111827; }',
-        '  .subtitle { font-size: 12px; fill: #4b5563; }',
-        '  .header { font-size: 13px; font-weight: 600; fill: #374151; }',
-        '  .row-label { font-size: 13px; font-weight: 500; fill: #1f2937; }',
-        '  .bar-text { font-size: 12px; font-weight: bold; fill: #ffffff; }',
-        '  .val-text { font-size: 12px; fill: #4b5563; }',
-        '</style>',
-        f'<text x="{width/2}" y="32" text-anchor="middle" class="title">Doubles Advantage Under Operator Swaps (adv/SD Ratio)</text>',
-        f'<text x="{width/2}" y="52" text-anchor="middle" class="subtitle">Global peak occurs under subtraction (adv/SD = 6.15), falsifying mathematical addition.</text>',
-    ]
-
-    start_y = 90
-    bar_height = 36
-    max_adv_sd = 7.0
-    bar_max_width = 320
-
-    for idx, (op, adv_sd, raw_adv, sd) in enumerate(data):
-        y = start_y + idx * (bar_height + 14)
-        bar_w = (adv_sd / max_adv_sd) * bar_max_width
-
-        color = "#2563eb"  # Blue
-        if op.startswith("minus"):
-            color = "#dc2626"  # Highlight red for subtraction peak!
-
-        svg_parts.append(f'<text x="110" y="{y + bar_height/2 + 4}" text-anchor="end" class="row-label">{op}</text>')
-        svg_parts.append(f'<rect x="130" y="{y}" width="{bar_w}" height="{bar_height}" fill="{color}" rx="6" />')
-        svg_parts.append(f'<text x="{130 + bar_w - 12}" y="{y + bar_height/2 + 4}" text-anchor="end" class="bar-text">+{adv_sd:.2f} SD</text>')
-        svg_parts.append(f'<text x="{140 + bar_w}" y="{y + bar_height/2 + 4}" class="val-text">(Adv: {raw_adv:+.3f}, SD: {sd:.3f})</text>')
-
-    svg_parts.append('</svg>')
-
-    out_file = Path(output_path)
-    out_file.parent.mkdir(parents=True, exist_ok=True)
-    with open(out_file, "w", encoding="utf-8") as f:
-        f.write("\n".join(svg_parts))
-    print(f"Generated Operator Swap Heatmap SVG at: {out_file}")
+    start_y, bar_height, max_width = 88, 30, 340
+    max_value = max(row["adv_sd"] for row in rows) or 1.0
+    for index, row in enumerate(rows):
+        y = start_y + index * 54
+        label = f'{row["label"]} ({row["operator"]})'
+        bar_width = row["adv_sd"] / max_value * max_width
+        svg.append(f'<text x="115" y="{y+bar_height/2+4}" text-anchor="end" class="label">{html.escape(label)}</text>')
+        svg.append(f'<rect x="130" y="{y}" width="{bar_width:.2f}" height="{bar_height}" fill="#426b9b" rx="5"/>')
+        svg.append(f'<text x="{130+bar_width-8:.2f}" y="{y+bar_height/2+4}" text-anchor="end" class="bar">{row["adv_sd"]:.2f}</text>')
+        svg.append(f'<text x="{140+bar_width:.2f}" y="{y+bar_height/2+4}" class="value">raw advantage {row["raw_adv"]:+.3f}</text>')
+    svg.append("</svg>")
+    out = Path(output_path)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text("\n".join(svg), encoding="utf-8")
 
 
-def main():
-    parser = argparse.ArgumentParser(description="Generate Figures & Heatmaps")
-    parser.add_argument("--grid-csv", type=str, default="data/addition_grid_79cell.csv")
-    parser.add_argument("--grid-svg", type=str, default="figures/addition_grid_heatmap.svg")
-    parser.add_argument("--operator-svg", type=str, default="figures/operator_swap_heatmap.svg")
+def main() -> None:
+    parser = argparse.ArgumentParser(description="Regenerate the repository SVG figures from committed artifacts")
+    parser.add_argument("--grid-csv", default="data/addition_grid_79cell.csv")
+    parser.add_argument("--operator-json", default="data/operator_swap_results.json")
+    parser.add_argument("--operator-variant", default="reported_unicode")
+    parser.add_argument("--grid-svg", default="figures/addition_grid_heatmap.svg")
+    parser.add_argument("--operator-svg", default="figures/operator_swap_heatmap.svg")
     args = parser.parse_args()
 
     generate_addition_grid_svg(args.grid_csv, args.grid_svg)
-    generate_operator_swap_svg(args.operator_svg)
+    generate_operator_swap_svg(args.operator_json, args.operator_svg, args.operator_variant)
+
+    # The manuscript embeds a duplicate copy; keep both paths generated together.
+    paper_grid = Path("paper/figures/addition_grid_heatmap.svg")
+    paper_operator = Path("paper/figures/operator_swap_heatmap.svg")
+    paper_grid.parent.mkdir(parents=True, exist_ok=True)
+    paper_grid.write_bytes(Path(args.grid_svg).read_bytes())
+    paper_operator.write_bytes(Path(args.operator_svg).read_bytes())
 
 
 if __name__ == "__main__":

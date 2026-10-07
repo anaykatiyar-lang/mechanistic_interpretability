@@ -1,4 +1,4 @@
-# Deconstructing Arithmetic in Small Language Models: Falsification of Circuit Hypotheses and the Cross-Operator Doubling Anomaly
+# Arithmetic Prompt Processing in GPT-2 Small: Auditing Circuit Claims and an Equal-Operand Preference
 
 **Anay Katiyar**  
 Independent Researcher  
@@ -7,7 +7,7 @@ Independent Researcher
 
 ## Abstract
 
-Mechanistic interpretability investigations often search for localized circuits responsible for discrete algorithmic capabilities, such as arithmetic addition in autoregressive language models. In this work, we conduct a rigorous forensic audit and empirical evaluation of arithmetic prompt processing in GPT-2 Small (124M parameters). We establish three primary findings: First, under the tested evaluation suite, GPT-2 Small does not exhibit evidence of a general, reliably functioning addition mechanism; its zero-shot top-1 accuracy on single-digit sums ($a + b =$) is approximately 6.2%, performing strictly at or below naive constant-guess baselines (25%). Much of the apparent preference for true sums is driven by token-level output biases—specifically numerical parity alignment (accounting for ~87% of baseline signs) and static unembedding biases ($b_U$). Second, early claims of dedicated circuits (such as late-layer suppressor heads or non-additive interactions) dissolve when correcting for LayerNorm scaling overshoots ($14\times$–$40\times$) and replacing off-distribution zero-ablations with distribution-preserving mean-ablations. Third, we isolate a robust, target-dependent anomaly: prompts with identical addends (`a + a =`) systematically elevate logits for their sum token ($2a$) relative to matched split controls ($a + b = 2a$, $a \ne b$) across targets 8, 10, 12, and 16 (mean advantage $+0.418$, normalized $adv/\text{SD} = 5.22$). However, through systematic operator and connector swaps ($\times$, $-$, 'and', 'then'), the effect is not restricted to arithmetic addition under the tested prompt formats: the doubling advantage persists across the tested operators and connectors and is strongest under subtraction ($-$), where $a - a = 2a$ is mathematically false ($adv/\text{SD} = 6.15$). Because the operator-patching metric was not anchored to a corrupt baseline (A19), these results argue against an addition-specific interpretation but do not constitute a universal falsification of operator-sensitive mechanisms. Our results illustrate how surface associative heuristics and token-level geometry can masquerade as algorithmic reasoning in small language models, providing a methodological blueprint for falsification in mechanistic interpretability.
+Mechanistic interpretability studies often search for localized circuits responsible for algorithmic behavior. This research draft documents an audit of arithmetic-shaped prompts in GPT-2 Small (124M parameters). The tested suite does not provide evidence for a general, reliably functioning addition mechanism, but the behavioral comparison is provisional: the manuscript reports 6.2% zero-shot top-1 accuracy while pairing it with 2/36 (about 5.6%), and the 25% constant-guess baseline is reported on a different, N=32 cohort. The committed repository lacks the source M1 run needed to resolve that mismatch. The committed 79-cell grid has parity-sign agreement in 68/79 cells (86.1%); the pattern is concentrated at sums ≤13 (63/64) and is much weaker at sums ≥14 (5/15). These cells are not independent observations. Displayed raw/corrected DLA pairs imply a scale factor near 19.2; the previously stated 14×–40× range is not supported by those pairs. Legacy aggregate files report a target-dependent equal-operand advantage and persistence across operator strings, but the originating prompt-level outputs are absent and the previous operator script used incomplete controls. A corrected script now writes a separate detailed reproduction file. The reported results therefore remain provisional until the missing runs are reproduced. Operator-position patching (A19) is a separate, unanchored experiment and does not determine the interpretation of the operator-swap comparison. No result here establishes universal operator blindness or identifies the mechanism behind the equal-operand preference.
 
 ---
 
@@ -15,14 +15,14 @@ Mechanistic interpretability investigations often search for localized circuits 
 
 A central objective of mechanistic interpretability is reverse-engineering the neural circuits responsible for algorithmic reasoning in transformer language models (Elhage et al., 2021; Olsson et al., 2022; Wang et al., 2022). Arithmetic tasks—such as single-digit addition—have frequently served as model organisms for studying representation learning, numerical binding, and modular arithmetic circuits (Nanda et al., 2023; Zhong et al., 2023). In small, pretrained language models like GPT-2 Small (Radford et al., 2019), preliminary probing frequently suggests identifiable circuits: attention heads attending to operand tokens, late-layer multi-layer perceptrons (MLPs) promoting correct digits, and apparent head-level suppressors regulating logit outputs.
 
-However, interpreting model internals without rigorous statistical controls and numerical error accounting carries substantial risk. In this paper, we report the complete trajectory of an empirical investigation into how GPT-2 Small processes addition prompts of the form `a + b =`. 
+Interpreting model internals without statistical controls and numerical error accounting carries substantial risk. This draft records the available trajectory of an investigation into GPT-2 Small's responses to addition prompts of the form `a + b =`; some originating notebooks and run-level outputs are not in the repository.
 
 Our initial investigations appeared to support a structured heuristic addition pathway. Yet, systematic methodological auditing revealed that several headline observations were artifacts of:
-1. **Unscaled Direct Logit Attribution (DLA)**: Neglecting the denominator of final LayerNorm scaling, causing component attributions to overshoot by $14\times$ to $40\times$.
+1. **Unscaled Direct Logit Attribution (DLA)**: Neglecting final LayerNorm scaling inflated the displayed component attributions. The raw/corrected pairs in Table 2 imply a factor near $19.2$; the broader $14\times$–$40\times$ range in earlier wording is not supported by those pairs.
 2. **Zero-Ablation Off-Distribution Shifts**: Forcing activation tensors to zero, which inflates residual stream standard deviation $\sigma$ from $19.20$ to $23.13$ and uniformly depresses all tracked logits by $\approx 1.0$, creating spurious "suppressor" heads.
 3. **Token Geometry and Parity Confounds**: Conflating task-specific computation with intrinsic token-level biases, such as numerical parity preferences and static unembedding biases ($b_U$).
 
-Upon resolving these methodological issues, we uncovered an unexpected empirical anomaly: when presented with identical operands (`a + a =`), the model assigns substantially higher logits to the sum token ($2a$) than when presented with non-identical split addends ($a + b = 2a$) matched for the same target sum. We subject this "doubling anomaly" to a comprehensive battery of falsification experiments across verbal formats, operator swaps, and pretraining corpus audits. The cross-operator results show that this phenomenon is not restricted to `+` under the tested prompt formats, providing evidence against an addition-specific interpretation. Broader operator-sensitive mechanisms and other explanations remain possible.
+After these checks, a reported equal-operand preference remained: prompts of the form `a + a =` had higher target-token scores than reported matched split controls for selected sums. The archived aggregate results also report persistence across prompt formats and operator substitutions. Because several run-level outputs are absent and the committed operator script did not match the reported controls, those cross-condition summaries are provisional. They do not identify the mechanism or rule out broader operator-sensitive explanations.
 
 ---
 
@@ -43,12 +43,9 @@ The closest published comparison is Hanna et al.'s analysis of a different mathe
 Before attributing internal representations to an "addition circuit", one must establish whether the model actually solves the task. We evaluated GPT-2 Small across a standardized cohort of single-digit addition prompts ($N=36$, $a, b \in [1, 9]$, $a + b < 10$).
 
 ```
-Prompt: "3 + 5 ="
-Predicted top-5 tokens: " 1" (6.25%), " 4" (6.01%), " 2" (5.92%), " 6" (5.80%), " 5" (5.72%)
-Target token " 8": Rank 7, Logit 13.0319
-Foil token " 9": Rank 12, Logit 12.3876
-Logit difference: +0.6443
 ```
+
+The earlier token-ranking and top-five values are omitted because the corresponding run output is not committed. The selected-prompt logit difference is reported elsewhere in the manuscript, but its originating run file is also absent.
 
 Although the logit difference between target (` 8`) and foil (` 9`) is positive ($+0.6443$), the model fails to output `' 8'` in its top predictions. Table 1 summarizes the model's accuracy across full vocabulary and subset selections.
 
@@ -56,24 +53,24 @@ Although the logit difference between target (` 8`) and foil (` 9`) is positive 
 
 | Metric | Zero-Shot ($N=36$) | Few-Shot ($N=32$) | Naive Baseline |
 |---|---|---|---|
-| **Top-1 Full Vocabulary** | 6.2% (2/36) | 6.2% (2/32) | ~0.002% (Chance) |
+| **Top-1 Full Vocabulary** | Reported 6.2% (2/36 = 5.6%) | 6.2% (2/32 = 6.25%) | ~0.002% (Chance) |
 | **Top-3 Full Vocabulary** | 13.9% (5/36) | 46.9% (15/32) | ~0.006% |
 | **Top-1 Among Answer Digits** | 12.5% | 31.2% | 14.3% (Chance) |
-| **Constant Guess Guessing "9"** | **25.0%** (8/32) | **25.0%** (8/32) | **25.0%** |
-| **Strict Correctness Filter ($\tau=1.0$)** | 1 / 36 (2.8%) | 5 / 33 (15.2%) | — |
+| **Constant Guess Guessing "9"** | Reported 25.0% (8/32; denominator differs from N=36 header) | **25.0%** (8/32) | **25.0%** |
+| **Strict Correctness Filter ($\tau=1.0$)** | 1 / 36 (2.8%) | 5 / 33 (15.2%; separate reported run) | — |
 
-GPT-2 Small's top-1 accuracy (6.2%) falls drastically below a trivial constant-guess baseline (guessing "9" achieves 25.0%). Applying an outcome filter (retaining only prompts where the model outputs the correct answer) artificially biases attribution samples to isolated outliers ($N=1$). Consequently, the tested benchmark provides no positive evidence for a general, reliably functioning addition mechanism. This does not establish that GPT-2 Small contains no addition-related representations or computations.
+The zero-shot percentage/count pair is inconsistent, and the constant-guess denominator is not the N=36 zero-shot cohort. The reported zero-shot result is lower than the reported constant-guess rate, but this table does not support a clean same-cohort comparison. The few-shot top-1 count (2/32) and strict-filter count (5/33) come from separate reported runs and are not reconciled. Applying an outcome filter to a single successful prompt also makes subsequent attribution descriptive and selected by outcome. No source M1 output or prompt list is committed; these values remain reported rather than independently reproduced. They do not establish that GPT-2 Small contains no addition-related representations or computations.
 
 ---
 
 ## 3. Forensic Deconstruction of the "Addition Circuit"
 
 ### 3.1 Direct Logit Attribution and the LayerNorm Scaling Correction
-Direct Logit Attribution (DLA) projects component activations onto the unembedding direction $W_U[:, \text{target}] - W_U[:, \text{foil}]$. In early evaluations, component projections summed to $\approx +8.95$ against a true logit difference of $+0.6443$. 
+Direct Logit Attribution (DLA) projects component activations onto the unembedding direction $W_U[:, \text{target}] - W_U[:, \text{foil}]$. In the reported evaluation, component projections summed to $\approx +8.95$ against a reported logit difference of $+0.6443$. The source notebook and activation outputs are not committed.
 
 This discrepancy arose because component activations were extracted prior to final LayerNorm. Under `fold_ln=True`, final LayerNorm computes:
 $$x_{\text{normalized}} = \frac{x - \mu}{\sigma_{\text{final}}}$$
-where $\sigma_{\text{final}} = \text{ln\\_final.hook\\_scale}$. Omitting division by $\sigma_{\text{final}}$ inflated raw component magnitudes by $14\times$ to $40\times$ (e.g., MLP 11 raw attribution $+2.6263 \to$ corrected $+0.1368$).
+where $\sigma_{\text{final}} = \text{ln\\_final.hook\\_scale}$. The displayed raw/corrected component pairs imply a scale factor near $19.2$ (e.g., MLP 11 raw attribution $+2.6263 \to$ corrected $+0.1368$). The earlier $14\times$–$40\times$ range is not supported by the pairs shown here.
 
 Furthermore, the static unembedding bias term $b_U[\text{target}] - b_U[\text{foil}]$ sits outside residual decomposition. Incorporating both corrections satisfies the exact sum identity to within $< 10^{-3}$:
 
@@ -92,38 +89,38 @@ $$\sum_{i=1}^{159} \text{DLA}_i + \left( b_U[\text{target}] - b_U[\text{foil}] \
 | **Head L9H1** | +0.5762 | +0.0300 | **Measured Logit Diff: +0.6443** |
 
 ### 3.2 The Static-Bias Override
-In a few-shot evaluation (Run 2: target `' 8'`, foil `' 1'`), the dynamic circuit produced a positive contribution ($+0.8382$), yet the measured logit difference was negative ($-0.1920$). This paradox is fully resolved by the static bias term: $b_U[\text{8}] - b_U[\text{1}] = -1.0303$. The static unembedding bias completely overrides the internal circuit dynamics, demonstrating that dynamic component attribution alone cannot predict output behavior.
+In a reported few-shot evaluation (Run 2: target `' 8'`, foil `' 1'`), the dynamic contribution was $+0.8382$ while the reported logit difference was $-0.1920$. The reported static bias term, $b_U[\text{8}] - b_U[\text{1}] = -1.0303$, accounts for the sign difference algebraically. This is a prompt-specific reconstruction; the originating run output is not committed.
 
 ### 3.3 Zero-Ablation Artifacts vs. Mean-Ablation Additivity
 Zeroing the output of head L11H0 caused logit difference to rise by $+0.0658$, leading to its early characterization as an active "suppressor head". Tracking the residual stream standard deviation $\sigma$, however, revealed that zero-ablation forced $\sigma$ from $19.2002$ to $23.1286$, inducing an unphysiological shift that depressed all vocabulary logits uniformly by $\approx 1.0$.
 
-When replaced with distribution-preserving mean-ablation across 5 neutral reference sentences, the causal shift of L11H0 collapsed to $+0.0013$ ($50\times$ reduction, $\sigma = 19.0148$). Moreover, joint ablation of L11H0 and MLP10 yielded measured $\Delta = +0.8127$ against an additive prediction of $+0.8131$ (residual $0.0004$). The claim of a non-additive suppressor interaction is completely falsified.
+When replaced with mean-ablation across five reference sentences, the reported L11H0 shift was $+0.0013$ ($\sigma = 19.0148$). Joint ablation of L11H0 and MLP10 yielded a reported logit difference of $+0.8127$, compared with an additive prediction of $+0.8131$; their difference is $-0.0004$ on this prompt. This result does not support the earlier non-additive suppressor interpretation for this prompt. The originating run outputs are not committed, so the values are not independently reproduced here.
 
 ---
 
 ## 4. The Doubling Anomaly
 
-Because the tested benchmark provides no positive evidence for a general, reliably functioning addition mechanism, we investigated structured sub-patterns across the addition grid. Across 79 single-digit cells, prompts of the form `a + a =` exhibited anomalously high target logits relative to matched split controls.
+Because the tested benchmark provides no positive evidence for a general, reliably functioning addition mechanism, we examined structured patterns in the addition grid. The committed grid and legacy dense-scan summary report a target-dependent equal-operand preference: it is positive for selected sums, while the reported effect is near zero or negative at other sums. The grid is directly inspectable, but the complete dense-scan prompt-level scores and table-generation code are not committed; its aggregate comparisons remain reported results rather than an independently regenerated analysis.
 
 ![Figure 1: 79-Cell Addition Grid Symmetric Logit Difference Heatmap](figures/addition_grid_heatmap.svg)
-*Figure 1: Heatmap of symmetric logit differences across all 79 single-digit cells ($a \times b \in [1, 9]^2$). A clear parity checkerboard emerges (Blue = Even/Positive, Red = Odd/Negative). Cells along the doubles diagonal ($a = b$, bordered) show elevated scores, but their signs remain strongly governed by output parity.*
+*Figure 1: Heatmap of symmetric logit differences across the 79 committed grid rows. Parity sign agreement is 68/79 overall, 63/64 for sums ≤13, and 5/15 for sums ≥14 (0/9 for sums 14–15). Repeated target sums mean grid cells are not independent; the high-sum pattern differs from the lower-sum pattern.*
 
 ### 4.1 Dense Scan Evaluation
 We conducted a dense scan across all even target sums $T \in [4, 16]$, evaluating double prompts ($d + d = T$) against all unique non-double single-digit splits ($a + b = T$, $a \ne b$) in both operand orders.
 
 **Table 3: Dense scan metrics across even target sums.**
 
-| Target ($T$) | Double Prompt | Control Splits ($n$) | Double Score | Control Mean | Advantage | Normalized $adv/\text{SD}$ | Rank |
-|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-| **4** | `2 + 2 =` | 2 | +0.251 | +0.203 | +0.049 | +0.29 | 2 / 3 |
-| **6** | `3 + 3 =` | 4 | +0.230 | +0.213 | +0.017 | +0.13 | 3 / 5 |
-| **8** | `4 + 4 =` | 6 | +0.606 | +0.315 | **+0.291** | **+3.31** | **1 / 7** |
-| **10** | `5 + 5 =` | 8 | +0.647 | +0.113 | **+0.535** | **+9.54** | **1 / 9** |
-| **12** | `6 + 6 =` | 6 | +0.401 | +0.236 | **+0.165** | **+1.63** | **1 / 7** |
-| **14** | `7 + 7 =` | 4 | -0.238 | -0.232 | -0.006 | -0.12 | 4 / 5 |
-| **16** | `8 + 8 =` | 2 | +0.719 | +0.037 | **+0.682** | **+10.83** | **1 / 3** |
+| Target ($T$) | Double Prompt | Ordered Control Prompts ($n$) | Double Score | Control Mean | Advantage | Normalized $adv/\text{SD}$ |
+|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| **4** | `2 + 2 =` | 2 | +0.251 | +0.203 | +0.049 | +0.29 |
+| **6** | `3 + 3 =` | 4 | +0.230 | +0.213 | +0.017 | +0.13 |
+| **8** | `4 + 4 =` | 6 | +0.606 | +0.315 | **+0.291** | **+3.31** |
+| **10** | `5 + 5 =` | 8 | +0.647 | +0.113 | **+0.535** | **+9.54** |
+| **12** | `6 + 6 =` | 6 | +0.401 | +0.236 | **+0.165** | **+1.63** |
+| **14** | `7 + 7 =` | 4 | -0.238 | -0.232 | -0.006 | -0.12 |
+| **16** | `8 + 8 =` | 2 | +0.719 | +0.037 | **+0.682** | **+10.83** |
 
-Across targets 8, 10, 12, and 16, the double prompt strictly outranks all matched controls. Targets 4, 6, and 14 exhibit null advantages across all configurations.
+These are reported aggregate values from `data/variance_scaling.csv`; raw prompt-level control scores and a table-generation script are not committed. The rank column is omitted because the matched per-prompt scores are unavailable. In this digit+digit summary, advantages are positive at 8, 10, 12, and 16 and near zero at 4, 6, and 14; that does not establish null effects across all formats (the same CSV reports +0.177 for target 4 in digit+word and -0.290 for target 6 in word+word).
 
 ### 4.2 Invariance to Lexical and Format Variations
 To test whether the doubling effect is driven by token-level repetition of identical surface strings, we evaluated cross-format variants: digit+word (`4 + four =`) and word+word (`four + four =`).
@@ -136,21 +133,21 @@ To test whether the doubling effect is driven by token-level repetition of ident
 | **digit + word** (`4 + four =`) | +1.129 | +0.378 | +0.750 | 0.171 | **4.40** |
 | **word + word** (`four + four =`) | +1.682 | +0.333 | +1.349 | 0.273 | **4.93** |
 
-While raw advantage grows with verbalization ($+0.418 \to +1.349$), the control variance expands proportionally ($0.080 \to 0.273$). The normalized metric $adv/\text{SD}$ remains similar across the tested formats ($5.22 \approx 4.40 \approx 4.93$). These are descriptive normalized effect measures, not conventional Student's t-statistics, p-values, or formal evidence of statistical significance. Critically, because `'4 + four ='` contains no repeated surface token, the anomaly cannot be explained by low-level byte-pair copy suppression.
+While the reported raw advantage grows with verbalization ($+0.418 \to +1.349$), the reported normalized values are similar ($5.22$, $4.40$, $4.93$). They are descriptive ratios, not conventional Student's t-statistics, p-values, or evidence of statistical significance. The reported `4 + four =` condition lacks a repeated surface token, so literal repetition of the same written digit is not required for the preference. This does not rule out lexical equivalence, latent repetition, or string-familiarity effects. The word+word pooled control SD in the CSV is 0.273, while recomputation from the rounded per-target SDs gives about 0.275; raw scores are absent, so the discrepancy is unresolved.
 
 ---
 
-## 5. Falsification: Operator and Connector Swaps
+## 5. Operator and Connector Substitutions
 
-Does the doubling advantage provide evidence for arithmetic addition? If the model performs mathematical doubling ($2 \times a$), replacing the addition operator (`+`) with non-addition operators or non-mathematical syntactic connectors should abolish the advantage on the sum token $2a$.
+Does the equal-operand preference appear only with addition? An addition-specific account predicts that it should weaken when the operator changes. The comparison is limited to the tested prompt strings and target tokens.
 
 ![Figure 2: Operator Swaps and Normalized adv/SD Ratio](figures/operator_swap_heatmap.svg)
-*Figure 2: Normalized advantage ($adv/\text{SD}$) on the sum token $2a$ across operators and syntactic connectors. The largest tested normalized value occurs under subtraction ($-$), where $a - a = 2a$ is mathematically false ($adv/\text{SD} = 6.15$). This cross-operator persistence argues against a simple addition-specific interpretation but does not by itself establish universal operator blindness.*
+*Figure 2: Reported normalized advantage ($adv/\text{SD}$) on token $2a$ across operator strings. The largest reported raw advantage is under “then” (+0.549); the largest reported normalized ratio is under subtraction (6.15). These are descriptive legacy aggregates and have not yet been reproduced from the corrected script. They do not establish universal operator blindness.*
 
 We evaluated all double and control prompts across 5 operator configurations, tracking logits strictly on the sum token $2a$:
 1. Addition (`+`): `d + d =`
-2. Multiplication (`*`): `d * d =`
-3. Subtraction (`-`): `d - d =`
+2. Multiplication (reported as `×` in the research log): `d × d =`
+3. Subtraction (reported as `−` in the research log): `d − d =`
 4. Conjunction (`and`): `d and d =`
 5. Temporal Sequence (`then`): `d then d =`
 
@@ -159,15 +156,17 @@ We evaluated all double and control prompts across 5 operator configurations, tr
 | Operator / Connector | Positive Adv | Control SD | Positive $adv/\text{SD}$ | Null Adv | Control SD | Null $adv/\text{SD}$ |
 |:---:|:---:|:---:|:---:|:---:|:---:|:---:|
 | **plus (`+`)** | +0.418 | 0.080 | **+5.22** | +0.005 | 0.099 | +0.05 |
-| **times (`*`)** | +0.224 | 0.092 | **+2.43** | +0.022 | 0.113 | +0.20 |
-| **minus (`-`)** | +0.323 | 0.052 | **+6.15** | +0.003 | 0.056 | +0.05 |
+| **times (`×`)** | +0.224 | 0.092 | **+2.43** | +0.022 | 0.113 | +0.20 |
+| **minus (`−`)** | +0.323 | 0.052 | **+6.15** | +0.003 | 0.056 | +0.05 |
 | **and** | +0.469 | 0.095 | **+4.95** | +0.081 | 0.094 | +0.86 |
 | **then** | +0.549 | 0.120 | **+4.56** | +0.113 | 0.082 | +1.38 |
 
 ### The Subtraction Result
-Under subtraction (`-`), the model is evaluated on prompts such as `"4 - 4 ="` against controls like `"5 - 3 ="`, scoring the token `' 8'`. Mathematically, $4 - 4 = 0$, not $8$. Yet, the advantage of the double prompt over controls on the sum token reaches its global maximum under subtraction: **$adv/\text{SD} = +6.15$**. 
+The JSON aggregate labels the tested strings as ASCII `*` and `-`, while the research log and manuscript describe the glyphs as Unicode `×` and `−`. The originating prompt-level run files are absent, so the exact strings used for the archived values are unresolved. The corrected script now defaults to the Unicode strings and offers an ASCII sensitivity run; it writes a new file rather than overwriting these summaries.
 
-The result argues against a simple addition-specific explanation for the doubling anomaly. The advantage persists across the tested operators and connectors, but this limited battery does not establish universal operator blindness or rule out broader memorization, token-frequency, training-distribution, or learned-heuristic explanations. In particular, A19 means the operator-position patching experiment cannot independently establish that operator binding was falsified.
+For the reported subtraction condition, a double prompt such as `"4 − 4 ="` is compared with split controls while scoring token `' 8'`; mathematically, $4 - 4 = 0$, not $8$. The reported normalized ratio is the largest among the five summaries (**$adv/\text{SD} = 6.15$**), but the largest reported raw advantage is under “then” (+0.549). The advantage appears under all five reported strings, which weakens a simple addition-only account within this limited design.
+
+The summaries are not independent verification: the stored JSON lacks prompt-level scores, and its operators/metadata do not match the committed script. Do not describe this as a completed reproduction until the fresh script output is compared against the original runs. Operator-position patching (A19) is a separate experiment and does not validate or invalidate these operator-swap aggregates.
 
 ---
 
@@ -179,7 +178,7 @@ We investigated whether the doubling anomaly is driven by verbatim co-occurrence
 
 **Methodological Retraction**: An early preliminary query indicated a correlation between joint prompt-answer counts and model advantage ($\rho = +0.82$, $p = 0.023$). Audit inspection revealed that query tokenization formatting had produced 0 joint matches for higher targets, collapsing the ratio into a prompt-frequency artifact.
 
-**Final Audit Finding**: Enforcing a reliability floor of $\ge 20$ combined joint occurrences (`a + b = T`), only targets 4 and 6 met the threshold (166 and 42 matches). Higher targets (8, 10, 12, 14, 16) were extremely sparse in exact formulaic form ($< 20$ matches). Consequently, the corpus frequency hypothesis is formally **inconclusive**. The subtraction result is inconsistent with a purely addition-specific surface-form explanation, but the corpus analysis remains inconclusive and does not rule out broader memorization or distributional explanations.
+**Repository status**: The committed corpus JSON does not contain per-control joint counts and does not match the schema or output path of the committed query script. Its stored values and floor flags therefore cannot be independently recomputed from this repository. The earlier $\rho=+0.82$, $p=0.023$ result remains retracted. The historical audit labels the corpus result inconclusive, but this draft does not assert a verified usable-target count or use this artifact to rule out memorization. The corrected script writes a separate detailed output, records failed queries as errors, and reports alternative floor rules; it does not compute a correlation without the original matched advantage data and a verified floor definition.
 
 ---
 
@@ -188,27 +187,25 @@ We investigated whether the doubling anomaly is driven by verbatim co-occurrence
 The cited literature is used as methodological context, not as evidence for the present measurements. In particular, previous circuit studies show examples of mechanistic explanations on other behaviors; they do not establish that the same mechanism is present in this addition benchmark. See [the literature-to-claim map](../docs/LITERATURE_MAP.md) for source-by-source scope.
 
 ### 7.1 Static Heuristics vs. Algorithmic Circuits
-Our findings intersect with growing literature urging caution in interpreting internal transformer representations (Bolukbasi et al., 2021; Hase et al., 2024). In small models, apparent task performance is frequently scaffolded by static heuristics:
-- **Parity Bias**: 87% of baseline signs in single-digit addition are predictable from target parity, a bias that replicates on non-arithmetic filler prompts.
-- **Static Unembedding Bias ($b_U$)**: High baseline preference for tokens like `' 10'` ($b_U = +3.7600$) explains apparent "suppression" of addition when targets equal 10.
+The committed addition grid shows parity-sign agreement in 68/79 cells (86.1%) overall, but the rate is 63/64 for sums ≤13 and 5/15 for sums ≥14. This pattern does not support a uniform parity account across the grid. The audit reports an elevated target-10 baseline on one filler prompt; the four-template mean is recomputed by the diagnostic script and is not available as a committed output.
 
 ### 7.2 Methodological Lessons for Mechanistic Interpretability
-This investigation highlights three indispensable methodological safeguards:
-1. **Always scale by LayerNorm variance**: Pre-LN residual attributions produce deceptive order-of-magnitude overshoots.
-2. **Mean-ablation over zero-ablation**: Zero-ablation destroys residual variance, generating artificial circuit suppressors.
-3. **Operator controls for algorithmic claims**: Algorithmic hypotheses must be tested against operator and connector swaps to rule out non-specific associative priors.
+This investigation illustrates several safeguards for this task:
+1. **Account for final LayerNorm scaling** when projecting residual components into unembedding space.
+2. **Compare interventions with distribution-preserving baselines**; zero-ablation changed residual-stream scale in the reported prompt.
+3. **Use operator and connector controls**, while treating the result as evidence about only the tested strings and controls.
 
 ---
 
 ## 8. Conclusion
 
-Through systematic empirical auditing and methodological correction, the tested evaluation suite does not provide evidence for a general, reliably functioning addition mechanism in GPT-2 Small. Several early mechanistic claims were weakened or rejected after correcting LayerNorm handling, static unembedding bias, tokenization, parity confounds, ablation procedures, and statistical interpretation. A separate equal-operand/doubles advantage persists across the tested operators and connectors, so it is not sufficient evidence for an addition-specific computation. The experiments do not establish the absence of arithmetic-related representations or operator-sensitive mechanisms elsewhere in the model.
+The reported evaluation suite does not establish a general, reliably functioning addition mechanism in GPT-2 Small. Several early mechanistic interpretations were weakened after methodological corrections. A separate equal-operand preference is present in committed grid data and is reported in legacy operator summaries, but the operator comparison has not been reproduced from the corrected script. It is therefore not evidence for a specific arithmetic computation or for universal operator blindness. Missing run-level artifacts and the M1 cohort mismatch limit the strength of the conclusions; the experiments do not establish the absence of arithmetic-related representations or operator-sensitive mechanisms elsewhere in the model.
 
 ---
 
 ## AI Use Disclosure
 
-Claude Sonnet 5.5, ChatGPT, and Gemini 3.1 Pro were used as research-assistance tools during the development of this project. Their assistance included literature exploration, code assistance and drafting or revising text. AI-generated suggestions were treated as provisional. The author cross-checked reported data, calculations, citations, and substantive claims against the available project records, code, audit trail, and cited sources. Any remaining provenance gaps or unresolved discrepancies are documented in the repository. The author made the final research decisions and is responsible for the experimental data, analyses, claims, citations, and manuscript.
+Claude Sonnet 5.5, ChatGPT, and Gemini 3.1 Pro were used as research-assistance tools during the development of this project for literature exploration, code assistance, and drafting or revising text. Suggestions were treated as provisional. The author reviewed reported data, calculations, citations, and claims against available project records, code, audit trail, and cited sources; this review identified missing source runs and artifact mismatches that are documented in the repository. Not every reported result could be independently regenerated from the committed files. The author made the final research decisions and is responsible for the data, analyses, claims, citations, and manuscript.
 
 ---
 
@@ -224,5 +221,5 @@ This bibliography provides methodological context, not the provenance for projec
 - Nanda, N., Chan, L., Lieberum, T., Smith, J., and Steinhardt, J. (2023). Progress Measures for Grokking via Mechanistic Interpretability. *ICLR 2023*.
 - Olsson, C., et al. (2022). In-context Learning and Induction Heads. *Transformer Circuits Thread*.
 - Radford, A., et al. (2019). Language Models are Unsupervised Multitask Learners. *OpenAI Technical Report*.
-- Wang, K., et al. (2022). Interpretability in the Wild: a Circuit for Indirect Object Identification in GPT-2 small. *ICLR*.
+- Wang, K., et al. (2023). Interpretability in the Wild: A Circuit for Indirect Object Identification in GPT-2 Small. *ICLR 2023*.
 - Zhong, Z., et al. (2023). The Clock and the Pizza: Two Stories in Mechanistic Explanation of Neural Networks. *NeurIPS*.

@@ -11,16 +11,16 @@ Each entry details: **Initial State**, **Methodological Flaw**, **Applied Correc
 | Phase | Working Hypothesis / Initial Interpretation | Empirical Discovery / What Changed It | Status |
 |---|---|---|---|
 | **Phase A** | Single prompt (`3 + 5 =`) suggested a dedicated addition circuit: late MLPs (L11, L7, L8), L11H1, L10H2, and L2H2 binding head (97% attention). | Direct logit attribution sums failed to match true logits. | Superseded |
-| **Phase B** | Unscaled direct logit attribution (DLA) seemed to indicate enormous component contributions (~14×–40× too large). | Applying proper final LayerNorm scaling (`cache.apply_ln_to_stack`) and unembedding bias ($b_U$) closed the residual identity to $< 10^{-3}$. | Corrected |
-| **Phase C** | Head L11H0 was deemed an active "suppressor head" and MLP10 $\times$ L11H0 was claimed to have a non-additive interaction. | Zero-ablation was found to take the residual off-distribution ($\sigma$ jumped from 19.20 to 23.13); mean-ablation revealed L11H0 has near-zero causal effect ($+0.0013$) and the interaction is strictly additive. | Falsified |
+| **Phase B** | Unscaled direct logit attribution (DLA) seemed to indicate enormous component contributions (early records used a ~14×–40× range). | Applying proper final LayerNorm scaling (`cache.apply_ln_to_stack`) and unembedding bias ($b_U$) closed the residual identity to $< 10^{-3}$. Displayed raw/corrected pairs imply a scale factor near 19.2; the wider range is not supported by those pairs. | Corrected; wider range historical and unsupported |
+| **Phase C** | Head L11H0 was deemed an active "suppressor head" and MLP10 $\times$ L11H0 was claimed to have a non-additive interaction. | Zero-ablation was found to take the residual off-distribution ($\sigma$ jumped from 19.20 to 23.13); the reported mean-ablation value for L11H0 is near zero ($+0.0013$). The reported double-ablation value (+0.8127) is close to the additive prediction (+0.8131) on that prompt. | Early interpretation retired; single-prompt result only |
 | **Phase D** | Early attention heads (L2H2, L4H11) were designated "arithmetic binding heads". | Non-arithmetic control prompts revealed L4H11 is a generic previous-token head (1.000 on control text) and L2H2 is a general syntactic head (70.8% on control). | Falsified |
 | **Phase E** | Output logits were thought to exhibit "first-operand invariance". | Full digit-shift sweeps revealed all digits co-move ($+0.0975$ to $+0.4797$), invalidating invariance. | Retired |
 | **Phase F** | Scaled population testing ($N=84$) was deployed across Easy, Medium, and Hard cohorts. | Population baseline collapsed to $-0.0058 \pm 0.2819$; top head L9H1 was consistent with null draws ($t \approx 2.1$). Parity confound identified and fixed. | Falsified |
 | **Phase G** | Attention-pattern blocking at position 1 appeared null when pooled. | Tier stratification showed Easy tier (no-carry) has a statistically significant drop ($+0.0852$, $p=0.0116$), while Medium is null ($p=0.724$). | Nuanced |
-| **Phase H** | Output preferences were attributed to arithmetic reasoning. | Parity grid (87% predictable by parity) and filler prompts proved baseline preferences are driven by static token bias ($b_U$, parity, round numbers). | Verified |
-| **Phase I** | Prompts of the form `a + a =` showed higher logits for the sum token than matched non-doubles. | Effect persisted across formats (`4 + four =`) and operator swaps ($\times$, $-$, 'and', 'then'), peaking under subtraction ($adv/\text{SD} = 6.15$). This supports a cross-operator persistence interpretation; it does not establish universal operator blindness. | Corroborated |
-| **Phase J** | M1 benchmark test: evaluated if GPT-2 Small answers addition correctly. | Zero-shot top-1 accuracy is $\approx 6\%$, below the constant-guess baseline (25%). The tested benchmark provides no positive evidence for a general, reliably functioning addition mechanism. | Limitation Closed |
-| **Phase K** | External corpus n-gram frequency audit (Infini-gram / Dolma v1.7). | Higher target sums lacked sufficient occurrences ($<20$ floor); the test concluded inconclusive. The operator-swap results argue against a simple addition-specific surface-form explanation, but do not rule out broader memorization or distributional explanations. | Inconclusive |
+| **Phase H** | Output preferences were attributed to arithmetic reasoning. | The committed 79-cell grid has parity-sign agreement in 68/79 cells (86.1%); the distribution is 63/64 for sums ≤13 and 5/15 for sums ≥14. Separate filler results are reported in the audit trail, but their run output is not committed. | Grid recomputed; causal explanation not established |
+| **Phase I** | Prompts of the form `a + a =` showed higher logits for the sum token than matched non-doubles. | Legacy summaries report an equal-operand preference across formats and operator strings, with a reported subtraction $adv/\text{SD}=6.15$. Prompt-level scores are absent; the prior script omitted controls and used ASCII glyphs where the log records Unicode. | Reported legacy result; not independently reproduced |
+| **Phase J** | M1 benchmark test: evaluated if GPT-2 Small answers addition correctly. | Zero-shot top-1 is reported as 6.2% (2/36; the count implies 5.6%); the 25% constant-guess baseline is reported for N=32. The originating run is absent, so the comparison is unresolved. | Reported limitation; cohort mismatch unresolved |
+| **Phase K** | External corpus n-gram frequency audit (Infini-gram / Dolma v1.7). | The legacy corpus artifact has no per-control counts, and its floor rule and result cannot be recomputed from committed files. The corrected query script has not been run here. | Inconclusive; legacy counts unverified |
 
 ---
 
@@ -54,7 +54,7 @@ Each entry details: **Initial State**, **Methodological Flaw**, **Applied Correc
 - **Original**: Zero-ablation of L11H0 caused $\Delta +0.0658$ logit diff boost; L11H0 labeled a "circuit suppressor". Double ablation of L11H0 + MLP10 claimed non-additive.
 - **Problem**: Setting activations to zero forces residual variance $\sigma$ off-distribution ($19.20 \to 23.13$), uniformly depressing all tracked logits by $\approx 1.0$.
 - **Correction**: Replaced zero-ablation with mean-ablation using reference sentences.
-- **Effect**: L11H0 mean-ablation $\Delta$ dropped to $+0.0013$ ($50\times$ smaller); double ablation measured $+0.8127$ vs predicted $+0.8131$ (strictly additive). Suppressor hypothesis falsified.
+- **Effect**: L11H0 mean-ablation $\Delta$ was reported as $+0.0013$ ($50\times$ smaller); double ablation measured $+0.8127$ vs predicted $+0.8131$ on that prompt. This is consistent with additivity in that measurement; it does not establish exact or general additivity. The suppressor interpretation was retired.
 
 ### A07. Wrong Ablation Object and Indexing
 - **Original**: Ablated `hook_v` instead of `hook_z`; omitted head indexing on layer 11.
@@ -114,7 +114,7 @@ Each entry details: **Initial State**, **Methodological Flaw**, **Applied Correc
 
 ### A20. Parity Bias Across the 79-Cell Grid
 - **Original**: Evaluated 79 single-digit cells without accounting for repeated targets and foil parity.
-- **Correction**: Tested non-arithmetic filler controls; verified that 87% of signs match parity bias (even net $+0.0965$, odd net $-0.0240$).
+- **Correction**: Recomputed the committed CSV directly: parity-sign agreement is 68/79 overall, 63/64 for sums ≤13, and 5/15 for sums ≥14. The earlier ~87% summary and filler values (even net $+0.0965$, odd net $-0.0240$) remain historical audit-trail reports; the filler run output is not committed. No causal claim that parity alone drives the grid is made.
 
 ### A21. Round-Number and Low-Baseline Artifacts
 - **Original**: Target 10 deficit ($-0.4206$) and $7 + 7 = 14$ failure interpreted as arithmetic computation errors.
@@ -126,8 +126,8 @@ Each entry details: **Initial State**, **Methodological Flaw**, **Applied Correc
 
 ### A23. Doubles Experimental Design Refinements
 - **Original**: Single control prompt per target; noisy control comparisons.
-- **Correction**: Dense scan over all valid single-digit splits (both operand orders); normalized advantage ($adv/\text{SD}$).
-- **Effect**: Confirmed advantage is target-dependent (positive at 8, 10, 12, 16; null at 4, 6, 14).
+- **Correction**: The legacy data file reports a dense scan over single-digit splits (both operand orders) and normalized advantage ($adv/\text{SD}$), but its prompt-level values are absent. The former committed operator script omitted valid splits for several targets; corrected generation logic is now in `src/config.py` and `src/operator_swap.py`.
+- **Effect / Status**: Target-dependent advantages are reported by the legacy aggregate (positive at 8, 10, 12, 16; near-zero or negative at 4, 6, 14). These values are not independently reproduced by the replacement script in this checkout.
 
 ### A24. Tokenization and Multi-Token Pitfalls
 - **Original**: Stripped leading whitespace in DiD v1 (`"8"` vs `" 8"`), producing format artifacts.
@@ -136,12 +136,12 @@ Each entry details: **Initial State**, **Methodological Flaw**, **Applied Correc
 ### A25. M1 Benchmark: Baseline Accuracy Assessment
 - **Original**: Proposed subset filtering to correctly answered prompts.
 - **Correction**: Evaluated model across full vocabulary and constant-guess baselines.
-- **Effect**: Zero-shot top-1 accuracy is $\approx 6.2\%$, well below constant guess of $25\%$. General addition mechanism hypothesis not supported under the tested benchmark.
+- **Effect / Status**: Zero-shot top-1 is reported as $\approx 6.2\%$ with 2/36, although 2/36 is about 5.6%; the constant-guess 25% baseline is reported on N=32. The originating M1 run is absent, so the percentage/count and cohort differences remain unresolved. The benchmark does not support a general, reliably functioning addition mechanism under the tested conditions.
 
 ### A26. External Frequency Audit Methodology Fixes
 - **Original**: Used incorrect API payload (`"corpus"` instead of `"index"`), anchored queries with leading space producing spurious $\rho = +0.82$.
-- **Correction**: Rewrote API query client with correct parameters and count floor ($\ge 20$).
-- **Effect**: Established that Dolma v1.7 counts are too sparse for higher sums; test formally classified as inconclusive.
+- **Correction**: The replacement API client uses the documented request shape, reports alternative historical floor bases, and preserves query failures instead of substituting zero. It has not been executed in this checkout; the legacy JSON lacks per-control counts and cannot verify the reported floor outcome.
+- **Effect / Status**: The prior $\rho = +0.82, p=0.023$ remains retracted. The corpus analysis is inconclusive; higher-sum sparsity is a legacy report, not independently reproduced here.
 
 ### A28. Deconstruction of Premature Framing Overreach
 - Retired early theoretical concepts ("Sign Inversion Paradox", "Attention Sinks as Information Movers") that lacked causal grounding.
@@ -155,7 +155,7 @@ Each entry details: **Initial State**, **Methodological Flaw**, **Applied Correc
 
 The final interpretation is intentionally narrower than several early formulations. The corrected experiments preserve the numerical results and audit history while distinguishing measured results from interpretations and hypotheses.
 
-- **[VERIFIED RESULT]** The corrected experiments measure an equal-operand/doubles advantage that persists across the tested operators and connectors.
+- **[REPORTED RESULT]** Legacy aggregates report a target-dependent equal-operand/doubles advantage across selected operators and connectors; the operator result has not been reproduced from prompt-level data in this checkout.
 - **[INTERPRETATION]** The observed effect is not sufficient evidence for an addition-specific circuit under the tested conditions.
 - **[LIMITATION]** The M1 benchmark is scoped to the evaluated task distribution, prompt formats, tokenization scheme, and target range; it does not establish the absence of every arithmetic-related representation or mechanism in GPT-2 Small.
 - **[LIMITATION]** Adv/SD is a project-defined descriptive normalized effect-size measure, not a conventional Student's t-statistic, p-value, or formal significance test.
@@ -163,7 +163,7 @@ The final interpretation is intentionally narrower than several early formulatio
 - **[LIMITATION]** The external corpus-frequency analysis is inconclusive and uses Dolma v1.7 only as a proxy rather than GPT-2's exact training corpus.
 - **[LIMITATION]** The 79-cell grid contains repeated target sums and related prompt structures, so cells are not fully independent replications.
 
-These changes correct claim strength and interpretation only; experimental numerical results, DLA values, operator-swap measurements, parity measurements, ablation measurements, corpus counts, token norms, and retired-result documentation remain unchanged.
+These edits do not change measurements in the CSV or legacy result artifacts. Where the repository contradicts a historical summary or lacks row-level records, the discrepancy is stated rather than reconciled.
 
 
 ---
@@ -175,3 +175,12 @@ The final research flow is recorded separately from the chronological correction
 Source relevance and source-to-claim boundaries are mapped in [LITERATURE_MAP.md](LITERATURE_MAP.md). It distinguishes literature-derived methodological context from project data and identifies unverified run-level provenance. The detailed method and code history is recorded in [audit_trail.md](audit_trail.md).
 
 No numerical measurements were changed in this integration. The numbered entries retained in [audit_trail.md](audit_trail.md) are the detailed audit record; this log summarizes the research-relevant chronology. The literature map points from headline value families to relevant artifacts and audit entries without replacing or reconciling their values.
+
+## 32. Repository artifact and reproduction audit
+
+- `src/operator_swap.py` had a syntax error and incomplete positive-target controls. The replacement compiles and uses all ordered unequal splits. The legacy JSON is preserved; no TransformerLens model run was possible in this environment, so no replacement scores are claimed.
+- `src/frequency_audit.py` previously converted failed queries to zero counts. The replacement retains errors, saves per-query records, and reports alternative floor calculations. It was not run against the external API here; the legacy corpus counts remain unverified.
+- `data/addition_grid_79cell.csv` has 79 data rows and includes the `(9, 5)` pair; no row was added. Its parity statistics were recomputed from the committed values.
+- The operator figure uses legacy aggregates, not a fresh model run; no corpus-frequency figure is committed. The operator labels distinguish raw advantage from normalized advantage and avoid a global-maximum or falsification claim.
+- M1, N=84, DLA, ablation, and token-diagnostic run outputs are not present. Their reported values remain source-reported; the M1 percentage/count and cohort mismatch is unresolved. The single-operand control has not been run.
+- The committed grid was checked directly and includes `(9, 5)`; no row was added. The README status badge says “Research draft,” and no “Published” badge is present.

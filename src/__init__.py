@@ -1,10 +1,10 @@
 # src/__init__.py
 """
-GPT-2 Small Doubling Anomaly — Falsification Toolkit.
+GPT-2 Small arithmetic analysis utilities.
 
 Modules:
     metrics          – adv/SD, pooled variance, and logit-difference functions
-    operator_swap    – TransformerLens script for operator-blindness checks
+    operator_swap    – TransformerLens comparison across operator strings
     frequency_audit  – Infini-gram API audit with rate-limiting & error handling
     token_diagnostics – Unembedding bias (b_U) & BPE vector norm diagnostic
 """

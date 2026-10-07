@@ -1,13 +1,10 @@
-"""
-token_diagnostics.py — Unembedding bias (b_U) and BPE vector norm diagnostics.
+"""Unembedding bias (b_U) and filler-prompt diagnostics.
 
-Empirical findings implemented from PROJECT_MEMORY.md §7 E01, E10 and AUDIT_TRAIL.md A02, A21:
-    - b_U bias values: ' 10' (+3.7600) vs ' 9' (+3.1871) vs ' 8' (+3.3653)
-    - Static-bias override: Circuit favors target (+0.8382) while b_U difference (-1.0303)
-      flips the net output toward foil (-0.1921)
-    - Target 10 anomaly: ' 10' is generically favored across non-arithmetic fillers by +1.0649
-    - Target 14 anomaly: Low baseline (-0.2311) explains 7 + 7 = 14 apparent failure
-    - Unembedding norm ||W_U[:, t]|| and dot products with final residual states
+The script recomputes token biases, vector norms, and the mean of the four
+filler prompts listed below. The archived +1.0649 target-10 value refers to a
+single "object in the box" prompt, not that four-prompt mean. The static-bias
+override reconstruction uses a separately supplied archived DLA value; it is
+not a fresh DLA calculation, and the originating prompt/run artifact is absent.
 """
 
 from __future__ import annotations
@@ -60,7 +57,7 @@ def extract_unembedding_properties(model: HookedTransformer) -> Dict[str, dict]:
 
 def evaluate_filler_baselines(model: HookedTransformer) -> Dict[str, dict]:
     """
-    Evaluate target-10 and target-14 preferences on non-arithmetic filler prompts.
+    Evaluate target-10 and target-14 preferences on four non-arithmetic fillers.
     """
     filler_results = {}
     t10_id = model.to_single_token(" 10")
@@ -102,7 +99,7 @@ def analyze_static_bias_override(
     circuit_dla_sum: float = 0.8382,
 ) -> dict:
     """
-    Simulate the static bias override discovered in Run 2 (E01, A02):
+    Reconstruct the archived static-bias override reported for Run 2 (E01, A02):
     Circuit favors target by +0.8382, but static b_U diff is -1.0303,
     causing net logit difference to flip negative (-0.1921).
     """
@@ -117,6 +114,7 @@ def analyze_static_bias_override(
         "target": target_tok,
         "foil": foil_tok,
         "circuit_dla_sum": float(circuit_dla_sum),
+        "circuit_dla_source": "archived reported value; no source run output is committed",
         "delta_b_U": float(delta_b_U),
         "net_logit_diff": float(net_logit_diff),
         "override_occurred": (circuit_dla_sum > 0 and net_logit_diff < 0),

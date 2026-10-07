@@ -1,7 +1,8 @@
 """
 metrics.py — Logit-difference, advantage/SD, and pooled-variance functions.
 
-All metrics faithfully implement the definitions established in PROJECT_MEMORY.md §4:
+These functions implement the metric definitions summarized in
+``docs/METHODOLOGY.md``:
     - logit_diff = logit(target) − logit(foil)
     - symmetric logit diff = logit(target) − mean(logit(foils))
     - doubles score = logit(T) − mean(logit(T−1), logit(T+1))
@@ -108,8 +109,10 @@ def adv_over_sd(
     """
     Normalized advantage: mean(advantage) / pooled_control_SD.
 
-    Pooled SD is computed from control scores centered by their per-target means,
-    following the definition in §4 (18 df over targets 8, 10, 12, 16).
+    Pooled SD is computed from control scores centered by their per-target means.
+    With the full ordered split controls on targets 8, 10, 12, and 16, this gives
+    18 within-target degrees of freedom. With incomplete control lists the df is
+    smaller; callers should record the actual control counts.
 
     Args:
         advantages: Per-target advantage values (positive targets only).
@@ -229,12 +232,13 @@ def own_answer_contrast(
 
     Args:
         logit_matrix: Shape [n_prompts, n_digits] — logits for each digit
-                      token on each prompt, already row-centred.
+                      token on each prompt, already row-centred by the caller.
         answer_labels: Shape [n_prompts] — true answer digit for each prompt.
         digits: List of digit values (default: 3..9 matching the 32-prompt cohort).
 
     Returns:
-        Mean own-answer contrast (float).
+        Mean own-answer contrast (float). This helper does not itself center
+        rows, construct a permutation null, or test neighbor specificity.
     """
     if digits is None:
         digits = list(range(3, 10))
