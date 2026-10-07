@@ -136,8 +136,8 @@ Project status: CLOSED.
 | A21 (round numbers) | Yes (target-10 and 7+7 anomalies explained) |
 | A22 (invariance) | Yes (retired) |
 | A23, A24 (doubles design and tokenization) | Yes (v1 artifact retired; effect corroborated, not confirmed) |
-| A25 (M1) | Closed as limitation |
-| A26 (frequency) | Inconclusive; ρ = +0.82 discarded |
+| A25 (M1) | Closed as limitation; cohort labels reconciled using supplied notebook |
+| A26 (frequency) | Earlier ρ = +0.82 discarded; corrected seven-target query finds no significant association |
 | A04, A07–A10, A12–A13, A20, A29 | No change to the surviving claim; data-integrity limits retained |
 
 ## Repository artifact audit addendum
@@ -148,6 +148,16 @@ This addendum records checks of the committed scripts, tables, figures, and cita
 - The former `src/frequency_audit.py` substituted zero counts when queries failed. The replacement retains failures as errors and emits per-query records with multiple candidate floor definitions. The historical artifact remains unchanged and unverified; the external API was not queried in this environment.
 - `data/addition_grid_79cell.csv` contains 79 data rows, including `(9, 5)`. No numerical rows were added or edited. Parity agreement was recomputed from the CSV; repeated target sums mean cells are not independent.
 - The operator figure is generated from the legacy aggregate. It is not a fresh model result. The corpus artifact has no committed figure.
-- Run-level notebooks or equivalent source outputs remain absent for M1, N=84, DLA, ablations, and token diagnostics. The single-operand comparison has no committed result. The M1 percentage/count and cohort discrepancies, and the word+word pooled-SD mismatch, remain unresolved pending source records.
-- The script now separates the Unicode operator strings recorded in the research log from an ASCII sensitivity condition. The exact glyphs used for the legacy aggregate remain unresolved because its original prompts are unavailable.
+- At the time of the earlier artifact review, run-level notebooks were absent. The updated source notebook and selected data exports are now included. Some outputs remain saved-run evidence rather than an independent repository rerun; the single-operand comparison has no committed result.
+- The notebook's operator source cell explicitly uses Unicode `×` and `−`, resolving the old glyph ambiguity at aggregate level. Prompt-level operator scores are not exported.
 - The manuscript bibliography's Wang et al. entry is dated 2023 to match the ICLR 2023 venue; the existing literature map already cites the paper as 2023.
+
+## Revised source-artifact audit (2026-10-08)
+
+The updated notebook and the two supplied score files were compared with the previous repository artifacts. The numerical changes below are recorded as updates; earlier values remain available in the audit history and `data/variance_scaling_legacy.csv`.
+
+- **M1 cohort clarification:** 2/36 (5.56%) is all-pairs zero-shot; 2/32 (6.25%) is held-out zero-shot; held-out few-shot is 2/32; earlier few-shot 5/33 uses another prefix and exclusion set. The held-out best-constant baseline is 8/32 (25%). Thus the earlier 6.2%/2/36 mismatch was a cohort-label mix, not a corrected measurement of the same run.
+- **Doubles row export:** `data/doubles_scan_scores.csv` has 39 unique rows (32 ordered controls and 7 doubles). Recomputed means, advantages, sample control SDs, and ranks agree with the notebook's dense digit+digit output to displayed rounding. The scan reports mean advantage +0.247, SE 0.102, with positive advantages at 6 of 7 targets.
+- **Format means:** `data/variance_scaling.csv` now matches the updated notebook's 21-row output. At targets 4, 6, and 14, digit+word and word+word absolute double/control scores differ from the previous file; the corresponding advantages agree to rounding. The old 27-row table, including its summary rows, is preserved in `data/variance_scaling_legacy.csv`. The new file does not contain formatted prompt-level controls or SDs, so those pooled SDs are not newly recomputed from the committed CSV.
+- **Corpus correction:** the updated notebook uses the API `index` field, empty additional anchor, and a newly initialized query-results list. The token check no longer shows the extra leading `▁`. The new output reports all seven targets above the selected query-total floor, joint-count Spearman $\rho=+0.46$, $p=.294$, and conditional $\rho=-0.14$, $p=.760$ ($n=7$). Neither association is significant. The old $\rho=+0.82$, $p=.023$ remains retracted. `data/corpus_frequency_requery_summary.csv` stores the rounded per-target output; individual API responses and individual control counts are not present.
+- **Run 2 DLA interpretation:** the notebook explicitly identifies `158 + 274 =` and compares `' 8'` with `' 1'`; the arithmetic answer is 432. The positive DLA and negative bias close that selected token-contrast identity but do not show a computation of 8 being overridden. The repository notebook copy now reruns this prompt into dedicated `run2_logits` and `run2_cache` variables, eliminating dependence on earlier loop state. A full clean-kernel rerun after this source-only adjustment remains outstanding.

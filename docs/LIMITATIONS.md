@@ -57,16 +57,19 @@ The external corpus-frequency analysis was inconclusive. Sparse joint-query coun
 
 1. **Corpus Proxy Discrepancy**:
    Dolma v1.7 is used as a proxy for WebText. Because WebText is proprietary and unreleased, true pretraining co-occurrence statistics cannot be measured directly. The corpus-size figure is omitted until supported by a verified source.
-2. **Unresolved Count Floor and Query Provenance**:
-   The committed corpus JSON lacks per-control counts and does not match the committed query script's schema. Historical files also differ on the count-floor rule. The report is retained as inconclusive, but no specific usable-target list or exact count is independently verified from the repository.
+2. **Query Provenance and Incomplete Raw Export**:
+   The updated notebook reruns the query with the `index` field and no extra leading-space anchor, and reports all seven targets above its selected query-total floor. The repository includes rounded per-target summaries, but not every individual control-query count or raw API response. The earlier JSON remains a legacy artifact.
 3. **Run 1 Artifact Retraction**:
    An initial analysis reported a correlation ($\rho = +0.82$, $p = 0.023$) between corpus frequency and model advantage. The statistic was retracted after the audit identified a query-format artifact. It must not be used as a finding.
 
-4. **Multi-Token Representation Limitation**: Some external arithmetic examples produce answers that do not correspond cleanly to a single GPT-2 token. Analyses that rely on `model.to_single_token` are restricted to examples whose target and foil representations satisfy the required single-token condition. Results from this restricted subset should not be generalized to arbitrary multi-token arithmetic answers.
+4. **Corrected Exploratory Result**:
+   With the corrected queries, the notebook reports joint-count Spearman $\rho=+0.46$, $p=.294$, and conditional-count $\rho=-0.14$, $p=.760$ ($n=7$). Neither association is statistically significant. This small proxy-corpus analysis is inconclusive and does not establish or rule out a memorization explanation.
 
-5. **Parity Confound**: Digit-level output comparisons can inherit parity-related token biases. Because neighboring foil tokens can differ in parity from the target, part of the measured target-vs-neighbor preference can reflect static or contextual parity effects rather than arithmetic computation. Parity-preserving controls and filler prompts are therefore necessary when interpreting these measurements.
+5. **Multi-Token Representation Limitation**: Some external arithmetic examples produce answers that do not correspond cleanly to a single GPT-2 token. Analyses that rely on `model.to_single_token` are restricted to examples whose target and foil representations satisfy the required single-token condition. Results from this restricted subset should not be generalized to arbitrary multi-token arithmetic answers.
 
-6. **Round-Number / Target-Token Bias**: Target-specific baseline effects are substantial for some numbers, particularly round-number tokens such as `10`. Target-specific baseline controls are therefore treated as necessary for interpreting mechanistic measurements.
+6. **Parity Confound**: Digit-level output comparisons can inherit parity-related token biases. Because neighboring foil tokens can differ in parity from the target, part of the measured target-vs-neighbor preference can reflect static or contextual parity effects rather than arithmetic computation. Parity-preserving controls and filler prompts are therefore necessary when interpreting these measurements.
+
+7. **Round-Number / Target-Token Bias**: Target-specific baseline effects are substantial for some numbers, particularly round-number tokens such as `10`. Target-specific baseline controls are therefore treated as necessary for interpreting mechanistic measurements.
 
 
 ---
@@ -75,19 +78,17 @@ The external corpus-frequency analysis was inconclusive. Sparse joint-query coun
 
 The cited mechanistic studies use different tasks and, in several cases, different training regimes. They motivate questions about task definition, controls, and causal validation; they do not independently corroborate this project's results. In particular, trained modular-addition transformers and GPT-2 Small greater-than results should not be presented as direct evidence for pretrained GPT-2 Small decimal addition. See [LITERATURE_MAP.md](LITERATURE_MAP.md) for source-by-source boundaries.
 
-The repository's [audit_trail.md](audit_trail.md) and [RESEARCH_LOG.md](RESEARCH_LOG.md) preserve headline measurements and corrections. Some originating notebook cells and run-level outputs are not included in the repository, so the exact row-level link from every headline number to its original execution is not fully verified. A committed data artifact is the primary measurement record; where no run-level artifact exists, the reported value remains documented in the manuscript and audit trail pending a traceable source.
+The repository includes the supplied source notebook and selected data exports. Its saved outputs provide provenance for several headline values, but they are not an independent rerun. The formatted doubles CSV contains per-target aggregate means, not each formatted prompt score; the operator summary has no prompt-level scores; and individual corpus API responses are not archived. The single-operand comparison remains absent. See [audit_trail.md](audit_trail.md) and [RESEARCH_LOG.md](RESEARCH_LOG.md) for the specific status of each result.
 
 
-The manuscript's M1 table pairs a zero-shot top-1 value of 6.2% with a count of 2/36. That count is about 5.6%, so the percentage/count pair is internally inconsistent. Both reported entries are preserved pending the originating run or a verified correction; this integration does not infer which entry should change.
-
-The reported 25% constant-guess baseline is 8/32, while the zero-shot header states N=36. The source M1 prompt/results file is absent, so same-cohort baseline comparisons and the reported top-five token/rank details are not independently verified. Few-shot top-1 2/32 and strict-filter 5/33 are reported from separate runs and remain unreconciled.
+The source notebook resolves the apparent M1 mismatch by distinguishing cohorts: all-pairs zero-shot is 2/36 (5.56%); held-out zero-shot is 2/32 (6.25%) and shares the 8/32 (25%) best-constant baseline; held-out few-shot is 2/32. The earlier few-shot 5/33 uses a different prefix and exclusion set. Saved notebook output supports these values, though no independent rerun was performed for this integration.
 
 ## 7. Reproduction Gaps Identified in the Committed Repository
 
 - The operator-swap script previously omitted valid single-digit splits for positive targets (4/4/4/2 controls instead of 6/8/6/2), while the legacy JSON reports 18 positive-control degrees of freedom. The script now builds all ordered splits, but the new model run has not been executed here.
-- The legacy operator JSON lacks per-prompt scores and uses ASCII operator labels; the research log describes Unicode multiplication/subtraction glyphs. The exact historical prompt strings are unresolved.
+- The legacy operator JSON lacks per-prompt scores. The supplied notebook defines Unicode multiplication/subtraction glyphs and reproduces the stored aggregates to rounding, resolving the exact glyph provenance at the summary level.
 - The single-operand comparison (`4 + 3` and `4 + 5`, scoring token `' 8'`) has no committed run output and has not been run by the reproduction code.
-- `data/variance_scaling.csv` contains aggregate summaries without raw control scores. The displayed word+word SDs do not exactly reconcile after rounding.
-- The N=84, M1, DLA, and ablation tables have no originating notebook or table-generation code in this repository.
+- `data/doubles_scan_scores.csv` contains 39 digit+digit double/control rows. `data/variance_scaling.csv` contains updated per-target format means; `data/variance_scaling_legacy.csv` preserves the prior table. The formatted prompt-level scores needed to recompute all pooled SDs are still absent.
+- The notebook contains M1, DLA, ablation, and N=84 code and saved outputs; these have not been independently rerun from the repository environment.
 - The full multiplication control set includes `1 × 7 = 7` at target 8 and `1 × 9 = 9` at target 10. Those answers equal the lower neighbor foil (`T−1`) for their target, so the control construction may mechanically lower the control mean; this needs to be reported and assessed explicitly.
 - Equality, lexical equivalence, and string familiarity are not separated by the current comparisons. There is one double prompt per target.

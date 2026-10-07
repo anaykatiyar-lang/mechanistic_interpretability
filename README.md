@@ -3,7 +3,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Status: Research draft](https://img.shields.io/badge/status-research%20draft-blue.svg)]()
 
-This repository contains a research draft and a partial set of analysis artifacts for an investigation of arithmetic-shaped prompts in GPT-2 Small (124M parameters). It is not a peer-reviewed publication. Several headline results remain documented without the originating notebook, raw outputs, or table-generation code; see the provenance notes below before treating the numbers as independently reproduced.
+This repository contains a research draft and analysis artifacts for an investigation of arithmetic-shaped prompts in GPT-2 Small (124M parameters). It is not a peer-reviewed publication. The executed source notebook and selected supporting CSVs are included. Saved notebook outputs document the reported runs; they are not independent reruns. See the provenance notes below.
 
 ## Research question and scoped result
 
@@ -13,11 +13,11 @@ The committed 79-row addition grid can be recomputed from its CSV: parity predic
 
 ## Important provenance limits
 
-- The manuscript reports zero-shot top-1 accuracy as 6.2% (2/36). The count 2/36 is approximately 5.6%, and the reported 25% constant-guess baseline uses an N=32 cohort. The originating M1 results and prompt file are not committed, so these values are retained as reported and the direct comparison remains unresolved.
-- `data/operator_swap_results.json` contains legacy aggregates without per-prompt scores. Its df metadata matches full controls, but the previous committed script used incomplete controls and ASCII `*`/`-`; the research log records `×`/`−`. The corrected script writes a separate reproduction artifact and supports an ASCII sensitivity run. The legacy aggregates have not been regenerated in this checkout.
-- `data/variance_scaling.csv` contains reported aggregates without raw prompt scores. Means recompute from the displayed per-target rows to rounding. The stored word+word pooled SD (0.273) does not recompute from the displayed rounded per-target SDs (approximately 0.275); raw scores are absent, so neither value is silently replaced.
-- `data/corpus_frequencies.json` is a legacy aggregate with no per-control counts. Its floor flags and verdict cannot be regenerated from that file. The corrected query script reports alternative floor definitions and preserves API failures as errors; the historical count artifact is not overwritten.
-- The repository does not contain the originating notebook or row-level outputs for the M1 benchmark, DLA tables, ablations, N=84 analyses, or the single-operand control. These remain reported findings, not independently reproducible results from this repository.
+- The M1 cohorts are separate: all-pairs zero-shot is 2/36 (5.56%); held-out zero-shot is 2/32 (6.25%) with an 8/32 (25%) best-constant baseline; held-out few-shot is 2/32. The earlier few-shot 5/33 uses a different prefix and exclusions.
+- `data/doubles_scan_scores.csv` contains 39 double/control scores and reproduces the digit+digit dense-scan table. `data/variance_scaling.csv` contains corrected per-target means across three formats; `data/variance_scaling_legacy.csv` preserves the former table. Formatted prompt-level scores needed to recompute every pooled SD are not included.
+- `data/operator_swap_results.json` remains a legacy aggregate without prompt-level scores. The notebook defines Unicode `×`/`−` and its saved output reproduces the aggregate summaries to rounding; the repository script supports the corrected Unicode controls and an ASCII sensitivity run.
+- The corrected corpus query reports joint-count Spearman ρ=+0.46, p=.294 and conditional ρ=−0.14, p=.760 (n=7); neither is significant. The earlier ρ=+0.82, p=.023 result remains retracted. `data/corpus_frequency_requery_summary.csv` contains rounded target-level summaries, not individual API responses.
+- The notebook contains the M1, DLA, ablation, and N=84 code and saved outputs. These have not been independently rerun in the repository environment. The single-operand comparison remains unverified.
 - DLA raw/corrected pairs shown in the manuscript imply a scale factor near 19.2. The broader “14×–40×” range is not supported by the displayed pairs. The audit trail preserves that earlier wording as history and marks the unsupported range.
 
 The source-to-claim and literature map is in [`docs/LITERATURE_MAP.md`](docs/LITERATURE_MAP.md). The experiment narrative is in [`docs/RESEARCH_FLOW.md`](docs/RESEARCH_FLOW.md), methodological details are in [`docs/METHODOLOGY.md`](docs/METHODOLOGY.md), and scope/provenance limits are in [`docs/LIMITATIONS.md`](docs/LIMITATIONS.md). The detailed correction record is [`docs/audit_trail.md`](docs/audit_trail.md).
@@ -31,7 +31,10 @@ mechanistic_interpretability/
 ├── data/
 │   ├── addition_grid_79cell.csv
 │   ├── operator_swap_results.json          # legacy aggregate; provenance caveat above
-│   ├── variance_scaling.csv                 # reported aggregates; raw prompt scores absent
+│   ├── doubles_scan_scores.csv              # digit+digit prompt-level scores
+│   ├── variance_scaling.csv                 # corrected format means
+│   ├── variance_scaling_legacy.csv          # prior table preserved for audit
+│   ├── corpus_frequency_requery_summary.csv # rounded corrected-query summary
 │   └── corpus_frequencies.json              # legacy aggregate; provenance caveat above
 ├── docs/
 │   ├── audit_trail.md
@@ -43,6 +46,8 @@ mechanistic_interpretability/
 ├── figures/
 ├── paper/
 │   └── draft_paper.md
+├── notebooks/
+│   └── mechanistic_interpretability.ipynb
 └── src/
     ├── config.py
     ├── frequency_audit.py
