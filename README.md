@@ -22,6 +22,12 @@ The committed 79-row addition grid can be recomputed from its CSV: parity predic
 
 The source-to-claim and literature map is in [`docs/LITERATURE_MAP.md`](docs/LITERATURE_MAP.md). The experiment narrative is in [`docs/RESEARCH_FLOW.md`](docs/RESEARCH_FLOW.md), methodological details are in [`docs/METHODOLOGY.md`](docs/METHODOLOGY.md), and scope/provenance limits are in [`docs/LIMITATIONS.md`](docs/LIMITATIONS.md). The detailed correction record is [`docs/audit_trail.md`](docs/audit_trail.md).
 
+## Figures and synchronization
+
+The repository's `figures/` directory is the canonical home for visual artifacts. The two SVGs at its root are regenerated from committed tabular data by `src.plot_heatmaps`; the four interactive Colab exports are in [`figures/colab/`](figures/colab/) and correspond to the saved figure outputs in notebook cells 47–50. Their plotted titles, axes, coordinates, and value matrices were compared with the notebook outputs; all four match. The supplied HTML exports are retained as received, with their interactive Plotly code embedded.
+
+When regenerating the notebook figures in Colab, first clone/open the repository and run the notebook with the repository root as the working directory. Cells 47–50 now save each Plotly figure to the matching `figures/colab/` file as well as displaying it. Review the resulting files and commit changed exports with the notebook. Do not copy figures from one location over another unless their prompt, metric, and source cell match. See [`docs/FIGURES.md`](docs/FIGURES.md) for the figure inventory and provenance.
+
 ## Repository contents
 
 ```text
@@ -38,12 +44,16 @@ mechanistic_interpretability/
 │   └── corpus_frequencies.json              # legacy aggregate; provenance caveat above
 ├── docs/
 │   ├── audit_trail.md
+│   ├── FIGURES.md
 │   ├── LITERATURE_MAP.md
 │   ├── LIMITATIONS.md
 │   ├── METHODOLOGY.md
 │   ├── RESEARCH_FLOW.md
 │   └── RESEARCH_LOG.md
 ├── figures/
+│   ├── addition_grid_heatmap.svg
+│   ├── operator_swap_heatmap.svg
+│   └── colab/                         # interactive notebook figure exports
 ├── paper/
 │   └── draft_paper.md
 ├── notebooks/
