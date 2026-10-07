@@ -57,8 +57,8 @@ The external corpus-frequency analysis was inconclusive. Sparse joint-query coun
 
 1. **Corpus Proxy Discrepancy**:
    Dolma v1.7 is used as a proxy for WebText. Because WebText is proprietary and unreleased, true pretraining co-occurrence statistics cannot be measured directly. The corpus-size figure is omitted until supported by a verified source.
-2. **Query Provenance and Incomplete Raw Export**:
-   The updated notebook reruns the query with the `index` field and no extra leading-space anchor, and reports all seven targets above its selected query-total floor. The repository includes rounded per-target summaries, but not every individual control-query count or raw API response. The earlier JSON remains a legacy artifact.
+2. **Incomplete Query Records**:
+   The corrected query uses the `index` field and no extra leading-space anchor. All seven targets pass the selected query-total floor. Rounded per-target summaries are available, but individual control-query counts and raw API responses are not. The earlier JSON is a legacy artifact.
 3. **Run 1 Artifact Retraction**:
    An initial analysis reported a correlation ($\rho = +0.82$, $p = 0.023$) between corpus frequency and model advantage. The statistic was retracted after the audit identified a query-format artifact. It must not be used as a finding.
 
@@ -74,21 +74,17 @@ The external corpus-frequency analysis was inconclusive. Sparse joint-query coun
 
 ---
 
-## 6. Literature and Data-Provenance Boundaries
+## 6. Literature and Measurement Boundaries
 
-The cited mechanistic studies use different tasks and, in several cases, different training regimes. They motivate questions about task definition, controls, and causal validation; they do not independently corroborate this project's results. In particular, trained modular-addition transformers and GPT-2 Small greater-than results should not be presented as direct evidence for pretrained GPT-2 Small decimal addition. See [LITERATURE_MAP.md](LITERATURE_MAP.md) for source-by-source boundaries.
+The cited mechanistic studies use different tasks and, in several cases, different training regimes. They motivate questions about task definition, controls, and causal validation; they do not independently corroborate these measurements. Trained modular-addition transformers and GPT-2 Small greater-than results are not direct evidence about pretrained GPT-2 Small decimal addition. See [LITERATURE_MAP.md](LITERATURE_MAP.md) for source-specific scope.
 
-The repository includes the supplied source notebook and selected data exports. Its saved outputs provide provenance for several headline values, but they are not an independent rerun. The formatted doubles CSV contains per-target aggregate means, not each formatted prompt score; the operator summary has no prompt-level scores; and individual corpus API responses are not archived. The single-operand comparison remains absent. See [audit_trail.md](audit_trail.md) and [RESEARCH_LOG.md](RESEARCH_LOG.md) for the specific status of each result.
+The notebook's saved outputs document reported runs but are not independent reruns. The 39-row digit+digit score file supports the dense-scan table. The formatted doubles file contains per-target means, not each formatted prompt score; the operator summary lacks prompt-level scores; and individual corpus API responses are unavailable. The single-operand comparison remains untested. The M1 cohorts are distinct: all-pairs zero-shot is 2/36 (5.56%); held-out zero-shot is 2/32 (6.25%) with an 8/32 (25%) best-constant baseline; held-out few-shot is 2/32; the earlier few-shot 5/33 uses another prefix and exclusion set. See [audit_trail.md](audit_trail.md) for the detailed correction record.
 
+## 7. Unresolved Reproduction and Design Checks
 
-The source notebook resolves the apparent M1 mismatch by distinguishing cohorts: all-pairs zero-shot is 2/36 (5.56%); held-out zero-shot is 2/32 (6.25%) and shares the 8/32 (25%) best-constant baseline; held-out few-shot is 2/32. The earlier few-shot 5/33 uses a different prefix and exclusion set. Saved notebook output supports these values, though no independent rerun was performed for this integration.
-
-## 7. Reproduction Gaps Identified in the Committed Repository
-
-- The operator-swap script previously omitted valid single-digit splits for positive targets (4/4/4/2 controls instead of 6/8/6/2), while the legacy JSON reports 18 positive-control degrees of freedom. The script now builds all ordered splits, but the new model run has not been executed here.
-- The legacy operator JSON lacks per-prompt scores. The supplied notebook defines Unicode multiplication/subtraction glyphs and reproduces the stored aggregates to rounding, resolving the exact glyph provenance at the summary level.
-- The single-operand comparison (`4 + 3` and `4 + 5`, scoring token `' 8'`) has no committed run output and has not been run by the reproduction code.
-- `data/doubles_scan_scores.csv` contains 39 digit+digit double/control rows. `data/variance_scaling.csv` contains updated per-target format means; `data/variance_scaling_legacy.csv` preserves the prior table. The formatted prompt-level scores needed to recompute all pooled SDs are still absent.
-- The notebook contains M1, DLA, ablation, and N=84 code and saved outputs; these have not been independently rerun from the repository environment.
-- The full multiplication control set includes `1 × 7 = 7` at target 8 and `1 × 9 = 9` at target 10. Those answers equal the lower neighbor foil (`T−1`) for their target, so the control construction may mechanically lower the control mean; this needs to be reported and assessed explicitly.
-- Equality, lexical equivalence, and string familiarity are not separated by the current comparisons. There is one double prompt per target.
+- The operator-swap summary lacks prompt-level scores, and a fresh model evaluation of the corrected ordered-control design has not been completed.
+- The single-operand comparison (`4 + 3` and `4 + 5`, scoring token `' 8'`) has no run output.
+- The formatted prompt-level controls needed to recompute all pooled SDs are unavailable; `data/variance_scaling.csv` contains per-target means, while `data/variance_scaling_legacy.csv` preserves the prior table.
+- The notebook contains M1, DLA, ablation, and N=84 code with saved outputs; these analyses have not been independently rerun from a clean environment.
+- In the multiplication controls, `1 × 7 = 7` at target 8 and `1 × 9 = 9` at target 10 match the lower-neighbor foil (`T−1`). This may mechanically lower the control mean and requires explicit assessment.
+- The current comparisons do not separate equality, lexical equivalence, and string familiarity. There is one double prompt per target.

@@ -86,7 +86,7 @@ Project status: CLOSED.
 - Problem: patched ≈ clean is expected both under full recovery and under no corruption effect. Pooled clean means are ≈0, so a null here does not distinguish "no recovery." The same applies to the 'b'-position test.
 - Correction: not performed (project closed). A valid test would use patched − corrupt (or a normalized recovery) per item, and ideally a per-item relation between recovery and the corruption effect.
 - Effect: "Operator Binding Falsified" is retained historically but is NOT established. The earlier single-prompt ` +` sweep (+0.5550 → +0.6208) also had no printed baselines.
-- Retraction: a screenshot-based suspicion that `op_idx` lacked the leading space in `" +"` was a misreading; the code was correct.
+- Retraction: inspection of the source confirms that `op_idx` included the leading space in `" +"`.
 ## A20. Parity grid, filler breadth and foil parity
 - Items: (i) the 79 grid cells are not independent (repeated target sums); (ii) filler control was described as one template; it was four (box, page, store, sequence); (iii) ±1 foils have the opposite parity of the target, so the symmetric metric directly senses parity bias (the D_acc script used ±2 foils).
 - Effect: parity-bias conclusion (H10) stands on the filler reproduction (even net +0.0965, odd −0.0240) but the ~87% figure should be read with the independence caveat. No permutation test on the grid was run.
@@ -111,7 +111,7 @@ Project status: CLOSED.
 - Original: M1 was "no general addition circuit"; the proposed fix was filtering to correctly answered prompts.
 - Problems: (i) the strict filter left 1 of 36 prompts, and DLA on one prompt is descriptive; (ii) DLA on outcome-filtered prompts is biased by construction (the filter forces a large positive total); (iii) the −1.260 value was the few-shot prompt with foil ` 9`, not comparable to the zero-shot −0.2643; (iv) target>foil is not the same as top-1 correctness (EXT: `158 + 274`: 432 beat 422 by +0.609 yet was not in the top-10); (v) hits clustered on answer 6, but a constant-6 guess scores 5/33, equal to the model; the best constant guess (always 9) scores 8/33; (vi) the few-shot prefix contains twins (e.g. `5 + 3 = 8` vs the test `3 + 5 =`).
 - Correction: top-1/top-3/strict tables; constant-guess baselines; own-answer contrast with permutation nulls.
-- Effect: M1 closed as a limitation: top-1 at or below constant-guess baseline; contrasts are weak but reliable (row-centred p=0.0004 both settings); neighbour specificity not significant zero-shot. [LIMITATION] Few-shot top-1: 5/33 vs 2/32 across runs, not reconciled. My earlier "level effect" explanation of the few-shot contrast was wrong.
+- Effect: M1 closed as a limitation: top-1 at or below constant-guess baseline; contrasts are weak but reliable (row-centred p=0.0004 both settings); neighbour specificity not significant zero-shot. [LIMITATION] Few-shot top-1: 5/33 vs 2/32 across runs, not reconciled. The level-effect interpretation of the few-shot contrast was unsupported.
 ## A26. Frequency test: API, anchoring, statistic
 - Original: `requests.post(..., {"corpus": ...})`; counted only the prompt `a + b =`; T=10 only; `.get("count", 0)` hid errors.
 - Problems: the field is `index`, so an error would have silently returned 0; counting the prompt alone ignores whether the answer follows; first corrected run's leading-space anchor produced `▁▁` queries with tiny counts; with zero joint counts the conditional ratio reduces to a ratio of prompt counts, which produced an artifactual ρ = +0.82 (p=0.023) that crossed the pre-set threshold.
@@ -120,11 +120,11 @@ Project status: CLOSED.
 ## A28. Manuscript framing overreach
 - Original: a literature and novelty outline built around the "Sign Inversion Paradox" and "late-layer attention sinks masquerading as information movers."
 - Problems: "sign inversion" named two different phenomena (static-bias override; local-vs-causal mismatch); the sink claim rests on L9H9, whose indirect-routing path patch was invalid (A12); the single-prompt basis was later superseded by the N=84 collapse and token-bias controls.
-- Effect: neither is a supported headline finding (see [RESEARCH_FLOW.md](RESEARCH_FLOW.md) and [LIMITATIONS.md](LIMITATIONS.md)). The cited literature is now mapped by source, relevance, and scope in [LITERATURE_MAP.md](LITERATURE_MAP.md); literature remains methodological context, not evidence for project measurements.
-## A29. Cross-file value and labeling discrepancies
-- The reported rank for `' 8'` differs across Run 2 and a table (rank 4) versus the controlled matrix (rank 7). The original DLA table is labeled `' 8'`/`' 6'` in the research log but `' 8'`/`' 9'` in a session record. L11H0 values −0.0448 (Run 1) and −0.1188 (Run 2) refer to different runs and must remain separate.
+- Effect: neither is a supported headline finding (see [RESEARCH_FLOW.md](RESEARCH_FLOW.md) and [LIMITATIONS.md](LIMITATIONS.md)). [LITERATURE_MAP.md](LITERATURE_MAP.md) describes each cited source, its relevance, and its scope; literature remains methodological context, not evidence for project measurements.
+## A29. Cross-record value and label discrepancies
+- The reported rank for `' 8'` differs across Run 2 and a table (rank 4) versus the controlled matrix (rank 7). One DLA table labels the contrast as `' 8'`/`' 6'`, while the controlled matrix uses `' 8'`/`' 9'`. L11H0 values −0.0448 (Run 1) and −0.1188 (Run 2) refer to different runs and must remain separate.
 - Effect: these source-label discrepancies remain unresolved pending the corresponding run outputs; they are not silently reconciled.
-## Summary table: did the correction change the conclusion?
+## Summary of research-relevant corrections
 | Issue | Changed conclusion? |
 |---|---|
 | A01, A02, A03 (DLA math) | Yes for magnitudes; Run 2 reinterpreted as static-bias override |
@@ -136,36 +136,6 @@ Project status: CLOSED.
 | A21 (round numbers) | Yes (target-10 and 7+7 anomalies explained) |
 | A22 (invariance) | Yes (retired) |
 | A23, A24 (doubles design and tokenization) | Yes (v1 artifact retired; effect corroborated, not confirmed) |
-| A25 (M1) | Closed as limitation; cohort labels reconciled using supplied notebook |
+| A25 (M1) | Closed as a scoped limitation; cohort definitions separated |
 | A26 (frequency) | Earlier ρ = +0.82 discarded; corrected seven-target query finds no significant association |
 | A04, A07–A10, A12–A13, A20, A29 | No change to the surviving claim; data-integrity limits retained |
-
-## Repository artifact audit addendum
-
-This addendum records checks of the committed scripts, tables, figures, and citations. It does not replace the historical entries above or alter their experimental values.
-
-- The former `src/operator_swap.py` had a syntax error and generated incomplete positive-target control sets. The replacement compiles and defines all ordered unequal single-digit splits. The legacy aggregate remains unchanged; it has no prompt-level scores, and no model rerun was completed in this environment.
-- The former `src/frequency_audit.py` substituted zero counts when queries failed. The replacement retains failures as errors and emits per-query records with multiple candidate floor definitions. The historical artifact remains unchanged and unverified; the external API was not queried in this environment.
-- `data/addition_grid_79cell.csv` contains 79 data rows, including `(9, 5)`. No numerical rows were added or edited. Parity agreement was recomputed from the CSV; repeated target sums mean cells are not independent.
-- The operator figure is generated from the legacy aggregate. It is not a fresh model result. The corpus artifact has no committed figure.
-- At the time of the earlier artifact review, run-level notebooks were absent. The updated source notebook and selected data exports are now included. Some outputs remain saved-run evidence rather than an independent repository rerun; the single-operand comparison has no committed result.
-- The notebook's operator source cell explicitly uses Unicode `×` and `−`, resolving the old glyph ambiguity at aggregate level. Prompt-level operator scores are not exported.
-- The manuscript bibliography's Wang et al. entry is dated 2023 to match the ICLR 2023 venue; the existing literature map already cites the paper as 2023.
-
-## Revised source-artifact audit (2026-10-08)
-
-The updated notebook and the two supplied score files were compared with the previous repository artifacts. The numerical changes below are recorded as updates; earlier values remain available in the audit history and `data/variance_scaling_legacy.csv`.
-
-- **M1 cohort clarification:** 2/36 (5.56%) is all-pairs zero-shot; 2/32 (6.25%) is held-out zero-shot; held-out few-shot is 2/32; earlier few-shot 5/33 uses another prefix and exclusion set. The held-out best-constant baseline is 8/32 (25%). Thus the earlier 6.2%/2/36 mismatch was a cohort-label mix, not a corrected measurement of the same run.
-- **Doubles row export:** `data/doubles_scan_scores.csv` has 39 unique rows (32 ordered controls and 7 doubles). Recomputed means, advantages, sample control SDs, and ranks agree with the notebook's dense digit+digit output to displayed rounding. The scan reports mean advantage +0.247, SE 0.102, with positive advantages at 6 of 7 targets.
-- **Format means:** `data/variance_scaling.csv` now matches the updated notebook's 21-row output. At targets 4, 6, and 14, digit+word and word+word absolute double/control scores differ from the previous file; the corresponding advantages agree to rounding. The old 27-row table, including its summary rows, is preserved in `data/variance_scaling_legacy.csv`. The new file does not contain formatted prompt-level controls or SDs, so those pooled SDs are not newly recomputed from the committed CSV.
-- **Corpus correction:** the updated notebook uses the API `index` field, empty additional anchor, and a newly initialized query-results list. The token check no longer shows the extra leading `▁`. The new output reports all seven targets above the selected query-total floor, joint-count Spearman $\rho=+0.46$, $p=.294$, and conditional $\rho=-0.14$, $p=.760$ ($n=7$). Neither association is significant. The old $\rho=+0.82$, $p=.023$ remains retracted. `data/corpus_frequency_requery_summary.csv` stores the rounded per-target output; individual API responses and individual control counts are not present.
-- **Run 2 DLA interpretation:** the notebook explicitly identifies `158 + 274 =` and compares `' 8'` with `' 1'`; the arithmetic answer is 432. The positive DLA and negative bias close that selected token-contrast identity but do not show a computation of 8 being overridden. The repository notebook copy now reruns this prompt into dedicated `run2_logits` and `run2_cache` variables, eliminating dependence on earlier loop state. A full clean-kernel rerun after this source-only adjustment remains outstanding.
-
-## Colab figure export audit (2026-10-08)
-
-- Four user-supplied interactive HTML figures were copied unchanged into `figures/colab/`: residual-stream patching, attention-head patching, L10H2 attention, and L9H9 attention.
-- Each supplied Plotly trace and layout was compared with the corresponding saved output in notebook cells 47–50. Titles, x/y coordinates, and complete plotted value matrices match exactly. This is an artifact consistency check, not a model rerun or an independent validation of the measurements.
-- Notebook cells 47–50 now write their figures to the same `figures/colab/` paths when run from the repository root. The notebook-generated exports use the Plotly 2.35.2 CDN; the original supplied files remain self-contained and unchanged.
-- The L9H9 attention visualization is descriptive. It does not resolve the audit trail's existing limitation on causal routing/path-patching claims.
-- See [`FIGURES.md`](FIGURES.md) for figure inventory, locations, and the synchronization procedure.

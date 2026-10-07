@@ -98,7 +98,7 @@ $$A_{l, h}[i, j] \leftarrow \frac{A_{l, h}[i, j]}{\sum_{k \ne 1} A_{l, h}[i, k]}
 ## 5. Operator and Corpus Comparisons
 
 ### 5.1 Operator-Swap Battery
-To test whether the reported equal-operand preference appears only with addition, addends are coupled via five strings: `+`, `−`, `×`, `and`, and `then`. The included notebook defines Unicode multiplication/subtraction explicitly, uses ordered unequal splits, and its saved summaries match the committed operator aggregate to rounding. Evaluation tracks logits on token $2d$. Prompt-level operator scores are not exported, and no fresh repository model rerun was performed. The corrected script defaults to the Unicode forms and can run ASCII forms as a separate sensitivity condition. These summaries do not establish universal operator blindness.
+To test whether the reported equal-operand preference appears only with addition, addends are coupled via five strings: `+`, `−`, `×`, `and`, and `then`. The notebook defines Unicode multiplication and subtraction explicitly and uses ordered unequal splits; its saved summaries match the operator aggregate to rounding. Evaluation tracks logits on token $2d$. Prompt-level operator scores are unavailable, and the corrected analysis has not been rerun as a model evaluation. The script uses Unicode forms by default and can run ASCII forms as a separate sensitivity condition. These summaries do not establish universal operator blindness.
 
 ### 5.2 Corpus N-Gram Frequency Audit Protocol
 
@@ -106,8 +106,8 @@ The corpus analysis is intended as contextual evidence rather than a direct meas
 - **API**: Infini-gram (`https://api.infini-gram.io/`).
 - **Index**: `v4_dolma-v1_7_llama`. Corpus-size claims require a source citation and are not used here.
 - **Queries**: Joint exact string (`"a + b = T"`) and prompt prefix (`"a + b ="`).
-- **Corrected query**: The included notebook uses the `index` request field, no extra leading-space anchor, retries failed requests, initializes a fresh results list, and checks query tokenization. Its selected query-total floor gives seven usable targets. The exploratory associations are joint $\rho=+0.46$, $p=.294$ and conditional $\rho=-0.14$, $p=.760$ ($n=7$); neither is significant. Rounded per-target summaries are in `data/corpus_frequency_requery_summary.csv`. Individual control-query counts and raw API responses are not committed.
-- **Reliability and scope**: The historical files disagree on the count-floor rule. The corrected repository script reports candidate floor bases separately and marks API failures explicitly. Dolma is a proxy rather than GPT-2's exact training data, so these counts cannot establish or exclude broader memorization or distributional effects.
+- **Corrected query**: The query uses the `index` request field, no extra leading-space anchor, retry and explicit failure handling, a fresh results list, and a tokenization check. Its selected query-total floor gives seven usable targets. The exploratory associations are joint $\rho=+0.46$, $p=.294$ and conditional $\rho=-0.14$, $p=.760$ ($n=7$); neither is significant. Rounded per-target summaries are in `data/corpus_frequency_requery_summary.csv`. Individual control-query counts and raw API responses are not committed.
+- **Reliability and scope**: The historical files disagree on the count-floor rule. The audit script reports candidate floor bases separately and marks API failures explicitly. Dolma is a proxy rather than GPT-2's exact training data, so these counts cannot establish or exclude broader memorization or distributional effects.
 
 
 ---
@@ -117,9 +117,9 @@ The corpus analysis is intended as contextual evidence rather than a direct meas
 The study's final reasoning path is behavioral baseline → matched controls → token and unembedding baselines → corrected DLA → candidate interventions → doubles comparison → operator/connector substitutions → corpus proxy audit. Causal validation of the surviving doubles effect remains proposed work, not a completed result. The full stage record uses the same fields at each step: question, prediction, measurement, result, interpretation, limitation, and next step. See [RESEARCH_FLOW.md](RESEARCH_FLOW.md).
 
 Use the labels consistently:
-- **[VERIFIED RESULT]** for a measurement tied to a committed data artifact or explicitly reported audit result.
+- **[VERIFIED RESULT]** for a measurement tied to an available data artifact or explicitly reported audit result.
 - **[INTERPRETATION]** for what that measurement supports within the tested design.
 - **[HYPOTHESIS]** for an untested proposed mechanism.
-- **[LIMITATION]** for scope, design, tokenization, corpus, or provenance boundaries.
+- **[LIMITATION]** for scope, design, tokenization, corpus, or evidence boundaries.
 
-Literature is methodological context; it is not a source of this project's experimental values. For source-to-claim boundaries and headline-number provenance, see [LITERATURE_MAP.md](LITERATURE_MAP.md). Cite [audit_trail.md](audit_trail.md) for the detailed correction record and verification status. The notebook is an executed source artifact; its saved output is not a substitute for independent reruns, and the individual corpus responses and formatted prompt-level scores remain unavailable.
+Literature is methodological context; it is not a source of this project's experimental values. For source-to-claim boundaries and the records for headline numbers, see [LITERATURE_MAP.md](LITERATURE_MAP.md). Cite [audit_trail.md](audit_trail.md) for the detailed correction record and verification status. The notebook is an executed source artifact; its saved output is not a substitute for independent reruns, and the individual corpus responses and formatted prompt-level scores remain unavailable.
