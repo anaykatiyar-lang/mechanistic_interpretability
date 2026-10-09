@@ -56,7 +56,6 @@ Explore the evidence and methods:
 
 ![Addition-grid symmetric logit-difference heatmap](figures/static/addition_grid_heatmap.svg)
 
-Explore the [interactive research explorer](index.html) for additional figures and comparisons.
 
 Attribution and attention visualizations are not, by themselves, proof of a causal circuit. Interpret intervention results alongside their clean and corrupt baselines.
 
