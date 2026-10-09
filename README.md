@@ -3,19 +3,23 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Status: Research draft](https://img.shields.io/badge/status-research%20draft-blue.svg)]()
 
-This project examines whether GPT-2 Small (124M parameters) uses a general addition-specific mechanism on simple decimal addition prompts. The tested experiments do not establish such a mechanism. They identify a target-dependent preference for equal-operand prompts under selected conditions, but its cause remains unresolved. This manuscript is a research draft and has not been peer reviewed.
+This project traces an apparent addition-circuit signal through behavioral baselines, measurement audits, prompt controls, and causal screens. The tested suite does not establish a general addition-specific mechanism; it does retain a target-dependent equal-operand preference as a measured result and a sharper target for follow-up. This manuscript is a research draft and has not been peer reviewed.
 
 **Explore:** [Claims ledger](docs/FINDINGS.md) · [Research path](#research-path) · [Interactive research explorer](index.html) · [Run the notebook](#reproduce) · [Audits](docs/audits.md)
 
 ## Research path
 
 ```mermaid
-flowchart LR
-    A[Behavioral baseline] --> B[Prompt and parity controls]
-    B --> C[DLA and intervention audits]
-    C --> D[Equal-operand scan]
-    D --> E[Exploratory component screens]
-    E --> F[Mechanism unresolved]
+flowchart TD
+    H[Initial hypothesis<br/>General addition-specific circuit] --> B[Behavioral baseline<br/>Compare with simple baselines]
+    B --> A[Audit measurements<br/>Correct DLA and test interventions]
+    A --> P[Map prompt structure<br/>Parity, token, and filler controls]
+    P --> D[Follow the surviving effect<br/>Equal-operand scan: +0.247 mean; 6/7 targets positive]
+    D --> G[Test boundaries<br/>Formats and operator/connector substitutions]
+    G --> C[Audit corpus-frequency proxy<br/>79 query records; no correlation reported]
+    C --> S[Screen candidate components<br/>Exploratory q-values and mixed transfer]
+    S --> R[Evidence-bounded result<br/>Equal-operand preference measured; circuit claim not supported]
+    R --> N[Next question<br/>Does the pattern have a causal, repeated-operand basis?]
 ```
 
 Follow the links for the [methods](docs/METHODOLOGY.md), [limitations](docs/LIMITATIONS.md), [research flow](docs/RESEARCH_FLOW.md), and [audit trail](docs/audit_trail.md).

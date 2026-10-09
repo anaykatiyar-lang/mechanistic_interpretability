@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Interactive guide to an audited GPT-2 Small arithmetic interpretability study.">
-  <title>GPT-2 Small: research explorer</title>
+    <meta name="description" content="A detailed research path from an apparent GPT-2 Small addition circuit to a measured equal-operand effect.">
+    <title>From Circuit Tracing to an Equal-Operand Effect | GPT-2 Small</title>
   <style>
     :root { color-scheme: light; --ink:#17212b; --muted:#536475; --paper:#f4f7fa; --card:#fff; --line:#dbe3eb; --accent:#245f88; }
     * { box-sizing:border-box; }
@@ -18,6 +18,15 @@
     article,details.panel { background:var(--card); border:1px solid var(--line); border-radius:.8rem; padding:1rem 1.1rem; }
     .status { color:#7a4b00; font-weight:700; }
     .muted { color:var(--muted); }
+    .path { list-style:none; counter-reset:stage; margin:1.5rem 0 0; padding:0; }
+    .path li { counter-increment:stage; display:grid; grid-template-columns:3rem minmax(0,1fr); gap:1rem; position:relative; padding-bottom:1rem; }
+    .path li::before { content:counter(stage); display:grid; place-items:center; z-index:1; width:2.6rem; height:2.6rem; border-radius:50%; background:#245f88; color:white; font-weight:750; }
+    .path li:not(:last-child)::after { content:""; position:absolute; left:1.27rem; top:2.6rem; bottom:0; width:2px; background:#c5d4e0; }
+    .path-card { background:var(--card); border:1px solid var(--line); border-radius:.8rem; padding:1rem 1.2rem; }
+    .path-card h3 { margin:.05rem 0 .35rem; }
+    .path-card p { margin:.35rem 0; }
+    .path-label { color:var(--accent); font-size:.83rem; font-weight:750; letter-spacing:.035em; text-transform:uppercase; }
+    .path-outcome { border-left:3px solid #4b8b67; padding-left:.75rem !important; }
     details { margin:1rem 0; }
     details summary { cursor:pointer; font-weight:700; color:var(--accent); }
     iframe { display:block; width:100%; height:620px; border:0; border-top:1px solid var(--line); margin-top:1rem; }
@@ -29,22 +38,39 @@
 </head>
 <body>
   <header>
-    <h1>GPT-2 Small: research explorer</h1>
-    <p>This study asks whether GPT-2 Small shows reliable addition behavior and whether a target-dependent equal-operand preference has an identified mechanism. The tested work does not establish a general addition circuit; the latest component screen is exploratory.</p>
+    <h1>From addition-circuit tracing to an equal-operand effect</h1>
+    <p>An initial addition-circuit hypothesis led to checks of model behavior, attribution math, and causal interventions. Those checks narrowed the circuit claim and exposed a target-dependent equal-operand preference. The path below shows what evidence changed the question and what test could explain the measured pattern.</p>
     <a class="button" href="https://colab.research.google.com/github/anaykatiyar-lang/mechanistic_interpretability/blob/main/notebooks/00_full_record.ipynb">Open the full notebook in Colab</a>
   </header>
   <main>
     <nav aria-label="Research navigation">
-      <a href="#claims">Claims</a><a href="#figures">Interactive figures</a><a href="#audit">Audit record</a><a href="#reproduce">Reproduce</a>
+      <a href="#claims">Findings</a><a href="#path">Research path</a><a href="#figures">Interactive figures</a><a href="#audit">Audit record</a><a href="#reproduce">Reproduce</a>
     </nav>
     <section id="claims">
       <h2>What the evidence supports</h2>
       <div class="grid">
         <article><h3>Behavior</h3><p>On the tested cohorts, zero-shot top-1 accuracy was 2/36 and 2/32. The held-out constant guess scored 8/32.</p><p class="muted">Scoped to these prompts and cohorts.</p></article>
-        <article><h3>Equal operands</h3><p>The saved digit-addition scan reports a target-dependent preference, positive at 6/7 targets.</p><p class="muted">The mechanism remains unresolved.</p></article>
+        <article><h3>Equal-operand pattern</h3><p>The saved digit-addition scan reports a target-dependent preference, positive at 6/7 targets.</p><p class="muted">A measured behavioral pattern that motivates causal follow-up.</p></article>
         <article><h3>Candidate components</h3><p><code>10_mlp_out</code>, L9H9, and L10H2 are exploratory candidates.</p><p class="status">No confirmed circuit: DLA q=0.513; two-sided causal q=0.150.</p></article>
       </div>
       <p><a href="docs/FINDINGS.md">Open the full claims ledger</a> · <a href="docs/RESEARCH_FLOW.md">Read the experimental flow</a> · <a href="docs/LITERATURE_MAP.md">See how prior work is used</a></p>
+    </section>
+    <section id="path">
+      <h2>Research path: from circuit tracing to an equal-operand effect</h2>
+      <p class="muted">Each stage shows the question, the diagnostic, what the result changed, and why the next analysis followed. The sequence makes the study’s change in direction inspectable.</p>
+      <ol class="path">
+        <li><article class="path-card"><span class="path-label">Starting question</span><h3>Does an apparent addition signal reflect a general internal circuit?</h3><p><strong>Initial idea:</strong> A target-token preference on prompts such as <code>3 + 5 =</code> appeared to offer a route to trace candidate heads and MLPs.</p><p><strong>Design consequence:</strong> The study first needed to establish the behavior and metric being explained. A component attribution is not, by itself, evidence that the model reliably performs the task.</p></article></li>
+        <li><article class="path-card"><span class="path-label">1 · Establish the behavior</span><h3>Set a behavioral baseline before telling a circuit story.</h3><p><strong>Measurement:</strong> Top-1 zero-shot accuracy was 2/36 on the all-pairs cohort and 2/32 on the held-out cohort. On that held-out set, a constant guess scored 8/32 (25%).</p><p class="path-outcome"><strong>Decision:</strong> These cohorts do not show reliable exact-answer performance above the simple held-out baseline. Keep cohort definitions distinct; do not generalize this benchmark result to every possible arithmetic representation.</p></article></li>
+        <li><article class="path-card"><span class="path-label">2 · Reconcile the attribution</span><h3>Correct the scale and separate dynamic contribution from output bias.</h3><p><strong>Diagnostic:</strong> Applying final LayerNorm scaling changed the DLA magnitudes; adding the unembedding-bias term reconciled selected logits. For <code>3 + 5 =</code>, +0.4658 DLA plus +0.1782 bias totals +0.6440, within the reported +0.6443 residual. In Run 2, the <code>' 8'</code> vs <code>' 1'</code> contrast gives +0.8382 dynamic contribution and −1.0303 bias; the displayed terms sum to −0.1921, against the reported −0.1920.</p><p class="path-outcome"><strong>Decision:</strong> Run 2's foil is not the arithmetic answer to <code>158 + 274</code> (432). The contrast describes a token preference; it cannot show that an answer-8 computation was overridden.</p></article></li>
+        <li><article class="path-card"><span class="path-label">3 · Challenge component causality</span><h3>Ask whether candidate-head effects survive controlled interventions.</h3><p><strong>Diagnostic:</strong> Zero-ablation moved residual scale from σ=19.2002 to 23.1286 and produced an L11H0 shift of +0.0658. Mean-ablation across reference prompts kept σ near 19.0148 and reduced the shift to +0.0013. A two-component ablation was +0.8127 against an additive prediction of +0.8131 on that prompt.</p><p class="path-outcome"><strong>Decision:</strong> The earlier suppressor and interaction readings are not supported by these controls. Separate audits also found an unanchored operator-position metric and an unverified L9H9 path patch; those tests cannot establish the strong causal claims previously attached to them.</p></article></li>
+        <li><article class="path-card"><span class="path-label">4 · Map task and prompt structure</span><h3>Check whether the apparent pattern is stable across the addition space.</h3><p><strong>Measurement:</strong> In the committed 79-row grid, parity predicted the sign of the measured logit difference in 68/79 rows: 63/64 for sums ≤13, but 5/15 for sums ≥14.</p><p class="path-outcome"><strong>Decision:</strong> The pattern depends on target range, and grid rows share target sums. This is structured evidence about the prompts, not 79 independent demonstrations of an addition algorithm. It motivated testing a more specific repeated-operand contrast.</p></article></li>
+        <li><article class="path-card"><span class="path-label">5 · Quantify the equal-operand pattern</span><h3>Compare each double with matched split-operand prompts for the same target.</h3><p><strong>Measurement:</strong> The 39-row digit+digit scan evaluates both orders of split controls. For target T, each prompt score is <code>L[T] − (L[T−1] + L[T+1])/2</code>; the double’s score is then compared with the mean of matched split-control scores. The reported mean advantage is +0.247 (SE 0.102), positive at 6/7 target sums.</p><p class="path-outcome"><strong>Decision:</strong> This target-dependent preference is the clearest surviving result. There is one double prompt per target, and <code>adv/SD</code> is descriptive—not an inferential test.</p></article></li>
+        <li><article class="path-card"><span class="path-label">6 · Probe the boundaries</span><h3>Test whether the result belongs specifically to addition or one formatting choice.</h3><p><strong>Measurement:</strong> Format-level mean advantages for targets 8/10/12/16 are +0.418, +0.750, and +1.349 across digit+digit, digit+word, and word+word summaries. Operator/connector summaries report a largest raw advantage of +0.549 under “then” and a largest <code>adv/SD</code> of 6.15 under subtraction.</p><p class="path-outcome"><strong>Decision:</strong> The pattern is not specific to the addition string within these aggregate comparisons. Missing formatted/operator prompt-level scores limit recomputation; the normalized ratios do not establish statistical significance or universal operator blindness.</p></article></li>
+        <li><article class="path-card"><span class="path-label">7 · Test the corpus-frequency explanation</span><h3>Check whether a public corpus proxy supports a verbatim-frequency account.</h3><p><strong>Measurement:</strong> The final notebook collector uses the <code>index</code> field, avoids the extra anchor, handles failures explicitly, and records 79 query records with zero failed attempts. It reports no correlation; the raw CSV/JSONL logs are not included here. Earlier correlations are historical, and Dolma is only a proxy for GPT-2’s unavailable training corpus.</p><p class="path-outcome"><strong>Decision:</strong> The corpus check neither establishes nor rules out a frequency account. Raw logs and a prespecified eligibility rule/statistic are needed before drawing that conclusion.</p></article></li>
+        <li><article class="path-card"><span class="path-label">8 · Return to mechanism with stricter tests</span><h3>Screen components against the measured equal-operand contrast.</h3><p><strong>Measurement:</strong> The final notebook treats <code>10_mlp_out</code>, L9H9, and L10H2 as exploratory candidates. DLA q<sub>FDR</sub>=0.513 and two-sided causal-screen q<sub>FDR</sub>=0.150; neither passes 0.05. Transfer is mixed: ablation reduces the advantage at previously examined target 8 and increases it at 14; in the new 24–36 range it decreases at five of seven targets and increases at two. Discovery targets were selected after the scan, and filler prompts also shift.</p><p class="path-outcome"><strong>Decision:</strong> These results do not validate a circuit. The printed removal fraction (+0.893908) also differs from the ratio of displayed aggregate means (about 0.664), so it is not used as a headline result without a defined aggregation.</p></article></li>
+        <li><article class="path-card"><span class="path-label">9 · Contribution and next test</span><h3>The audit sharpened the research question.</h3><p><strong>Study result:</strong> On these tests, a general addition-specific circuit is not demonstrated; a target-dependent equal-operand preference is measured in the saved prompts. The component screen did not identify its cause.</p><p class="path-outcome"><strong>Next study:</strong> Predefine independent targets and matched controls, retain prompt-level scores, use a held-out evaluation, and test necessity and restoration with distribution-preserving interventions. That design can distinguish a causal repeated-operand mechanism from token, template, and baseline effects.</p></article></li>
+      </ol>
+      <p><a href="docs/RESEARCH_FLOW.md">See the full question–prediction–measurement–result–limitation table</a> · <a href="docs/LITERATURE_MAP.md">See how prior papers inform the methods without serving as evidence for these measurements</a>.</p>
     </section>
     <section id="figures">
       <h2>Explore the saved figures</h2>
@@ -70,7 +96,7 @@
       <ul>
         <li><a href="notebooks/00_full_record.ipynb">Final full-record notebook</a> · <a href="notebooks/00_full_record.md">Markdown export</a></li>
         <li><a href="data/MANIFEST.csv">Data and provenance manifest</a></li>
-        <li><a href="docs/ENVIRONMENT.md">Recorded software environment and unresolved version gap</a></li>
+        <li><a href="docs/ENVIRONMENT.md">Recorded software environment</a></li>
         <li><a href="paper/draft_paper.md">Research draft</a></li>
       </ul>
       <p class="muted">The uploaded notebook has saved outputs and was not rerun while preparing this repository update. The manifest identifies exports that still need to be downloaded from the Colab runtime.</p>
