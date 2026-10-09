@@ -31,7 +31,8 @@ def generate_addition_grid_svg(csv_path: str, output_path: str) -> None:
     lower = agreement([row for row in rows if int(row["target_sum"]) <= 13])
     upper = agreement([row for row in rows if int(row["target_sum"]) >= 14])
 
-    cell_size, padding_x, padding_y = 56, 90, 100
+    # Leave a clear gap between the two-line summary and the x-axis title.
+    cell_size, padding_x, padding_y = 56, 90, 120
     width, height = padding_x + 9 * cell_size + 60, padding_y + 9 * cell_size + 80
     svg = [
         f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}" width="{width}" height="{height}" style="background:#fff;font-family:Arial,sans-serif">',
@@ -40,7 +41,7 @@ def generate_addition_grid_svg(csv_path: str, output_path: str) -> None:
         f'<text x="{width/2}" y="48" text-anchor="middle" class="subtitle">Parity sign agreement: {overall[0]}/{overall[1]} overall; {lower[0]}/{lower[1]} for sums ≤13; {upper[0]}/{upper[1]} for sums ≥14.</text>',
         f'<text x="{width/2}" y="66" text-anchor="middle" class="subtitle">Repeated target sums mean cells are not independent; parity alignment is weaker and changes at higher sums.</text>',
         f'<text x="{padding_x + 4.5 * cell_size}" y="{padding_y - 30}" text-anchor="middle" class="axis">Second Operand (b)</text>',
-        f'<text x="25" y="{padding_y + 4.5 * cell_size}" text-anchor="middle" transform="rotate(-90 25 {padding_y + 4.5 * cell_size})" class="axis">First Operand (a)</text>',
+        f'<text x="45" y="{padding_y + 4.5 * cell_size}" text-anchor="middle" transform="rotate(-90 45 {padding_y + 4.5 * cell_size})" class="axis">First Operand (a)</text>',
     ]
     for index in range(9):
         svg.append(f'<text x="{padding_x + index*cell_size + cell_size/2}" y="{padding_y-10}" text-anchor="middle" class="tick">{index+1}</text>')
@@ -98,15 +99,16 @@ def generate_operator_swap_svg(data_path: str, output_path: str, variant: str) -
     rows = _operator_rows(data_path, variant)
     raw_max = max(rows, key=lambda row: row["raw_adv"])
     normalized_max = max(rows, key=lambda row: row["adv_sd"])
-    width, height = 720, 110 + 54 * len(rows)
+    width, height = 720, 126 + 54 * len(rows)
     svg = [
         f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}" width="{width}" height="{height}" style="background:#fff;font-family:Arial,sans-serif">',
         '<style>.title{font-size:16px;font-weight:bold;fill:#111827}.subtitle{font-size:11px;fill:#4b5563}.label{font-size:13px;fill:#1f2937}.bar{font-size:12px;font-weight:bold;fill:#fff}.value{font-size:11px;fill:#4b5563}</style>',
         f'<text x="{width/2}" y="28" text-anchor="middle" class="title">Reported Doubles Advantage Under Operator Substitutions</text>',
-        f'<text x="{width/2}" y="48" text-anchor="middle" class="subtitle">Descriptive adv/SD summary. Largest raw advantage: {html.escape(raw_max["label"])} ({raw_max["raw_adv"]:+.3f}); largest adv/SD: {html.escape(normalized_max["label"])} ({normalized_max["adv_sd"]:.2f}).</text>',
-        '<text x="360" y="72" class="subtitle">Legacy aggregate; not reproduced from prompt-level scores. adv/SD is not a significance test.</text>',
+        f'<text x="{width/2}" y="48" text-anchor="middle" class="subtitle">Descriptive adv/SD summary; largest raw advantage: {html.escape(raw_max["label"])} ({raw_max["raw_adv"]:+.3f}).</text>',
+        f'<text x="{width/2}" y="66" text-anchor="middle" class="subtitle">Largest adv/SD: {html.escape(normalized_max["label"])} ({normalized_max["adv_sd"]:.2f}).</text>',
+        f'<text x="{width/2}" y="84" text-anchor="middle" class="subtitle">Legacy aggregate; not reproduced from prompt-level scores. adv/SD is not a significance test.</text>',
     ]
-    start_y, bar_height, max_width = 88, 30, 340
+    start_y, bar_height, max_width = 100, 30, 340
     max_value = max(row["adv_sd"] for row in rows) or 1.0
     for index, row in enumerate(rows):
         y = start_y + index * 54

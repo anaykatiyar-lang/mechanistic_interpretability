@@ -1,26 +1,27 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 380" width="720" height="380" style="background:#fff;font-family:Arial,sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 396" width="720" height="396" style="background:#fff;font-family:Arial,sans-serif">
 <style>.title{font-size:16px;font-weight:bold;fill:#111827}.subtitle{font-size:11px;fill:#4b5563}.label{font-size:13px;fill:#1f2937}.bar{font-size:12px;font-weight:bold;fill:#fff}.value{font-size:11px;fill:#4b5563}</style>
 <text x="360.0" y="28" text-anchor="middle" class="title">Reported Doubles Advantage Under Operator Substitutions</text>
-<text x="360.0" y="48" text-anchor="middle" class="subtitle">Descriptive adv/SD summary. Largest raw advantage: then (+0.549); largest adv/SD: minus (6.15).</text>
-<text x="360" y="72" class="subtitle">Legacy aggregate; not reproduced from prompt-level scores. adv/SD is not a significance test.</text>
-<text x="115" y="107.0" text-anchor="end" class="label">plus (+)</text>
-<rect x="130" y="88" width="288.59" height="30" fill="#426b9b" rx="5"/>
-<text x="410.59" y="107.0" text-anchor="end" class="bar">5.22</text>
-<text x="428.59" y="107.0" class="value">raw advantage +0.418</text>
-<text x="115" y="161.0" text-anchor="end" class="label">times (*)</text>
-<rect x="130" y="142" width="134.34" height="30" fill="#426b9b" rx="5"/>
-<text x="256.34" y="161.0" text-anchor="end" class="bar">2.43</text>
-<text x="274.34" y="161.0" class="value">raw advantage +0.224</text>
-<text x="115" y="215.0" text-anchor="end" class="label">minus (-)</text>
-<rect x="130" y="196" width="340.00" height="30" fill="#426b9b" rx="5"/>
-<text x="462.00" y="215.0" text-anchor="end" class="bar">6.15</text>
-<text x="480.00" y="215.0" class="value">raw advantage +0.323</text>
-<text x="115" y="269.0" text-anchor="end" class="label">and (and)</text>
-<rect x="130" y="250" width="273.66" height="30" fill="#426b9b" rx="5"/>
-<text x="395.66" y="269.0" text-anchor="end" class="bar">4.95</text>
-<text x="413.66" y="269.0" class="value">raw advantage +0.469</text>
-<text x="115" y="323.0" text-anchor="end" class="label">then (then)</text>
-<rect x="130" y="304" width="252.10" height="30" fill="#426b9b" rx="5"/>
-<text x="374.10" y="323.0" text-anchor="end" class="bar">4.56</text>
-<text x="392.10" y="323.0" class="value">raw advantage +0.549</text>
+<text x="360.0" y="48" text-anchor="middle" class="subtitle">Descriptive adv/SD summary; largest raw advantage: then (+0.549).</text>
+<text x="360.0" y="66" text-anchor="middle" class="subtitle">Largest adv/SD: minus (6.15).</text>
+<text x="360.0" y="84" text-anchor="middle" class="subtitle">Legacy aggregate; not reproduced from prompt-level scores. adv/SD is not a significance test.</text>
+<text x="115" y="119.0" text-anchor="end" class="label">plus (+)</text>
+<rect x="130" y="100" width="288.59" height="30" fill="#426b9b" rx="5"/>
+<text x="410.59" y="119.0" text-anchor="end" class="bar">5.22</text>
+<text x="428.59" y="119.0" class="value">raw advantage +0.418</text>
+<text x="115" y="173.0" text-anchor="end" class="label">times (*)</text>
+<rect x="130" y="154" width="134.34" height="30" fill="#426b9b" rx="5"/>
+<text x="256.34" y="173.0" text-anchor="end" class="bar">2.43</text>
+<text x="274.34" y="173.0" class="value">raw advantage +0.224</text>
+<text x="115" y="227.0" text-anchor="end" class="label">minus (-)</text>
+<rect x="130" y="208" width="340.00" height="30" fill="#426b9b" rx="5"/>
+<text x="462.00" y="227.0" text-anchor="end" class="bar">6.15</text>
+<text x="480.00" y="227.0" class="value">raw advantage +0.323</text>
+<text x="115" y="281.0" text-anchor="end" class="label">and (and)</text>
+<rect x="130" y="262" width="273.66" height="30" fill="#426b9b" rx="5"/>
+<text x="395.66" y="281.0" text-anchor="end" class="bar">4.95</text>
+<text x="413.66" y="281.0" class="value">raw advantage +0.469</text>
+<text x="115" y="335.0" text-anchor="end" class="label">then (then)</text>
+<rect x="130" y="316" width="252.10" height="30" fill="#426b9b" rx="5"/>
+<text x="374.10" y="335.0" text-anchor="end" class="bar">4.56</text>
+<text x="392.10" y="335.0" class="value">raw advantage +0.549</text>
 </svg>
