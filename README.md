@@ -1,6 +1,10 @@
- <p align="center">
+<p align="center">
   <a href="https://colab.research.google.com/github/anaykatiyar-lang/mechanistic_interpretability/blob/main/notebooks/00_full_record.ipynb">
-    <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Google Colab">
+    <img
+      src="https://upload.wikimedia.org/wikipedia/commons/d/d0/Google_Colaboratory_SVG_Logo.svg"
+      alt="Open notebook in Google Colab"
+      width="100"
+    />
   </a>
 </p>
 
