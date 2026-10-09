@@ -179,8 +179,15 @@ The earlier summary below is historical only. Its per-query response files were 
 - **Candidate screen:** `10_mlp_out`, L9H9, and L10H2 are exploratory candidates. The component DLA screen reports q_FDR = 0.513 for these candidates; the two-sided causal screen reports q_FDR = 0.150. Neither screen passes q < .05.
 - **Transfer and specificity:** At previously examined targets 8 and 14, joint ablation reduces the target-level advantage at 8 and increases it at 14. In the new target range 24–36, the displayed advantage decreases at five of seven targets and increases at two. This range is exploratory, not independent confirmation. Filler prompts also show effects.
 - **Aggregate-ratio discrepancy:** The final audit prints a removal fraction of +0.893908 alongside a full-model mean +0.289386 and an ablated mean +0.097351. The ratio formed from those aggregate means is approximately +0.664, so +0.893908 uses a different aggregation and must not be reported without defining it.
-- **Corpus query:** The final notebook records 79 raw query records and zero failed attempts, and says it saved CSV/JSONL logs in the notebook runtime. Those raw response files were not among the uploaded files or repository artifacts. The final notebook does not report a correlation from that raw collector. The prior summary reported joint ρ=+0.46, p=.294 and conditional ρ=−0.14, p=.760 (n=7), but its raw API records are unavailable. These values are historical and not from the final collector; the corpus-frequency relationship remains unresolved pending raw-log export and a specified analysis rule.
+- **Corpus query:** The repository notebook records 79 raw query records and zero failed attempts. A later uploaded notebook (8) records 80 raw query records and one failed attempt. Both display the same seven-target summary, but the raw per-attempt response files were not supplied, so the extra record cannot be identified or reconciled. Neither raw-collection cell reports a correlation. The prior summary reported joint ρ=+0.46, p=.294 and conditional ρ=−0.14, p=.760 (n=7), but its raw API records are unavailable; these values are historical and not from either raw collector. The corpus-frequency relationship remains unresolved pending raw-log export and a specified analysis rule. See [CORPUS_AUDIT.md](CORPUS_AUDIT.md) for the displayed table and run-level distinction.
 - **Environment:** The notebook prints `Python: 3.10+`; recorded package versions are listed in [`docs/ENVIRONMENT.md`](ENVIRONMENT.md).
+
+## A31. Later corpus collector output
+- **Source:** User-supplied notebook version (8), raw corpus collector cell and saved output; the notebook itself was not added as a second full-record artifact.
+- **Observed output:** 80 query-attempt records and 1 failed attempt. The seven displayed target-summary rows match the table displayed by the repository notebook, which reports 79 records and 0 failures.
+- **Boundary:** The CSV/JSONL query logs named by the notebook were not supplied separately. The additional attempt and its status therefore cannot be identified, and the outputs must remain distinct rather than silently reconciled. The collector applies no count floor and computes no correlation. The summary values and source limitations are documented in [CORPUS_AUDIT.md](CORPUS_AUDIT.md).
+- **Interpretation:** This output does not resolve the corpus-frequency relationship and does not supersede the historical correlation summaries or the retracted `ρ=+0.82` result.
+
 ## Summary of research-relevant corrections
 | Issue | Changed conclusion? |
 |---|---|
@@ -194,5 +201,5 @@ The earlier summary below is historical only. Its per-query response files were 
 | A22 (invariance) | Yes (retired) |
 | A23, A24 (doubles design and tokenization) | Yes (v1 artifact retired; effect corroborated, not confirmed) |
 | A25 (M1) | Closed as a scoped limitation; cohort definitions separated |
-| A26 and A30 (frequency) | Earlier ρ = +0.82 discarded; final raw-query collector has no reported correlation and is unresolved |
+| A26, A30, and A31 (frequency) | Earlier ρ = +0.82 discarded; saved raw-collection outputs differ by one attempt, no correlation is reported, and the relationship remains unresolved |
 | A04, A07–A10, A12–A13, A20, A29 | No change to the surviving claim; data-integrity limits retained |

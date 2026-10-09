@@ -5,21 +5,21 @@
 
 This project traces an apparent addition-circuit signal through behavioral baselines, measurement audits, prompt controls, and causal screens. The tested suite does not establish a general addition-specific mechanism; it does retain a target-dependent equal-operand preference as a measured result and a sharper target for follow-up. This manuscript is a research draft and has not been peer reviewed.
 
-**Explore:** [Claims ledger](docs/FINDINGS.md) · [Research path](#research-path) · [Interactive research explorer](index.html) · [Run the notebook](#reproduce) · [Audits](docs/audits.md)
+**Explore:** [Claims ledger](docs/FINDINGS.md) · [Research flow](#research-flow) · [Interactive research explorer](index.html) · [Run the notebook](#reproduce) · [Audits](docs/audits.md)
 
-## Research path
+## Research flow
 
 ```mermaid
 flowchart TD
-    H[Initial hypothesis<br/>General addition-specific circuit] --> B[Behavioral baseline<br/>Compare with simple baselines]
-    B --> A[Audit measurements<br/>Correct DLA and test interventions]
-    A --> P[Map prompt structure<br/>Parity, token, and filler controls]
-    P --> D[Follow the surviving effect<br/>Equal-operand scan: +0.247 mean; 6/7 targets positive]
-    D --> G[Test boundaries<br/>Formats and operator/connector substitutions]
-    G --> C[Audit corpus-frequency proxy<br/>79 query records; no correlation reported]
-    C --> S[Screen candidate components<br/>Exploratory q-values and mixed transfer]
-    S --> R[Evidence-bounded result<br/>Equal-operand preference measured; circuit claim not supported]
-    R --> N[Next question<br/>Does the pattern have a causal, repeated-operand basis?]
+    subgraph first[ ]
+      direction LR
+      H[Initial hypothesis<br/>Addition-specific circuit] --> B[Behavioral baseline<br/>Compare with simple baselines] --> A[Attribution and intervention audit<br/>Correct DLA; test component claims] --> P[Map prompt structure<br/>Parity and target-range controls] --> D[Surviving pattern<br/>Equal-operand scan: +0.247; 6/7 positive]
+    end
+    subgraph second[ ]
+      direction LR
+      G[Test boundaries<br/>Formats and operator/connector substitutions] --> C[Corpus proxy<br/>Two saved runs; one-attempt discrepancy] --> S[Candidate screen<br/>Exploratory; no circuit established] --> R[Evidence-bounded result<br/>Target-dependent preference] --> N[Next study<br/>Independent prompts and causal specificity]
+    end
+    D --> G
 ```
 
 Follow the links for the [methods](docs/METHODOLOGY.md), [limitations](docs/LIMITATIONS.md), [research flow](docs/RESEARCH_FLOW.md), and [audit trail](docs/audit_trail.md).
@@ -30,7 +30,7 @@ Follow the links for the [methods](docs/METHODOLOGY.md), [limitations](docs/LIMI
 - **Addition grid:** parity predicted the sign of the measured logit difference in 68/79 rows overall, 63/64 rows for sums ≤13, and 5/15 rows for sums ≥14. Rows share target sums and are not independent.
 - **Equal operands:** the digit+digit scan reports a mean advantage of +0.247 (SE 0.102), positive at 6 of 7 targets. The effect is target-dependent; the mechanism is not identified. The normalized `adv/SD` ratio is descriptive, not a significance test.
 - **Candidate-component screen:** the final notebook labels `10_mlp_out`, L9H9, and L10H2 as exploratory candidates. DLA q-values are 0.513; two-sided causal-screen q-values are 0.150. Transfer is mixed, so no circuit is established.
-- **Corpus comparison:** unresolved in the final notebook. Its raw-query cell records 79 queries with no failed attempts, but the per-query log files are not included in this repository and no correlation is reported in that final run. Earlier correlations are historical, not current findings.
+- **Corpus comparison:** unresolved. The repository notebook records 79 query attempts and no failures; a later uploaded notebook output records 80 attempts and one failure. Both display the same seven-target summary, but their raw per-attempt logs were not supplied and neither raw-collection cell reports a correlation. Earlier correlations are historical, not current findings. See the [corpus audit](docs/CORPUS_AUDIT.md).
 
 These findings apply to the tested model, prompts, targets, and controls. They do not show that GPT-2 Small lacks all arithmetic-related representations or computations.
 
@@ -84,7 +84,7 @@ The operator comparison and corpus query scripts are documented in their module 
 
 ## Evidence and scope
 
-The final notebook is preserved at [`notebooks/00_full_record.ipynb`](notebooks/00_full_record.ipynb), with a [Markdown export](notebooks/00_full_record.md). Its saved outputs document the uploaded run; this repository did not rerun the notebook. The committed digit+digit scores support the earlier dense-scan table; formatted prompt-level control scores and the final notebook's raw corpus query logs are not available here. The single-operand comparison remains unverified. See the [claims ledger](docs/FINDINGS.md), [study limitations](docs/LIMITATIONS.md), [research flow](docs/RESEARCH_FLOW.md), [literature-to-claim map](docs/LITERATURE_MAP.md), and [audit trail](docs/audit_trail.md). File-level provenance is in [`data/MANIFEST.csv`](data/MANIFEST.csv).
+The final notebook is preserved at [`notebooks/00_full_record.ipynb`](notebooks/00_full_record.ipynb), with a [Markdown export](notebooks/00_full_record.md). Its saved outputs document the repository's uploaded run; this repository did not rerun the notebook. A later supplied notebook has a corpus collector output with one additional logged attempt and one failure; the per-attempt logs are unavailable, so this is recorded as a separate run rather than reconciled. Formatted prompt-level control scores and corpus query logs are not available here. The single-operand comparison remains unverified. See the [claims ledger](docs/FINDINGS.md), [study limitations](docs/LIMITATIONS.md), [research flow](docs/RESEARCH_FLOW.md), [literature-to-claim map](docs/LITERATURE_MAP.md), [corpus audit](docs/CORPUS_AUDIT.md), and [audit trail](docs/audit_trail.md). File-level provenance is in [`data/MANIFEST.csv`](data/MANIFEST.csv).
 
 <details>
 <summary>Audit highlights</summary>
@@ -95,7 +95,7 @@ The final notebook is preserved at [`notebooks/00_full_record.ipynb`](notebooks/
 | Zero-ablation | Treat off-distribution zero-ablation cautiously; the mean-ablation control reduced the L11H0 shift from +0.0658 to +0.0013. |
 | Position-1 control | Corrected the operand corruption rule; the earlier positive reading was leakage. |
 | Operator patching | The original metric lacked a corrupt baseline, so the strong falsification claim is not established. |
-| Corpus-frequency result | The earlier ρ=+0.82 result is retracted; the final raw-query collection reports no correlation, so the relationship remains unresolved. |
+| Corpus-frequency result | The earlier ρ=+0.82 result is retracted; raw-collection outputs differ by one logged attempt and report no correlation, so the relationship remains unresolved. |
 | Candidate components | `10_mlp_out`, L9H9, and L10H2 remain exploratory; they are not a confirmed circuit. |
 
 See the [full audit trail](docs/audit_trail.md) for the entries and source values.

@@ -58,12 +58,12 @@ The external corpus-frequency analysis was inconclusive. Sparse joint-query coun
 1. **Corpus Proxy Discrepancy**:
    Dolma v1.7 is used as a proxy for WebText. Because WebText is proprietary and unreleased, true pretraining co-occurrence statistics cannot be measured directly. The corpus-size figure is omitted until supported by a verified source.
 2. **Incomplete Query Records**:
-   The final notebook uses the `index` field and no extra leading-space anchor; its saved output reports 79 query records with zero failed attempts. The raw CSV/JSONL responses are not in this repository, and the final notebook does not report a correlation from them. Prior summary values are historical and recorded in audit A30.
+   The repository notebook output reports 79 query-attempt records with zero failed attempts; a later uploaded notebook (8) reports 80 records with one failed attempt. Both display the same seven-target summary. The per-attempt CSV/JSONL responses were not supplied, so the one-record difference cannot be reconciled. Neither raw collector reports a correlation; see [CORPUS_AUDIT.md](CORPUS_AUDIT.md) and audit A30–A31.
 3. **Run 1 Artifact Retraction**:
    An initial analysis reported a correlation ($\rho = +0.82$, $p = 0.023$) between corpus frequency and model advantage. The statistic was retracted after the audit identified a query-format artifact. It must not be used as a finding.
 
 4. **Earlier Exploratory Summary**:
-   A previous summary reported joint-count Spearman $\rho=+0.46$, $p=.294$, and conditional-count $\rho=-0.14$, $p=.760$ ($n=7$). These are historical, not results of the final raw-query collector. The current corpus-frequency relationship is unresolved until raw responses are exported and the eligibility rule and statistic are specified.
+   A previous summary reported joint-count Spearman $\rho=+0.46$, $p=.294$, and conditional-count $\rho=-0.14$, $p=.760$ ($n=7$). These are historical, not results of either saved raw-query collector. The current corpus-frequency relationship is unresolved until raw responses are exported, the run discrepancy is identified, and the eligibility rule and statistic are specified.
 
 5. **Multi-Token Representation Limitation**: Some external arithmetic examples produce answers that do not correspond cleanly to a single GPT-2 token. Analyses that rely on `model.to_single_token` are restricted to examples whose target and foil representations satisfy the required single-token condition. Results from this restricted subset should not be generalized to arbitrary multi-token arithmetic answers.
 

@@ -107,8 +107,8 @@ The corpus analysis is intended as contextual evidence rather than a direct meas
 - **Index**: `v4_dolma-v1_7_llama`. Corpus-size claims require a source citation and are not used here.
 - **Queries**: Joint exact string (`"a + b = T"`) and prompt prefix (`"a + b ="`).
 - **Earlier corrected summary**: A previous run reported joint $\rho=+0.46$, $p=.294$ and conditional $\rho=-0.14$, $p=.760$ ($n=7$). Those values are historical, not results of the final notebook's raw-query collector.
-- **Final notebook collector**: The final notebook uses the `index` request field, no extra leading-space anchor, retry and explicit failure handling, a fresh result list, and tokenization checks. Its saved output reports 79 query records and zero failed attempts, but the raw CSV/JSONL response logs were not included with the uploaded notebook. No correlation is reported from that final collector. The corpus-frequency relationship is unresolved until the raw logs are exported and the filtering rule and statistic are specified.
-- **Reliability and scope**: The historical files disagree on the count-floor rule. The audit script reports candidate floor bases separately and marks API failures explicitly. Dolma is a proxy rather than GPT-2's exact training data, so these counts cannot establish or exclude broader memorization or distributional effects.
+- **Saved raw collectors**: The repository notebook output reports 79 query-attempt records and zero failures. A later uploaded notebook (8) reports 80 records and one failure. Both display the same seven-target summary; the per-attempt CSV/JSONL logs were not supplied, so the one-record difference cannot be reconciled. Neither raw collector reports a correlation, and neither applies a floor. See [CORPUS_AUDIT.md](CORPUS_AUDIT.md) for the transcribed summary and run distinction.
+- **Reliability and scope**: The historical files disagree on the count-floor rule. The raw collector leaves the floor unapplied pending prespecification. Dolma is a proxy rather than GPT-2's exact training data, so these counts cannot establish or exclude broader memorization or distributional effects.
 
 
 ---

@@ -12,5 +12,6 @@
 | [A23–A25](audit_trail.md#a23-doubles-analyses) | Refine doubles controls and tokenization; distinguish benchmark cohorts. | The equal-operand effect is target-dependent and corroborated, not confirmed as a mechanism. |
 | [A26](audit_trail.md#a26-frequency-test-api-anchoring-statistic) | Correct corpus API/query construction; retire the `ρ=+0.82` result. | Corpus-frequency conclusion is unresolved/inconclusive. |
 | [A30](audit_trail.md#a30-final-notebook-mechanism-screen-and-corpus-log-status) | Record the final notebook’s exploratory screen and missing raw corpus exports. | Candidate components remain exploratory; no circuit-level claim is supported. |
+| [A31](audit_trail.md#a31-later-corpus-collector-output) | Record the later corpus collector output and its one-attempt discrepancy against the repository notebook. | Both outputs show the same target summary; raw attempt logs are unavailable and the frequency relationship remains unresolved. |
 
 The audit trail preserves historical values and labels them as superseded, retracted, or unresolved where appropriate. It is the source of truth for correction history.
