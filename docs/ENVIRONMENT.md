@@ -13,4 +13,4 @@ The uploaded final notebook records these package versions in its saved output:
 | einops | 0.8.2 (install log) |
 | tqdm | 4.67.3 (install log) |
 
-The notebook prints Python as `3.10+`, not an exact version; its package-install paths contain `python3.13`. That conflict has not been resolved from a runtime metadata record. The repository’s `requirements.txt` is a flexible dependency list, not a lockfile. A complete environment lock should be generated from a clean, successful rerun after the notebook logs `sys.version`, platform, and every direct dependency. No environment is claimed to reproduce the recorded outputs exactly yet.
+The notebook prints `Python: 3.10+`. The repository’s `requirements.txt` is a flexible dependency list, not a lockfile. A complete environment lock should be generated from a clean, successful rerun after recording the runtime and every direct dependency. No environment is claimed to reproduce the saved outputs exactly yet.

@@ -62,7 +62,7 @@ The patching figures show normalized recovery for the tested prompts. Values bel
 
 ## Reproduce
 
-The notebook records TransformerLens 3.6.0, PyTorch 2.11.0+cpu, Transformers 5.18.0, and NumPy 2.1.3. Its Python line says only `3.10+`, while the install log path names Python 3.13; the exact interpreter version remains unverified. The ranges in `requirements.txt` are not a complete lockfile.
+The notebook prints `Python: 3.10+` and records TransformerLens 3.6.0, PyTorch 2.11.0+cpu, Transformers 5.18.0, and NumPy 2.1.3. The ranges in `requirements.txt` are not a complete lockfile.
 
 ```bash
 git clone https://github.com/anaykatiyar-lang/mechanistic_interpretability.git

@@ -180,7 +180,7 @@ The earlier summary below is historical only. Its per-query response files were 
 - **Transfer and specificity:** At previously examined targets 8 and 14, joint ablation reduces the target-level advantage at 8 and increases it at 14. In the new target range 24–36, the displayed advantage decreases at five of seven targets and increases at two. This range is exploratory, not independent confirmation. Filler prompts also show effects.
 - **Aggregate-ratio discrepancy:** The final audit prints a removal fraction of +0.893908 alongside a full-model mean +0.289386 and an ablated mean +0.097351. The ratio formed from those aggregate means is approximately +0.664, so +0.893908 uses a different aggregation and must not be reported without defining it.
 - **Corpus query:** The final notebook records 79 raw query records and zero failed attempts, and says it saved CSV/JSONL logs in the notebook runtime. Those raw response files were not among the uploaded files or repository artifacts. The final notebook does not report a correlation from that raw collector. The prior summary reported joint ρ=+0.46, p=.294 and conditional ρ=−0.14, p=.760 (n=7), but its raw API records are unavailable. These values are historical and not from the final collector; the corpus-frequency relationship remains unresolved pending raw-log export and a specified analysis rule.
-- **Environment:** The notebook prints Python as `3.10+`, but its install output paths contain `python3.13`. The exact interpreter version is unresolved.
+- **Environment:** The notebook prints `Python: 3.10+`; recorded package versions are listed in [`docs/ENVIRONMENT.md`](ENVIRONMENT.md).
 ## Summary of research-relevant corrections
 | Issue | Changed conclusion? |
 |---|---|
