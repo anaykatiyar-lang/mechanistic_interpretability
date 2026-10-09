@@ -1,0 +1,2 @@
+n_target_levels,mean_advantage,exact_signflip_p,bootstrap_ci_low,bootstrap_ci_high,advantage_over_target_sd
+7,0.24738471848624094,0.03125,0.07381524358476911,0.4374254885173979,0.9164147200489814

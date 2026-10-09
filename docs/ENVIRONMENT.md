@@ -1,6 +1,6 @@
 # Analysis environment record
 
-The uploaded final notebook records these package versions in its saved output:
+The full-record notebook records these package versions in its saved output:
 
 | Package | Recorded version |
 |---|---|

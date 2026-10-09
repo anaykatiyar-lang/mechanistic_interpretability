@@ -1,0 +1,4 @@
+format_a,format_b,mean_difference,p_raw,p_holm
+digit+digit,digit+word,-0.21895949045817062,0.015625,0.046875
+digit+digit,word+word,-0.4744483913694109,0.109375,0.21875
+digit+word,word+word,-0.2554889009112403,0.1875,0.21875

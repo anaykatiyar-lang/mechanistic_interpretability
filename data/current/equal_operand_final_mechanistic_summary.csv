@@ -1,0 +1,2 @@
+proposed_circuit,full_discovery_advantage,circuit_ablated_advantage,removal_fraction,mean_completeness,mean_patch_recovery,mean_holdout_advantage_change,mean_filler_absolute_shift
+"['10_mlp_out', 'L9H9', 'L10H2']",0.2893863995869954,0.09735147953033448,0.8939081699859928,0.8939081699859928,0.0856153266574612,-0.07627781232198078,0.07725512981414795

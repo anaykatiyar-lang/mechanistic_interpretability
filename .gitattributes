@@ -1,0 +1,3 @@
+data/current/*.csv text eol=lf
+data/current/*.jsonl text eol=lf
+paper/figures/*.pdf binary

@@ -124,17 +124,46 @@ def generate_operator_swap_svg(data_path: str, output_path: str, variant: str) -
     out.write_text("\n".join(svg), encoding="utf-8")
 
 
+
+def generate_operator_target_svg(csv_path: str, output_path: str) -> None:
+    """Render clean-rerun matched target-level operator advantages."""
+    with open(csv_path, newline="", encoding="utf-8-sig") as handle:
+        rows = list(csv.DictReader(handle))
+    operators = ["plus", "minus", "times", "and", "then"]
+    targets = [int(row["T"]) for row in rows]
+    values = [[float(row[op]) for op in operators] for row in rows]
+    width, height, x0, y0, cw, ch = 680, 440, 165, 125, 90, 38
+    vmax = max(abs(x) for row in values for x in row) or 1.0
+    out = [f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}" width="{width}" height="{height}" style="background:#fff;font-family:Arial,sans-serif">',
+      '<style>.title{font-size:17px;font-weight:bold;fill:#111827}.sub{font-size:11px;fill:#4b5563}.axis{font-size:12px;fill:#374151}.val{font-size:11px;font-weight:bold;text-anchor:middle;dominant-baseline:central}</style>',
+      f'<text x="{width/2}" y="28" text-anchor="middle" class="title">Equal-operand advantage by target and operator</text>',
+      '<text x="340" y="51" text-anchor="middle" class="sub">Seven matched target levels; raw target-level mean contrasts</text>',
+      '<text x="340" y="68" text-anchor="middle" class="sub">Operator tests: no plus-versus-other difference after Holm correction (all p = 0.6875)</text>',
+      f'<text x="{x0-15}" y="105" text-anchor="end" class="axis">Target</text>']
+    for j,op in enumerate(operators): out.append(f'<text x="{x0+j*cw+cw/2}" y="105" text-anchor="middle" class="axis">{op}</text>')
+    for i,T in enumerate(targets):
+      y=y0+i*ch; out.append(f'<text x="{x0-16}" y="{y+ch/2}" text-anchor="end" dominant-baseline="central" class="axis">{T}</text>')
+      for j,v in enumerate(values[i]):
+        norm=v/vmax
+        if norm>=0: rgb=(int(255-95*norm),int(255-8*norm),int(255-70*norm)); tc="#7f1d1d"
+        else: rgb=(int(255-35*abs(norm)),int(255-60*abs(norm)),int(255-10*abs(norm)));tc="#1e3a8a"
+        fill="#%02x%02x%02x"%rgb;x=x0+j*cw
+        out.append(f'<rect x="{x}" y="{y}" width="{cw-3}" height="{ch-3}" rx="3" fill="{fill}"/>')
+        out.append(f'<text x="{x+cw/2}" y="{y+ch/2}" fill="{tc}" class="val">{v:+.3f}</text>')
+    out.append('<text x="340" y="410" text-anchor="middle" class="sub">Contrast is scored on the arithmetic sum token for every string; non-addition rows are not arithmetic-accuracy tests.</text></svg>')
+    Path(output_path).parent.mkdir(parents=True,exist_ok=True)
+    Path(output_path).write_text("\n".join(out),encoding="utf-8")
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Regenerate the repository SVG figures from committed artifacts")
     parser.add_argument("--grid-csv", default="data/current/addition_grid_79cell.csv")
-    parser.add_argument("--operator-json", default="data/current/operator_swap_results.json")
-    parser.add_argument("--operator-variant", default="reported_unicode")
+    parser.add_argument("--operator-csv", default="data/current/equal_operand_operator_advantages.csv")
     parser.add_argument("--grid-svg", default="figures/static/addition_grid_heatmap.svg")
     parser.add_argument("--operator-svg", default="figures/static/operator_swap_heatmap.svg")
     args = parser.parse_args()
 
     generate_addition_grid_svg(args.grid_csv, args.grid_svg)
-    generate_operator_swap_svg(args.operator_json, args.operator_svg, args.operator_variant)
+    generate_operator_target_svg(args.operator_csv, args.operator_svg)
 
 if __name__ == "__main__":
     main()

@@ -1,27 +1,89 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 396" width="720" height="396" style="background:#fff;font-family:Arial,sans-serif">
-<style>.title{font-size:16px;font-weight:bold;fill:#111827}.subtitle{font-size:11px;fill:#4b5563}.label{font-size:13px;fill:#1f2937}.bar{font-size:12px;font-weight:bold;fill:#fff}.value{font-size:11px;fill:#4b5563}</style>
-<text x="360.0" y="28" text-anchor="middle" class="title">Reported Doubles Advantage Under Operator Substitutions</text>
-<text x="360.0" y="48" text-anchor="middle" class="subtitle">Descriptive adv/SD summary; largest raw advantage: then (+0.549).</text>
-<text x="360.0" y="66" text-anchor="middle" class="subtitle">Largest adv/SD: minus (6.15).</text>
-<text x="360.0" y="84" text-anchor="middle" class="subtitle">Legacy aggregate; not reproduced from prompt-level scores. adv/SD is not a significance test.</text>
-<text x="115" y="119.0" text-anchor="end" class="label">plus (+)</text>
-<rect x="130" y="100" width="288.59" height="30" fill="#426b9b" rx="5"/>
-<text x="410.59" y="119.0" text-anchor="end" class="bar">5.22</text>
-<text x="428.59" y="119.0" class="value">raw advantage +0.418</text>
-<text x="115" y="173.0" text-anchor="end" class="label">times (*)</text>
-<rect x="130" y="154" width="134.34" height="30" fill="#426b9b" rx="5"/>
-<text x="256.34" y="173.0" text-anchor="end" class="bar">2.43</text>
-<text x="274.34" y="173.0" class="value">raw advantage +0.224</text>
-<text x="115" y="227.0" text-anchor="end" class="label">minus (-)</text>
-<rect x="130" y="208" width="340.00" height="30" fill="#426b9b" rx="5"/>
-<text x="462.00" y="227.0" text-anchor="end" class="bar">6.15</text>
-<text x="480.00" y="227.0" class="value">raw advantage +0.323</text>
-<text x="115" y="281.0" text-anchor="end" class="label">and (and)</text>
-<rect x="130" y="262" width="273.66" height="30" fill="#426b9b" rx="5"/>
-<text x="395.66" y="281.0" text-anchor="end" class="bar">4.95</text>
-<text x="413.66" y="281.0" class="value">raw advantage +0.469</text>
-<text x="115" y="335.0" text-anchor="end" class="label">then (then)</text>
-<rect x="130" y="316" width="252.10" height="30" fill="#426b9b" rx="5"/>
-<text x="374.10" y="335.0" text-anchor="end" class="bar">4.56</text>
-<text x="392.10" y="335.0" class="value">raw advantage +0.549</text>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 440" width="680" height="440" style="background:#fff;font-family:Arial,sans-serif">
+<style>.title{font-size:17px;font-weight:bold;fill:#111827}.sub{font-size:11px;fill:#4b5563}.axis{font-size:12px;fill:#374151}.val{font-size:11px;font-weight:bold;text-anchor:middle;dominant-baseline:central}</style>
+<text x="340.0" y="28" text-anchor="middle" class="title">Equal-operand advantage by target and operator</text>
+<text x="340" y="51" text-anchor="middle" class="sub">Seven matched target levels; raw target-level mean contrasts</text>
+<text x="340" y="68" text-anchor="middle" class="sub">Operator tests: no plus-versus-other difference after Holm correction (all p = 0.6875)</text>
+<text x="150" y="105" text-anchor="end" class="axis">Target</text>
+<text x="210.0" y="105" text-anchor="middle" class="axis">plus</text>
+<text x="300.0" y="105" text-anchor="middle" class="axis">minus</text>
+<text x="390.0" y="105" text-anchor="middle" class="axis">times</text>
+<text x="480.0" y="105" text-anchor="middle" class="axis">and</text>
+<text x="570.0" y="105" text-anchor="middle" class="axis">then</text>
+<text x="149" y="144.0" text-anchor="end" dominant-baseline="central" class="axis">4</text>
+<rect x="165" y="125" width="87" height="35" rx="3" fill="#f9fefb"/>
+<text x="210.0" y="144.0" fill="#7f1d1d" class="val">+0.049</text>
+<rect x="255" y="125" width="87" height="35" rx="3" fill="#f9f5fd"/>
+<text x="300.0" y="144.0" fill="#1e3a8a" class="val">-0.151</text>
+<rect x="345" y="125" width="87" height="35" rx="3" fill="#f2fdf5"/>
+<text x="390.0" y="144.0" fill="#7f1d1d" class="val">+0.121</text>
+<rect x="435" y="125" width="87" height="35" rx="3" fill="#fdfbfe"/>
+<text x="480.0" y="144.0" fill="#1e3a8a" class="val">-0.048</text>
+<rect x="525" y="125" width="87" height="35" rx="3" fill="#f9f5fd"/>
+<text x="570.0" y="144.0" fill="#1e3a8a" class="val">-0.153</text>
+<text x="149" y="182.0" text-anchor="end" dominant-baseline="central" class="axis">6</text>
+<rect x="165" y="163" width="87" height="35" rx="3" fill="#fdfefd"/>
+<text x="210.0" y="182.0" fill="#7f1d1d" class="val">+0.017</text>
+<rect x="255" y="163" width="87" height="35" rx="3" fill="#fefefe"/>
+<text x="300.0" y="182.0" fill="#1e3a8a" class="val">-0.004</text>
+<rect x="345" y="163" width="87" height="35" rx="3" fill="#fefefe"/>
+<text x="390.0" y="182.0" fill="#1e3a8a" class="val">-0.009</text>
+<rect x="435" y="163" width="87" height="35" rx="3" fill="#f4fef7"/>
+<text x="480.0" y="182.0" fill="#7f1d1d" class="val">+0.101</text>
+<rect x="525" y="163" width="87" height="35" rx="3" fill="#f7fef9"/>
+<text x="570.0" y="182.0" fill="#7f1d1d" class="val">+0.074</text>
+<text x="149" y="220.0" text-anchor="end" dominant-baseline="central" class="axis">8</text>
+<rect x="165" y="201" width="87" height="35" rx="3" fill="#e1fce8"/>
+<text x="210.0" y="220.0" fill="#7f1d1d" class="val">+0.291</text>
+<rect x="255" y="201" width="87" height="35" rx="3" fill="#ecfdf1"/>
+<text x="300.0" y="220.0" fill="#7f1d1d" class="val">+0.180</text>
+<rect x="345" y="201" width="87" height="35" rx="3" fill="#f5fef8"/>
+<text x="390.0" y="220.0" fill="#7f1d1d" class="val">+0.091</text>
+<rect x="435" y="201" width="87" height="35" rx="3" fill="#ddfce6"/>
+<text x="480.0" y="220.0" fill="#7f1d1d" class="val">+0.321</text>
+<rect x="525" y="201" width="87" height="35" rx="3" fill="#dbfce4"/>
+<text x="570.0" y="220.0" fill="#7f1d1d" class="val">+0.344</text>
+<text x="149" y="258.0" text-anchor="end" dominant-baseline="central" class="axis">10</text>
+<rect x="165" y="239" width="87" height="35" rx="3" fill="#c7fad6"/>
+<text x="210.0" y="258.0" fill="#7f1d1d" class="val">+0.535</text>
+<rect x="255" y="239" width="87" height="35" rx="3" fill="#c6fad5"/>
+<text x="300.0" y="258.0" fill="#7f1d1d" class="val">+0.552</text>
+<rect x="345" y="239" width="87" height="35" rx="3" fill="#d8fbe2"/>
+<text x="390.0" y="258.0" fill="#7f1d1d" class="val">+0.376</text>
+<rect x="435" y="239" width="87" height="35" rx="3" fill="#c8fad6"/>
+<text x="480.0" y="258.0" fill="#7f1d1d" class="val">+0.534</text>
+<rect x="525" y="239" width="87" height="35" rx="3" fill="#b6f8c9"/>
+<text x="570.0" y="258.0" fill="#7f1d1d" class="val">+0.703</text>
+<text x="149" y="296.0" text-anchor="end" dominant-baseline="central" class="axis">12</text>
+<rect x="165" y="277" width="87" height="35" rx="3" fill="#eefdf2"/>
+<text x="210.0" y="296.0" fill="#7f1d1d" class="val">+0.165</text>
+<rect x="255" y="277" width="87" height="35" rx="3" fill="#ecfdf1"/>
+<text x="300.0" y="296.0" fill="#7f1d1d" class="val">+0.176</text>
+<rect x="345" y="277" width="87" height="35" rx="3" fill="#f1fdf5"/>
+<text x="390.0" y="296.0" fill="#7f1d1d" class="val">+0.130</text>
+<rect x="435" y="277" width="87" height="35" rx="3" fill="#e2fcea"/>
+<text x="480.0" y="296.0" fill="#7f1d1d" class="val">+0.275</text>
+<rect x="525" y="277" width="87" height="35" rx="3" fill="#e7fded"/>
+<text x="570.0" y="296.0" fill="#7f1d1d" class="val">+0.227</text>
+<text x="149" y="334.0" text-anchor="end" dominant-baseline="central" class="axis">14</text>
+<rect x="165" y="315" width="87" height="35" rx="3" fill="#fefefe"/>
+<text x="210.0" y="334.0" fill="#1e3a8a" class="val">-0.006</text>
+<rect x="255" y="315" width="87" height="35" rx="3" fill="#fefefe"/>
+<text x="300.0" y="334.0" fill="#7f1d1d" class="val">+0.009</text>
+<rect x="345" y="315" width="87" height="35" rx="3" fill="#f9fefa"/>
+<text x="390.0" y="334.0" fill="#7f1d1d" class="val">+0.054</text>
+<rect x="435" y="315" width="87" height="35" rx="3" fill="#f8fefa"/>
+<text x="480.0" y="334.0" fill="#7f1d1d" class="val">+0.060</text>
+<rect x="525" y="315" width="87" height="35" rx="3" fill="#effdf3"/>
+<text x="570.0" y="334.0" fill="#7f1d1d" class="val">+0.153</text>
+<text x="149" y="372.0" text-anchor="end" dominant-baseline="central" class="axis">16</text>
+<rect x="165" y="353" width="87" height="35" rx="3" fill="#b8f9cb"/>
+<text x="210.0" y="372.0" fill="#7f1d1d" class="val">+0.682</text>
+<rect x="255" y="353" width="87" height="35" rx="3" fill="#d7fbe1"/>
+<text x="300.0" y="372.0" fill="#7f1d1d" class="val">+0.383</text>
+<rect x="345" y="353" width="87" height="35" rx="3" fill="#e0fce8"/>
+<text x="390.0" y="372.0" fill="#7f1d1d" class="val">+0.298</text>
+<rect x="435" y="353" width="87" height="35" rx="3" fill="#b2f8c6"/>
+<text x="480.0" y="372.0" fill="#7f1d1d" class="val">+0.745</text>
+<rect x="525" y="353" width="87" height="35" rx="3" fill="#a0f7b9"/>
+<text x="570.0" y="372.0" fill="#7f1d1d" class="val">+0.922</text>
+<text x="340" y="410" text-anchor="middle" class="sub">Contrast is scored on the arithmetic sum token for every string; non-addition rows are not arithmetic-accuracy tests.</text></svg>

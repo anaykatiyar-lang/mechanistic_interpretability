@@ -5,19 +5,12 @@
 | File | Data source | Description |
 |---|---|---|
 | [`../figures/static/addition_grid_heatmap.svg`](../figures/static/addition_grid_heatmap.svg) | `data/current/addition_grid_79cell.csv` | Symmetric logit-difference heatmap for the 79-row addition grid. |
-| [`../figures/static/operator_swap_heatmap.svg`](../figures/static/operator_swap_heatmap.svg) | `data/current/operator_swap_results.json` | Summary of normalized advantages across the reported operator and connector conditions. This is an aggregate visualization, not prompt-level data or a fresh model run. |
+| [`../figures/static/operator_swap_heatmap.svg`](../figures/static/operator_swap_heatmap.svg) | `data/current/equal_operand_operator_advantages.csv` | Seven-target matched equal-operand advantages by operator/connector. Paired plus-versus-other Holm p-values are 0.6875; lack of detection is not equivalence. |
+| [`../paper/figures/addition_grid_heatmap.pdf`](../paper/figures/addition_grid_heatmap.pdf) | `data/current/addition_grid_79cell.csv` | Publication-format vector rendering of Figure 1. |
+| [`../paper/figures/operator_target_advantages.pdf`](../paper/figures/operator_target_advantages.pdf) | `data/current/equal_operand_operator_advantages.csv` | Publication-format target-by-operator heatmap of Figure 2. |
 
-The SVGs can be regenerated with `python -m src.plot_heatmaps`. The manuscript links directly to the canonical copies in `figures/`.
+Regenerate the SVG figures with `python src/plot_heatmaps.py`; the manuscript vector assets are generated from the same canonical CSVs with `python src/render_paper_figures.py`.
 
 ## Activation patching and attention
 
-The following interactive figures are saved HTML artifacts from the analysis. They are included for inspection; the final full-record notebook does not currently reproduce these exact files.
-
-| File | Measurement |
-|---|---|
-| [`../figures/interactive/residual_stream_patching.html`](../figures/interactive/residual_stream_patching.html) | Normalized recovery by layer and sequence position for the `3 + 5 =` clean and `3 + 9 =` corrupt prompts. |
-| [`../figures/interactive/attention_head_patching.html`](../figures/interactive/attention_head_patching.html) | Normalized recovery by layer and attention head at the final prompt position. |
-| [`../figures/interactive/l10h2_attention_pattern.html`](../figures/interactive/l10h2_attention_pattern.html) | Attention weights across prompt tokens for layer 10, head 2. |
-| [`../figures/interactive/l9h9_attention_pattern.html`](../figures/interactive/l9h9_attention_pattern.html) | Attention weights across prompt tokens for layer 9, head 9. |
-
-The patching heatmaps show normalized recovery and can contain values below zero or above one. Interpret them using the clean/corrupt baselines and metric definition in the notebook. Attention patterns describe where a head attends; they do not alone demonstrate causal routing or arithmetic specificity. In particular, the L9H9 path-patching result remains unverified (see [audit trail A12](audit_trail.md#a12-invalid-path-patching-l9h9)).
+Interactive figures are saved HTML artifacts for inspection. Attention patterns describe where a head attends; they do not alone demonstrate causal routing or arithmetic specificity. In particular, the L9H9 path-patching result remains unverified (see [audit trail A12](audit_trail.md#a12-invalid-path-patching-l9h9)).

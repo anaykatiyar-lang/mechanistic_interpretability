@@ -1,0 +1,4 @@
+omitted_component,remaining_ablation_set,mean_advantage,restoration_vs_full_circuit
+L9H9,"['10_mlp_out', 'L10H2']",0.16079163551330566,0.06344015598297119
+10_mlp_out,"['L9H9', 'L10H2']",0.1594950755437215,0.06214359601338702
+L10H2,"['10_mlp_out', 'L9H9']",0.14763444264729816,0.05028296311696369

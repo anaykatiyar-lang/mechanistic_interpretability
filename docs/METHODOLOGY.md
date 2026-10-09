@@ -1,6 +1,6 @@
 # Research Methodology and Experimental Design
 
-This document details the rigorous experimental design, mathematical formalisms, control protocols, and metric specifications developed to investigate the GPT-2 Small arithmetic doubling anomaly.
+This document details the rigorous experimental design, mathematical formalisms, control protocols, and metric specifications used to investigate equal-operand patterns in GPT-2 Small arithmetic prompts.
 
 ---
 
@@ -9,7 +9,7 @@ This document details the rigorous experimental design, mathematical formalisms,
 - **Target Architecture**: GPT-2 Small (124M parameters, 12 layers, 12 attention heads per layer, $d_{\text{model}} = 768$, $d_{\text{head}} = 64$, $d_{\text{vocab}} = 50,257$).
 - **Tooling**: TransformerLens library (`HookedTransformer.from_pretrained("gpt2-small")`).
 - **Weight Folding**: Executed under default `fold_ln=True`, whereby LayerNorm gain and bias are folded directly into adjacent projection weights. Consequently, `ln_final` has no learnable weight, but dynamic scaling factor `hook_scale` is actively extracted at run time.
-- **Tokenization Conventions**: Target and foil strings include explicit leading spaces (for example, `' 8'`). Whitespace is part of the GPT-2 byte-pair tokenization and must be preserved. Exact token IDs for all targets/foils should be regenerated from the selected model; the originating token-diagnostic output is not committed.
+- **Tokenization Conventions**: Target and foil strings include explicit leading spaces (for example, `' 8'`). Whitespace is part of the GPT-2 byte-pair tokenization and must be preserved. The clean-rerun equal-operand target and foil token IDs are recorded in `data/current/equal_operand_tokenization_audit.csv`; the separate cohort-wide token-diagnostic report is not part of the current export set.
 
 ---
 
@@ -69,6 +69,10 @@ $$\text{adv}/\text{SD} = \frac{\overline{\text{Advantage}}}{s_{\text{pooled}}}$$
 
 ---
 
+### 3.4 Target-level inference
+
+The digit+digit primary result uses the seven even target levels as its inference units. The exact sign-flip test enumerates all $2^7$ sign assignments and uses a two-sided tail probability. The percentile bootstrap resamples the seven target-level advantages with replacement for 10,000 draws (seed 20261008). The format and operator comparisons pair values by target and apply Holm correction within the reported comparison families. These tests characterize the fixed seven-target set; they do not make prompt instances or target levels into independent model replications.
+
 ## 4. Mechanistic Attribution and Intervention Protocols
 
 ### 4.1 Mathematically Rigorous Direct Logit Attribution (DLA)
@@ -98,7 +102,7 @@ $$A_{l, h}[i, j] \leftarrow \frac{A_{l, h}[i, j]}{\sum_{k \ne 1} A_{l, h}[i, k]}
 ## 5. Operator and Corpus Comparisons
 
 ### 5.1 Operator-Swap Battery
-To test whether the reported equal-operand preference appears only with addition, addends are coupled via five strings: `+`, `−`, `×`, `and`, and `then`. The notebook defines Unicode multiplication and subtraction explicitly and uses ordered unequal splits; its saved summaries match the operator aggregate to rounding. Evaluation tracks logits on token $2d$. Prompt-level operator scores are unavailable, and the corrected analysis has not been rerun as a model evaluation. The script uses Unicode forms by default and can run ASCII forms as a separate sensitivity condition. These summaries do not establish universal operator blindness.
+To test whether the reported equal-operand preference appears only with addition, addends are coupled via five strings: `+`, `−`, `×`, `and`, and `then`. The notebook defines Unicode multiplication and subtraction explicitly and uses ordered unequal splits; its saved summaries match the operator aggregate to rounding. Evaluation tracks logits on token $2d$. The supplied clean-rerun export contains seven target-level means for each operator with matched target rows. Paired target-level tests use Holm correction; plus-versus-other comparisons have adjusted p = 0.6875 throughout. These results do not establish operator equivalence or universal operator blindness. Prompt-level operator scores are not included, so prompt-level uncertainty cannot be reconstructed. The reported strings preserve the notebook Unicode forms.
 
 ### 5.2 Corpus N-Gram Frequency Audit Protocol
 
@@ -106,9 +110,9 @@ The corpus analysis is intended as contextual evidence rather than a direct meas
 - **API**: Infini-gram (`https://api.infini-gram.io/`).
 - **Index**: `v4_dolma-v1_7_llama`. Corpus-size claims require a source citation and are not used here.
 - **Queries**: Joint exact string (`"a + b = T"`) and prompt prefix (`"a + b ="`).
-- **Earlier corrected summary**: A previous run reported joint $\rho=+0.46$, $p=.294$ and conditional $\rho=-0.14$, $p=.760$ ($n=7$). Those values are historical, not results of the final notebook's raw-query collector.
-- **Saved raw collectors**: The repository notebook output reports 79 query-attempt records and zero failures. A later uploaded notebook (8) reports 80 records and one failure. Both display the same seven-target summary; the per-attempt CSV/JSONL logs were not supplied, so the one-record difference cannot be reconciled. Neither raw collector reports a correlation, and neither applies a floor. See [CORPUS_AUDIT.md](CORPUS_AUDIT.md) for the transcribed summary and run distinction.
-- **Reliability and scope**: The historical files disagree on the count-floor rule. The raw collector leaves the floor unapplied pending prespecification. Dolma is a proxy rather than GPT-2's exact training data, so these counts cannot establish or exclude broader memorization or distributional effects.
+- **Historical summary**: Earlier joint and conditional Spearman values are historical and are not results of the archived raw-query log.
+- **Current raw export**: The supplied clean-rerun CSV/JSONL contains 79 logged requests and zero failures. Its seven-target summary is archived and derived from the query log using the notebook aggregation. No association test or eligibility floor was applied. A distinct saved output reports 80 requests/one failure; it remains a separate run. See [CORPUS_AUDIT.md](CORPUS_AUDIT.md).
+- **Reliability and scope**: The raw collector leaves the floor unapplied pending prespecification. Dolma is a proxy rather than GPT-2's exact training data, so these counts cannot establish or exclude broader memorization or distributional effects.
 
 
 ---
@@ -123,4 +127,4 @@ Use the labels consistently:
 - **[HYPOTHESIS]** for an untested proposed mechanism.
 - **[LIMITATION]** for scope, design, tokenization, corpus, or evidence boundaries.
 
-Literature is methodological context; it is not a source of this project's experimental values. For source-to-claim boundaries and the records for headline numbers, see [LITERATURE_MAP.md](LITERATURE_MAP.md). Cite [audit_trail.md](audit_trail.md) for the detailed correction record and verification status. The notebook is an executed source artifact; its saved output is not a substitute for independent reruns, and the individual corpus responses and formatted prompt-level scores remain unavailable.
+Literature is methodological context; it is not a source of this project's experimental values. For source-to-claim boundaries and the records for headline numbers, see [LITERATURE_MAP.md](LITERATURE_MAP.md). Cite [audit_trail.md](audit_trail.md) for the detailed correction record and verification status. The supplied clean-rerun CSV/JSONL exports are archived under `data/current/` and checksummed in `data/MANIFEST.csv`. Format and operator exports contain target-level summaries rather than every underlying prompt score; the individual corpus API request/response records are available.

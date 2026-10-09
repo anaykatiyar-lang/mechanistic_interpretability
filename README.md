@@ -33,9 +33,9 @@ The mechanism behind that effect remains an open question.
 ## What the results show
 
 - **Weak zero-shot addition performance:** the recorded all-pairs evaluation achieved top-1 accuracy of 2/36. A separate held-out evaluation achieved 2/32, compared with 8/32 for its best constant-guess baseline.
-- **An equal-operand effect:** the committed digit-plus-digit scan reports a mean advantage of +0.247, positive at 6 of 7 target levels. This is a descriptive result, not a significance test.
-- **No confirmed circuit:** the component analyses remain exploratory, with mixed transfer results. The evidence does not establish a general addition-specific mechanism.
-- **An unresolved corpus comparison:** the current corpus evidence is insufficient to establish a reliable relationship between corpus co-occurrence and the measured model effect.
+- **An equal-operand effect:** the clean-rerun digit-plus-digit export reports a mean target-level advantage of +0.247 across seven sums (exact sign-flip p = 0.03125; 95% target-bootstrap interval [+0.0738, +0.4374]). This is evidence within the tested target grid, not proof of a mechanism or broad generalization. Digit+digit also differs from digit+word after Holm correction (p = 0.046875).
+- **No confirmed circuit:** candidate-component screens remain exploratory (two-sided FDR q = 0.150 in the causal screen); transfer effects are mixed and do not establish a general addition-specific mechanism.
+- **Corpus audit:** the archived no-floor summary has positive double-versus-control joint log ratios at all seven targets, but mixed conditional ratios. No association test was prespecified, so the relationship to the model effect remains unresolved.
 
 These conclusions apply to the tested model, prompts, targets, and controls. They do not imply that GPT-2 Small lacks every arithmetic-related representation or computation.
 
@@ -56,6 +56,9 @@ Explore the evidence and methods:
 
 ![Addition-grid symmetric logit-difference heatmap](figures/static/addition_grid_heatmap.svg)
 
+![Target-level equal-operand advantages by operator string](figures/static/operator_swap_heatmap.svg)
+
+Explore the [interactive research explorer](index.html) for additional figures and comparisons.
 
 Attribution and attention visualizations are not, by themselves, proof of a causal circuit. Interpret intervention results alongside their clean and corrupt baselines.
 
@@ -74,10 +77,10 @@ python -m pip install -r requirements.txt
 Regenerate the committed static figures:
 
 ```bash
-python -m src.plot_heatmaps
+python src/plot_heatmaps.py
 ```
 
-See the notebook and methodology documentation for experimental details and environment requirements. The corpus scripts require network access to Infini-gram.
+See the notebook, [current data exports](data/current/), [data manifest](data/MANIFEST.csv), and methodology for experimental details. The corpus scripts require network access to Infini-gram; archived raw responses permit inspection of the supplied query run.
 
 ## Project structure
 

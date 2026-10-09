@@ -60,7 +60,7 @@
         <span>prompt and parity map</span>
       </div>
       <div class="flow-line" aria-label="Research flow, second line">
-        <span><strong>Equal-operand effect:</strong> +0.247; 6/7 targets</span><span class="flow-arrow" aria-hidden="true">→</span>
+        <span><strong>Equal-operand effect:</strong> +0.247; exact sign-flip p = 0.03125; 6/7 targets positive</span><span class="flow-arrow" aria-hidden="true">→</span>
         <span>boundary checks</span><span class="flow-arrow" aria-hidden="true">→</span>
         <span>corpus audit</span><span class="flow-arrow" aria-hidden="true">→</span>
         <span>no circuit established</span><span class="flow-arrow" aria-hidden="true">→</span>
@@ -83,7 +83,7 @@
         <tr><td>DLA omitted final LayerNorm scaling and a static bias term.</td><td>Corrected values change attribution magnitudes and reconcile selected token contrasts.</td></tr>
         <tr><td>Zero-ablation shifted residual scale.</td><td>Mean-ablation reduced the reported L11H0 shift from +0.0658 to +0.0013.</td></tr>
         <tr><td>Operator-position patch lacked a corrupt baseline.</td><td>“Operator binding falsified” is not established.</td></tr>
-        <tr><td>Saved collector outputs differ by one attempt (79/0 vs 80/1); per-attempt logs are unavailable.</td><td>Corpus-frequency relationship is unresolved; neither collector reports a correlation and prior correlations are historical.</td></tr>
+        <tr><td>79 raw requests (0 errors); joint double/control log ratio is positive at all seven targets, with mixed conditional ratios.</td><td>Raw request/response records and the no-floor summary are available. No association test was applied; corpus-frequency relationship remains unresolved.</td></tr>
       </tbody></table>
       <p><a href="docs/audits.md">Open the audit index</a> · <a href="docs/audit_trail.md">Read the canonical audit trail</a> · <a href="docs/LIMITATIONS.md">Review limitations</a></p>
     </section>
@@ -95,7 +95,7 @@
         <li><a href="docs/ENVIRONMENT.md">Recorded software environment</a></li>
         <li><a href="paper/draft_paper.md">Research draft</a></li>
       </ul>
-      <p class="muted">The uploaded notebook has saved outputs and was not rerun while preparing this repository update. The manifest identifies exports that still need to be downloaded from the Colab runtime.</p>
+      <p class="muted">Clean-rerun outputs are archived in <code>data/current/</code>; the manifest records their row counts and SHA-256 digests. The notebook documents the corresponding analysis steps.</p>
     </section>
     <footer>Research draft · not peer reviewed · all claims are limited to the stated prompts, model, and controls.</footer>
   </main>

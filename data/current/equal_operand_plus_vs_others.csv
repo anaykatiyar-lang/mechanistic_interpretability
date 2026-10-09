@@ -1,0 +1,5 @@
+comparison,mean_difference_+_-_other,p_exact,p_holm
+plus_vs_minus,0.08367734863644553,0.1875,0.6875
+plus_vs_times,0.09591977936880927,0.1875,0.6875
+plus_vs_and,-0.03663858345576695,0.234375,0.6875
+plus_vs_then,-0.0769022646404448,0.171875,0.6875

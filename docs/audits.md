@@ -11,7 +11,8 @@
 | [A19](audit_trail.md#a19-operator-patching-metric-not-anchored-to-a-corrupt-baseline-identified-at-archive-compilation) | Identify the missing corrupt baseline in operator-position patching. | “Operator binding falsified” is not established. |
 | [A23–A25](audit_trail.md#a23-doubles-analyses) | Refine doubles controls and tokenization; distinguish benchmark cohorts. | The equal-operand effect is target-dependent and corroborated, not confirmed as a mechanism. |
 | [A26](audit_trail.md#a26-frequency-test-api-anchoring-statistic) | Correct corpus API/query construction; retire the `ρ=+0.82` result. | Corpus-frequency conclusion is unresolved/inconclusive. |
-| [A30](audit_trail.md#a30-final-notebook-mechanism-screen-and-corpus-log-status) | Record the final notebook’s exploratory screen and missing raw corpus exports. | Candidate components remain exploratory; no circuit-level claim is supported. |
-| [A31](audit_trail.md#a31-later-corpus-collector-output) | Record the later corpus collector output and its one-attempt discrepancy against the repository notebook. | Both outputs show the same target summary; raw attempt logs are unavailable and the frequency relationship remains unresolved. |
+| [A30](audit_trail.md#a30-final-notebook-mechanism-screen-and-corpus-log-status) | Record the exploratory component screen and former raw-log gap; current raw logs are archived under `data/current/`. | Candidate components remain exploratory; no circuit-level claim is supported. |
+| [A31](audit_trail.md#a31-later-corpus-collector-output) | Record the separate 80-attempt/one-failure collector output. | It remains distinct from the supplied 79/0 raw export. |
+| [A32](audit_trail.md#a32-supplied-clean-rerun-exports-integrated-into-canonical-data) | Integrate supplied current-run exports and update target-level inference, intervention, and corpus provenance. | Primary target-level effect is nominally significant; no validated circuit or corpus-frequency association is established. |
 
 The audit trail preserves historical values and labels them as superseded, retracted, or unresolved where appropriate. It is the source of truth for correction history.

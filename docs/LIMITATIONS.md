@@ -18,7 +18,7 @@ This document catalogs the exact scope limitations, tokenization artifacts, stat
 ## 2. Token Geometry and Representation Quirks
 
 1. **Leading Whitespace Sensitivity**:
-   In GPT-2's byte-pair encoding (BPE), leading whitespace is part of the tokenized string. The DiD v1 analysis used unspaced targets in at least one comparison, but the exact per-token IDs and originating run outputs are not committed. The reported format swing therefore cannot be attributed solely to tokenization without separating the other simultaneous design changes recorded in the audit trail.
+   In GPT-2's byte-pair encoding (BPE), leading whitespace is part of the tokenized string. The historical DiD v1 format contrast used unspaced targets in at least one comparison and cannot be isolated from its other design changes. The clean-rerun equal-operand token IDs are now archived in `data/current/equal_operand_tokenization_audit.csv`; this audit does not retroactively repair the v1 result.
 2. **Single vs Multi-Token Representations**:
    While single-digit and early two-digit answers (`' 10'`, `' 12'`, `' 14'`, `' 16'`) are single BPE tokens in GPT-2, external tokenizers (such as Llama used in Dolma indexing) segment multi-digit numbers into individual digits. This creates token geometry mismatches during external corpus frequency matching.
 3. **Round-Number and Static Bias Skew ($b_U$)**:
@@ -53,17 +53,17 @@ This document catalogs the exact scope limitations, tokenization artifacts, stat
 
 ## 5. Corpus Frequency Audit Boundaries
 
-The external corpus-frequency analysis was inconclusive. Sparse joint-query counts and the mismatch between the available corpus and GPT-2's exact training distribution prevent strong conclusions about memorization. The results therefore should not be used either to establish or to rule out a memorization-based explanation.
+The external corpus-frequency analysis remains inconclusive. The seven-target count comparison and the mismatch between the available corpus and GPT-2's exact training distribution prevent strong conclusions about memorization. The results therefore should not be used either to establish or to rule out a memorization-based explanation.
 
 1. **Corpus Proxy Discrepancy**:
    Dolma v1.7 is used as a proxy for WebText. Because WebText is proprietary and unreleased, true pretraining co-occurrence statistics cannot be measured directly. The corpus-size figure is omitted until supported by a verified source.
-2. **Incomplete Query Records**:
-   The repository notebook output reports 79 query-attempt records with zero failed attempts; a later uploaded notebook (8) reports 80 records with one failed attempt. Both display the same seven-target summary. The per-attempt CSV/JSONL responses were not supplied, so the one-record difference cannot be reconciled. Neither raw collector reports a correlation; see [CORPUS_AUDIT.md](CORPUS_AUDIT.md) and audit A30–A31.
+2. **Run distinction and analysis scope**:
+   The supplied clean-rerun CSV/JSONL logs contain 79 attempts with zero recorded failures; the seven-target no-floor summary is archived. A separate saved output reports 80 attempts and one failure, which is not identified by this log. Neither raw collection applies an eligibility floor or reports an association test. The corpus-frequency relationship therefore remains unresolved; see [CORPUS_AUDIT.md](CORPUS_AUDIT.md) and audit A30–A32.
 3. **Run 1 Artifact Retraction**:
    An initial analysis reported a correlation ($\rho = +0.82$, $p = 0.023$) between corpus frequency and model advantage. The statistic was retracted after the audit identified a query-format artifact. It must not be used as a finding.
 
 4. **Earlier Exploratory Summary**:
-   A previous summary reported joint-count Spearman $\rho=+0.46$, $p=.294$, and conditional-count $\rho=-0.14$, $p=.760$ ($n=7$). These are historical, not results of either saved raw-query collector. The current corpus-frequency relationship is unresolved until raw responses are exported, the run discrepancy is identified, and the eligibility rule and statistic are specified.
+   A previous summary reported joint-count Spearman $\rho=+0.46$, $p=.294$, and conditional-count $\rho=-0.14$, $p=.760$ ($n=7$). These values remain historical and are not results of the archived raw-query log. Raw responses are now available, but an eligibility rule and association statistic were not prespecified or applied; the frequency relationship therefore remains unresolved.
 
 5. **Multi-Token Representation Limitation**: Some external arithmetic examples produce answers that do not correspond cleanly to a single GPT-2 token. Analyses that rely on `model.to_single_token` are restricted to examples whose target and foil representations satisfy the required single-token condition. Results from this restricted subset should not be generalized to arbitrary multi-token arithmetic answers.
 
@@ -78,13 +78,13 @@ The external corpus-frequency analysis was inconclusive. Sparse joint-query coun
 
 The cited mechanistic studies use different tasks and, in several cases, different training regimes. They motivate questions about task definition, controls, and causal validation; they do not independently corroborate these measurements. Trained modular-addition transformers and GPT-2 Small greater-than results are not direct evidence about pretrained GPT-2 Small decimal addition. See [LITERATURE_MAP.md](LITERATURE_MAP.md) for source-specific scope.
 
-The notebook's saved outputs document reported runs but are not independent reruns. The 39-row digit+digit score file supports the dense-scan table. The formatted doubles file contains per-target means, not each formatted prompt score; the operator summary lacks prompt-level scores; and individual corpus API responses are unavailable. The single-operand comparison remains untested. The M1 cohorts are distinct: all-pairs zero-shot is 2/36 (5.56%); held-out zero-shot is 2/32 (6.25%) with an 8/32 (25%) best-constant baseline; held-out few-shot is 2/32; the earlier few-shot 5/33 uses another prefix and exclusion set. See [audit_trail.md](audit_trail.md) for the detailed correction record.
+The supplied clean-rerun exports include the 39-row digit+digit score file, target-level format and operator tables, intervention results, and individual corpus API responses. Format/operator exports remain target-level summaries rather than all underlying prompt scores. The single-operand comparison remains untested. The M1 cohorts are distinct: all-pairs zero-shot is 2/36 (5.56%); held-out zero-shot is 2/32 (6.25%) with an 8/32 (25%) best-constant baseline; held-out few-shot is 2/32; the earlier few-shot 5/33 uses another prefix and exclusion set. See [audit_trail.md](audit_trail.md) for the detailed correction record.
 
 ## 7. Unresolved Reproduction and Design Checks
 
-- The operator-swap summary lacks prompt-level scores, and a fresh model evaluation of the corrected ordered-control design has not been completed.
+- Operator comparisons now have seven matched target-level means per condition and paired target-level inference; prompt-level operator scores are not archived.
 - The single-operand comparison (`4 + 3` and `4 + 5`, scoring token `' 8'`) has no run output.
-- The formatted prompt-level controls needed to recompute all pooled SDs are unavailable; `data/current/variance_scaling.csv` contains per-target means. Superseded rounded values are summarized in audit A23; the old table has been retired.
-- The final notebook contains saved outputs; these analyses have not been independently rerun from a clean environment.
+- Format comparisons now have target-level means and paired target-level tests. The prompt-level formatted controls needed to recompute pooled SDs are still not included; the current format files are target-level summaries.
+- The output bundle does not include standalone exports for every intermediate candidate-selection, filler-control, and operator-transfer table listed in the notebook manifest.
 - In the multiplication controls, `1 × 7 = 7` at target 8 and `1 × 9 = 9` at target 10 match the lower-neighbor foil (`T−1`). This may mechanically lower the control mean and requires explicit assessment.
 - The current comparisons do not separate equality, lexical equivalence, and string familiarity. There is one double prompt per target.

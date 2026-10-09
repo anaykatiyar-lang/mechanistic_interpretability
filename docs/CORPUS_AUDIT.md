@@ -1,9 +1,19 @@
 # Corpus audit
 
-The corpus collector queried exact double prompts and matched unequal-operand controls in the Dolma v1.7 proxy corpus (`v4_dolma-v1_7_llama`). The raw collector applied no eligibility floor and did not calculate a correlation. Dolma is a proxy and does not establish GPT-2 Small's training-data exposure.
+The corpus collector queried exact double prompts and matched ordered unequal-operand controls in the Dolma v1.7 proxy index (`v4_dolma-v1_7_llama`). The supplied clean-rerun export is archived in `data/current/corpus_raw_api_query_log.csv` and `.jsonl`. It contains 79 logged attempts, all HTTP 200, with zero recorded errors. The seven-target no-floor summary is archived at `data/current/corpus_raw_target_summary_no_floor.csv` and reconstructed from those request/response records using the notebook collector's cell 147 aggregation.
 
-The repository notebook records 79 query attempts with no failures. The later supplied notebook output records 80 attempts with one failure. Both display the same seven-target summary, but the per-attempt logs were not supplied, so the difference cannot be reconciled. These are separate saved outputs; neither is silently substituted for the other.
+For all seven targets, the raw joint count for the double string exceeds the mean count for ordered controls (positive joint $\log_{10}$ ratio, not a correlation coefficient). Conditional $\log_{10}$ ratios are mixed in sign. These are descriptive corpus counts only. No eligibility floor was applied and no association test between corpus counts and model advantage was run. Dolma is a proxy, not GPT-2's training corpus; these results cannot establish actual training exposure or explain the model's equal-operand effect.
 
-**Finding:** the available corpus output does not establish whether corpus frequency explains the equal-operand preference. No association test was reported by the raw collector. The raw response logs are needed before the run discrepancy or a frequency relationship can be assessed further.
+| Target | Double joint | Double prefix | Ordered controls | Mean control joint | Mean control prefix | Joint $\log_{10}$ ratio | Conditional $\log_{10}$ ratio |
+|---:|---:|---:|---:|---:|---:|---:|---:|
+| 4 | 28489 | 64946 | 2 | 4305.000 | 10762.500 | +0.8206 | +0.0400 |
+| 6 | 5076 | 11432 | 4 | 2506.750 | 7661.750 | +0.3063 | +0.1325 |
+| 8 | 3191 | 9251 | 6 | 1907.167 | 5151.333 | +0.2234 | -0.0308 |
+| 10 | 3812 | 9848 | 8 | 1490.875 | 4364.375 | +0.4075 | +0.0542 |
+| 12 | 1547 | 5074 | 6 | 1151.167 | 3517.167 | +0.1283 | -0.0309 |
+| 14 | 854 | 2759 | 4 | 696.500 | 2703.500 | +0.0884 | +0.0796 |
+| 16 | 1083 | 3787 | 2 | 420.500 | 1952.000 | +0.4102 | +0.1225 |
 
-See [audit trail entries A26, A30, and A31](audit_trail.md) for the run discrepancy and provenance limits, and the [data manifest](../data/MANIFEST.csv) for missing exports.
+The supplied raw export resolves the former absence of per-attempt logs. A separate saved output reported 80 attempts and one failure; the extra failed attempt is not identifiable from this 79-attempt export, so the two runs remain distinct. The historical `ρ=+0.82, p=0.023` result remains retracted, and the earlier `ρ=+0.46` / `ρ=−0.14` summaries remain historical rather than results of this raw log.
+
+See [audit trail A26, A30–A32](audit_trail.md) and the [data manifest](../data/MANIFEST.csv) for provenance.

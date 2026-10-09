@@ -3,7 +3,7 @@ Methodological and code-audit history of the GPT-2 Small addition project.
 Each entry: Original, Problem, Correction, Effect on conclusion, Numbers.
 Entries focus on issues that affect result validity, interpretation, or unresolved evidence. Numbered identifiers are retained for cross-document references.
 Tags: [VERIFIED RESULT] [INTERPRETATION] [HYPOTHESIS] [LIMITATION].
-Project status: final notebook outputs recorded; clean rerun and raw corpus-log export remain outstanding.
+Project status: supplied clean-rerun exports and raw corpus logs are archived under `data/current/`; see A32 and the data manifest.
 ## A01. Direct Logit Attribution without final LayerNorm scaling
 - Original: component outputs from `get_full_resid_decomposition` projected directly onto W_U[:,target] − W_U[:,foil].
 - Problem: components are pre-LayerNorm; LN divides by σ of the full summed stream. Raw sums overshoot.
@@ -174,19 +174,28 @@ The earlier summary below is historical only. Its per-query response files were 
 - The reported rank for `' 8'` differs across Run 2 and a table (rank 4) versus the controlled matrix (rank 7). One DLA table labels the contrast as `' 8'`/`' 6'`, while the controlled matrix uses `' 8'`/`' 9'`. L11H0 values −0.0448 (Run 1) and −0.1188 (Run 2) refer to different runs and must remain separate.
 - Effect: these source-label discrepancies remain unresolved pending the corresponding run outputs; they are not silently reconciled.
 
-## A30. Final notebook mechanism screen and corpus-log status
-- **Source:** Uploaded final notebook `notebooks/00_full_record.ipynb`, cells 145–167. Saved outputs are preserved; the notebook was not rerun during repository integration.
-- **Candidate screen:** `10_mlp_out`, L9H9, and L10H2 are exploratory candidates. The component DLA screen reports q_FDR = 0.513 for these candidates; the two-sided causal screen reports q_FDR = 0.150. Neither screen passes q < .05.
-- **Transfer and specificity:** At previously examined targets 8 and 14, joint ablation reduces the target-level advantage at 8 and increases it at 14. In the new target range 24–36, the displayed advantage decreases at five of seven targets and increases at two. This range is exploratory, not independent confirmation. Filler prompts also show effects.
-- **Aggregate-ratio discrepancy:** The final audit prints a removal fraction of +0.893908 alongside a full-model mean +0.289386 and an ablated mean +0.097351. The ratio formed from those aggregate means is approximately +0.664, so +0.893908 uses a different aggregation and must not be reported without defining it.
-- **Corpus query:** The repository notebook records 79 raw query records and zero failed attempts. A later uploaded notebook (8) records 80 raw query records and one failed attempt. Both display the same seven-target summary, but the raw per-attempt response files were not supplied, so the extra record cannot be identified or reconciled. Neither raw-collection cell reports a correlation. The prior summary reported joint ρ=+0.46, p=.294 and conditional ρ=−0.14, p=.760 (n=7), but its raw API records are unavailable; these values are historical and not from either raw collector. The corpus-frequency relationship remains unresolved pending raw-log export and a specified analysis rule. See [CORPUS_AUDIT.md](CORPUS_AUDIT.md) for the displayed table and run-level distinction.
-- **Environment:** The notebook prints `Python: 3.10+`; recorded package versions are listed in [`docs/ENVIRONMENT.md`](ENVIRONMENT.md).
+## A30. Exploratory mechanism screen and original corpus-log status
+- **Source:** Final full-record notebook analysis cells 145–167 and their saved output tables.
+- **Candidate screen:** `10_mlp_out`, L9H9, and L10H2 are exploratory candidates. The component DLA screen reports q_FDR = 0.513; the two-sided causal screen reports q_FDR = 0.150. Neither passes q < .05.
+- **Transfer and specificity:** At targets 8 and 14, joint ablation lowers the target-level advantage at 8 and raises it at 14. In the prospective range 24–36, the signed advantage change is negative at five targets and positive at two; clean contrasts at 26 and 34 are negative. This remains exploratory transfer, not confirmation. Filler prompts also show effects.
+- **Completeness:** The target-level completeness ratios vary from 0.54 to 1.54; the largest ratio occurs where the full effect is small. Do not summarize these ratios as a stable circuit-level removal fraction.
+- **Original corpus log status:** At the time of this record, raw per-request files were not part of the repository. The supplied 79/0 raw CSV/JSONL and reconstructed no-floor summary are now archived under `data/current/` (A32). A separate 80/1 output remains distinct. Neither collector applies a floor or reports an association test; prior correlations remain historical. See [CORPUS_AUDIT.md](CORPUS_AUDIT.md).
 
-## A31. Later corpus collector output
-- **Source:** User-supplied notebook version (8), raw corpus collector cell and saved output; the notebook itself was not added as a second full-record artifact.
-- **Observed output:** 80 query-attempt records and 1 failed attempt. The seven displayed target-summary rows match the table displayed by the repository notebook, which reports 79 records and 0 failures.
-- **Boundary:** The CSV/JSONL query logs named by the notebook were not supplied separately. The additional attempt and its status therefore cannot be identified, and the outputs must remain distinct rather than silently reconciled. The collector applies no count floor and computes no correlation. The summary values and source limitations are documented in [CORPUS_AUDIT.md](CORPUS_AUDIT.md).
-- **Interpretation:** This output does not resolve the corpus-frequency relationship and does not supersede the historical correlation summaries or the retracted `ρ=+0.82` result.
+## A31. Separate corpus collector output
+- **Source:** A separately saved corpus collector output.
+- **Observed output:** 80 query attempts and 1 failed attempt.
+- **Boundary:** The archived clean-rerun log has 79 attempts and zero errors; it does not identify the extra failed attempt in this separate output. Keep the outputs distinct. The corpus-frequency relationship remains unresolved because neither run reports a prespecified association analysis.
+- **Current status:** The request/response files for the 79/0 run are now archived, superseding the former statement that no raw per-attempt log was available. The separate 80/1 output is retained as a distinct provenance record.
+
+## A32. Supplied clean-rerun exports integrated into canonical data
+- **Source:** Clean-rerun CSV/JSONL outputs. Canonical outputs are stored once under `data/current/`; row counts and SHA-256 digests are in `data/MANIFEST.csv`.
+- **Byte checks:** `doubles_scan_scores.csv` (39 rows) and `variance_scaling.csv` (21 rows) byte-match the existing canonical files. The two supplied final-summary aliases are identical and stored once. No experimental numbers were edited or merged.
+- **Primary equal-operand result:** Mean advantage +0.2473847 across seven target levels; exact target-level sign-flip p = 0.03125; 10,000-resample target bootstrap 95% percentile interval [+0.0738152, +0.4374255], seed 20261008. The effect-size ratio is descriptive. Interpretation is bounded to these seven target levels.
+- **Format inference:** Digit+digit versus digit+word paired difference −0.2189595, raw p = 0.015625, Holm p = 0.046875. Other format contrasts have Holm p = 0.21875. The contrast is target-level and does not establish general invariance.
+- **Operator inference:** Plus-versus-other paired Holm p = 0.6875 for each comparison. This is failure to detect a difference, not evidence of equivalence.
+- **Candidate causal screen:** For nominated components, one-sided raw p = 0.03125 each, but one-sided FDR q = 0.09375; two-sided FDR q = 0.15. No nominated component passes q < 0.05. Prospective-range signed advantage change decreases at five targets and increases at two; clean advantages at targets 26 and 34 are already negative. These outputs do not establish a circuit.
+- **Corpus export:** Raw CSV and JSONL contain 79 request attempts, 0 errors, and 79 HTTP 200 responses. A seven-target no-floor summary is reconstructed from the raw log using notebook cell 147. Double joint counts exceed mean ordered-control joint counts for all seven targets; conditional log ratios vary in sign. No association test or eligibility floor was applied. A separate saved 80/1 output remains a distinct run; its failed attempt is not found in this log. Historical correlations remain historical and `ρ=+0.82, p=0.023` remains retracted.
+- **Scope:** The supplied output exports do not include every format/operator prompt score. The single-operand control remains untested. No data values were silently reconciled.
 
 ## Summary of research-relevant corrections
 | Issue | Changed conclusion? |
@@ -201,5 +210,5 @@ The earlier summary below is historical only. Its per-query response files were 
 | A22 (invariance) | Yes (retired) |
 | A23, A24 (doubles design and tokenization) | Yes (v1 artifact retired; effect corroborated, not confirmed) |
 | A25 (M1) | Closed as a scoped limitation; cohort definitions separated |
-| A26, A30, and A31 (frequency) | Earlier ρ = +0.82 discarded; saved raw-collection outputs differ by one attempt, no correlation is reported, and the relationship remains unresolved |
+| A26, A30, A31, and A32 (frequency) | Earlier ρ = +0.82 discarded; 79/0 raw logs are archived; a separate 80/1 output remains distinct; no association is reported and the relationship remains unresolved |
 | A04, A07–A10, A12–A13, A20, A29 | No change to the surviving claim; data-integrity limits retained |

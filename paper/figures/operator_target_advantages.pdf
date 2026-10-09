@@ -1,0 +1,153 @@
+%PDF-1.4
+%‚„œ”
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 720 590] /Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+5 0 obj
+<< /Length 4007 >>
+stream
+1 1 1 rg 0 0 720 590 re f
+BT /F1 17 Tf 155.0 555.0 Td (Equal-operand advantage by target and operator) Tj ET
+BT /F1 10 Tf 155.0 533.0 Td (Clean-rerun target-level contrasts; no plus-versus-other difference after Holm correction \(p = 0.6875\).) Tj ET
+BT /F1 10 Tf 199.0 479.0 Td (plus) Tj ET
+BT /F1 10 Tf 292.0 479.0 Td (minus) Tj ET
+BT /F1 10 Tf 385.0 479.0 Td (times) Tj ET
+BT /F1 10 Tf 478.0 479.0 Td (and) Tj ET
+BT /F1 10 Tf 571.0 479.0 Td (then) Tj ET
+BT /F1 10 Tf 145.0 439.0 Td (4) Tj ET
+0.966 0.989 0.997 rg
+175.0 421.0 91.0 46.0 re f
+BT /F1 9 Tf 195.0 440.0 Td (+0.049) Tj ET
+0.992 0.910 0.910 rg
+268.0 421.0 91.0 46.0 re f
+BT /F1 9 Tf 288.0 440.0 Td (-0.151) Tj ET
+0.915 0.974 0.993 rg
+361.0 421.0 91.0 46.0 re f
+BT /F1 9 Tf 381.0 440.0 Td (+0.121) Tj ET
+0.997 0.971 0.971 rg
+454.0 421.0 91.0 46.0 re f
+BT /F1 9 Tf 474.0 440.0 Td (-0.048) Tj ET
+0.992 0.909 0.909 rg
+547.0 421.0 91.0 46.0 re f
+BT /F1 9 Tf 567.0 440.0 Td (-0.153) Tj ET
+BT /F1 10 Tf 145.0 391.0 Td (6) Tj ET
+0.988 0.996 0.999 rg
+175.0 373.0 91.0 46.0 re f
+BT /F1 9 Tf 195.0 392.0 Td (+0.017) Tj ET
+1.000 0.998 0.998 rg
+268.0 373.0 91.0 46.0 re f
+BT /F1 9 Tf 288.0 392.0 Td (-0.004) Tj ET
+0.999 0.994 0.994 rg
+361.0 373.0 91.0 46.0 re f
+BT /F1 9 Tf 381.0 392.0 Td (-0.009) Tj ET
+0.929 0.978 0.995 rg
+454.0 373.0 91.0 46.0 re f
+BT /F1 9 Tf 474.0 392.0 Td (+0.101) Tj ET
+0.948 0.984 0.996 rg
+547.0 373.0 91.0 46.0 re f
+BT /F1 9 Tf 567.0 392.0 Td (+0.074) Tj ET
+BT /F1 10 Tf 145.0 343.0 Td (8) Tj ET
+0.795 0.937 0.984 rg
+175.0 325.0 91.0 46.0 re f
+BT /F1 9 Tf 195.0 344.0 Td (+0.291) Tj ET
+0.873 0.961 0.990 rg
+268.0 325.0 91.0 46.0 re f
+BT /F1 9 Tf 288.0 344.0 Td (+0.180) Tj ET
+0.936 0.980 0.995 rg
+361.0 325.0 91.0 46.0 re f
+BT /F1 9 Tf 381.0 344.0 Td (+0.091) Tj ET
+0.773 0.930 0.983 rg
+454.0 325.0 91.0 46.0 re f
+BT /F1 9 Tf 474.0 344.0 Td (+0.321) Tj ET
+0.758 0.925 0.981 rg
+547.0 325.0 91.0 46.0 re f
+BT /F1 9 Tf 567.0 344.0 Td (+0.344) Tj ET
+BT /F1 10 Tf 145.0 295.0 Td (10) Tj ET
+0.623 0.884 0.971 rg
+175.0 277.0 91.0 46.0 re f
+BT /F1 9 Tf 195.0 296.0 Td (+0.535) Tj ET
+0.611 0.880 0.970 rg
+268.0 277.0 91.0 46.0 re f
+BT /F1 9 Tf 288.0 296.0 Td (+0.552) Tj ET
+0.735 0.918 0.980 rg
+361.0 277.0 91.0 46.0 re f
+BT /F1 9 Tf 381.0 296.0 Td (+0.376) Tj ET
+0.624 0.884 0.971 rg
+454.0 277.0 91.0 46.0 re f
+BT /F1 9 Tf 474.0 296.0 Td (+0.534) Tj ET
+0.504 0.847 0.962 rg
+547.0 277.0 91.0 46.0 re f
+BT /F1 9 Tf 567.0 296.0 Td (+0.703) Tj ET
+BT /F1 10 Tf 145.0 247.0 Td (12) Tj ET
+0.884 0.964 0.991 rg
+175.0 229.0 91.0 46.0 re f
+BT /F1 9 Tf 195.0 248.0 Td (+0.165) Tj ET
+0.876 0.962 0.990 rg
+268.0 229.0 91.0 46.0 re f
+BT /F1 9 Tf 288.0 248.0 Td (+0.176) Tj ET
+0.909 0.972 0.993 rg
+361.0 229.0 91.0 46.0 re f
+BT /F1 9 Tf 381.0 248.0 Td (+0.130) Tj ET
+0.806 0.940 0.985 rg
+454.0 229.0 91.0 46.0 re f
+BT /F1 9 Tf 474.0 248.0 Td (+0.275) Tj ET
+0.840 0.951 0.988 rg
+547.0 229.0 91.0 46.0 re f
+BT /F1 9 Tf 567.0 248.0 Td (+0.227) Tj ET
+BT /F1 10 Tf 145.0 199.0 Td (14) Tj ET
+1.000 0.996 0.996 rg
+175.0 181.0 91.0 46.0 re f
+BT /F1 9 Tf 195.0 200.0 Td (-0.006) Tj ET
+0.993 0.998 0.999 rg
+268.0 181.0 91.0 46.0 re f
+BT /F1 9 Tf 288.0 200.0 Td (+0.009) Tj ET
+0.962 0.988 0.997 rg
+361.0 181.0 91.0 46.0 re f
+BT /F1 9 Tf 381.0 200.0 Td (+0.054) Tj ET
+0.958 0.987 0.997 rg
+454.0 181.0 91.0 46.0 re f
+BT /F1 9 Tf 474.0 200.0 Td (+0.060) Tj ET
+0.892 0.967 0.992 rg
+547.0 181.0 91.0 46.0 re f
+BT /F1 9 Tf 567.0 200.0 Td (+0.153) Tj ET
+BT /F1 10 Tf 145.0 151.0 Td (16) Tj ET
+0.519 0.852 0.963 rg
+175.0 133.0 91.0 46.0 re f
+BT /F1 9 Tf 195.0 152.0 Td (+0.682) Tj ET
+0.730 0.917 0.979 rg
+268.0 133.0 91.0 46.0 re f
+BT /F1 9 Tf 288.0 152.0 Td (+0.383) Tj ET
+0.790 0.935 0.984 rg
+361.0 133.0 91.0 46.0 re f
+BT /F1 9 Tf 381.0 152.0 Td (+0.298) Tj ET
+0.475 0.838 0.960 rg
+454.0 133.0 91.0 46.0 re f
+BT /F1 9 Tf 474.0 152.0 Td (+0.745) Tj ET
+0.350 0.800 0.950 rg
+547.0 133.0 91.0 46.0 re f
+BT /F1 9 Tf 567.0 152.0 Td (+0.922) Tj ET
+BT /F1 9 Tf 160.0 90.0 Td (The sum token is scored under every string; non-addition rows are not arithmetic-accuracy tests.) Tj ET
+endstream
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000015 00000 n 
+0000000064 00000 n 
+0000000121 00000 n 
+0000000247 00000 n 
+0000000317 00000 n 
+trailer
+<< /Size 6 /Root 1 0 R >>
+startxref
+4376
+%%EOF

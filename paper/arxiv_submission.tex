@@ -10,7 +10,7 @@
 \hypersetup{colorlinks=true,allcolors=blue}
 \setlist{nosep}
 
-\title{Auditing Addition-Circuit Interpretations in GPT-2 Small: Behavioral Baselines and an Equal-Operand Preference}
+\title{Short Addition Completions in GPT-2 Small: Behavioral Limits and a Target-Dependent Equal-Operand Preference}
 \author{Anay Katiyar\\\small Independent Researcher}
 \date{}
 
@@ -18,32 +18,34 @@
 \maketitle
 
 \begin{abstract}
-Does GPT-2 Small use an identifiable circuit to perform simple decimal addition, or can its apparent arithmetic behavior be explained by prompt and token-level preferences? We audit saved behavioral, attribution, intervention, and prompt-comparison results for GPT-2 Small (124M parameters) on short addition prompts. In a held-out zero-shot cohort, top-1 accuracy is 2/32, compared with 8/32 for the best constant guess. In a 79-cell prompt grid, the sign of a neighbor-averaged target logit contrast agrees with target parity in 68/79 cells, but agreement differs sharply across target ranges. A matched scan of seven even target sums finds a descriptive equal-operand advantage of +0.247 (reported SE 0.102), positive at six targets. Correcting final-LayerNorm scaling and separating unembedding bias narrows earlier component interpretations; candidate-component screens remain exploratory and do not establish a circuit. Corpus-proxy outputs are incomplete and do not report an association test. The evidence supports a target-dependent prompt-level preference, not a general addition mechanism or a claim that arithmetic representations are absent.
+Mechanistic studies have examined arithmetic in pretrained language models, but evidence from those models and tasks does not by itself establish how GPT-2 Small scores short decimal-addition completions. We present a bounded audit of saved behavioral, attribution, intervention, and prompt-comparison results for GPT-2 Small (124M parameters). In a held-out zero-shot cohort, top-1 accuracy is 2/32, compared with 8/32 for the best constant guess. In a 79-cell prompt grid, the sign of a neighbor-averaged target logit contrast agrees with target parity in 68/79 cells, with substantially different agreement across target ranges. A scan of seven even target sums records a mean target-level equal-operand advantage of +0.2474 (exact sign-flip $p=0.03125$; target-bootstrap 95\% interval $[+0.0738,+0.4374]$), positive at six targets. Correcting final-LayerNorm scaling and separating unembedding bias narrows earlier component interpretations; candidate-component screens remain exploratory (nominated-candidate one-sided FDR $q=0.09375$, two-sided $q=0.15$) and do not establish a circuit. A digit+digit versus digit+word target-level contrast survives Holm correction ($p=0.046875$), while plus-versus-other operator comparisons do not detect a difference after correction. Archived raw corpus-proxy logs contain 79 requests with no recorded errors; their no-floor target summary is descriptive and does not report an association test. The study's contribution is a model- and prompt-specific characterization of these measurements and their interpretive limits, including an exploratory equal-operand pattern; it does not identify an addition mechanism or establish that arithmetic representations are absent.
 \end{abstract}
 
 \section{Introduction}
 
 Mechanistic interpretability seeks explanations of model behavior in terms of internal representations and computations, rather than correlations between inputs and outputs alone \cite{elhage2021framework}. GPT-2 is an autoregressive language model trained on next-token prediction \cite{radford2019gpt2}; arithmetic is an attractive test case because the intended operation is explicit, but a model's preference for a correct answer token is not by itself evidence that it carried out the operation.
 
-The closest comparison in model and method is the study of greater-than prediction in pretrained GPT-2 Small by Hanna et al. \cite{hanna2023greater}. They identify and test a circuit for comparing year-like values. Their task and positive circuit result motivate asking whether similarly controlled evidence supports a circuit for decimal addition; they do not establish that it does. Other influential addition studies analyze small transformers trained on modular addition. Nanda et al. reverse-engineer a Fourier-based algorithm in a grokked model, while Zhong et al. show that closely related training setups can yield distinct algorithms \cite{nanda2023progress,zhong2023clock}. These are important demonstrations of what mechanistic evidence can establish in controlled trained models, but they differ from a pretrained language model completing familiar text strings. Ye et al. study hidden processes in models trained on synthetic grade-school math, another distinct training and task setting \cite{ye2024physics}.
+The closest comparison by model is Hanna et al.'s study of greater-than prediction in pretrained GPT-2 Small \cite{hanna2023greater}. They identify and test a circuit for comparing year-like values, rather than decimal addition. By task, more direct precedents study arithmetic mechanisms in pretrained language models. Stolfo et al. use causal mediation to trace arithmetic-related information flow across models with 2.8B--7B parameters \cite{stolfo2023causal}; Yu and Ananiadou analyze addition and other operations in Llama-7B and GPT-J, including attention heads and feed-forward neurons \cite{yu2024cna}; and Nikankin et al. characterize arithmetic circuits and heuristic neurons in pretrained Llama 3, Pythia, and GPT-J models \cite{nikankin2025heuristics}. These studies establish that mechanistic arithmetic analysis in pretrained models is not new. Their models, scales, prompt designs, and analyses differ from the short GPT-2 Small decimal-completion probes reported here, so their circuit findings neither validate nor rule out the interpretations tested in this study. Nanda et al. and Zhong et al. provide a further comparison through transformers trained on modular addition, where learned algorithms can be examined in controlled settings \cite{nanda2023progress,zhong2023clock}. Ye et al. study models trained on synthetic grade-school math, another distinct setting \cite{ye2024physics}.
 
-This work audits a set of GPT-2 Small probes on prompts such as \texttt{3 + 5 =}. The initial hypothesis concerned a general addition-specific circuit. Behavioral baselines, attribution corrections, and intervention controls narrowed that interpretation. A target-dependent preference for equal-operand prompts remained in a seven-target scan, so we examine it as a descriptive behavioral effect and a candidate for future causal testing.
+This work audits a set of GPT-2 Small probes on prompts such as \texttt{3 + 5 =}. The initial hypothesis concerned a general addition-specific circuit. Behavioral baselines, attribution corrections, and intervention controls narrowed that interpretation. A target-dependent preference for equal-operand prompts remained in a seven-target scan, so we report it as a descriptive behavioral effect and a candidate for future causal testing.
 
-Our contribution is an evidence-bounded report of these probes and their corrections. We do not claim to identify an addition algorithm. In particular, the available data support neither a general circuit account nor the stronger claim that GPT-2 Small has no arithmetic-related representations.
+The contribution is deliberately narrower than a new account of arithmetic mechanisms: we document how exact-answer baselines, a neighbor-token logit contrast, and an equal-operand comparison behave in this specific GPT-2 Small prompt setting, and show how attribution and intervention audits constrain circuit-level interpretations. The equal-operand pattern is exploratory and descriptive. We do not claim priority for mechanistic arithmetic research, identify an addition algorithm, or infer that GPT-2 Small lacks arithmetic-related representations. This focused comparison is not a systematic review of all arithmetic-interpretability work.
 
 \section{Study scope and related work}
 
-\paragraph{Pretrained mathematical behavior.} Hanna et al. examine a greater-than task in pretrained GPT-2 Small and validate a circuit across related contexts \cite{hanna2023greater}. This is the nearest precedent by model family and mechanistic method. The present study differs in the behavior (decimal addition rather than year-span comparison), and it does not meet the same standard of circuit identification or generalization.
+\paragraph{Pretrained mathematical behavior in GPT-2 Small.} Hanna et al. examine a greater-than task in pretrained GPT-2 Small and validate a circuit across related contexts \cite{hanna2023greater}. This is the nearest precedent by model family, not by arithmetic operation. The present study examines decimal-addition prompts and does not provide comparable circuit validation or generalization evidence.
 
-\paragraph{Addition circuits in trained models.} Nanda et al. study small transformers trained on modular addition and use activation, weight, and intervention analyses to validate a learned Fourier algorithm \cite{nanda2023progress}. Zhong et al. show that learned modular-addition solutions vary with architecture and training conditions \cite{zhong2023clock}. Lee et al. study how training data and formats affect arithmetic learning in small transformers \cite{lee2024teaching}. These studies motivate testing the algorithm actually learned rather than assuming that a task name specifies a mechanism. Their synthetic training regimes, modular arithmetic, and model behaviors differ from the pretrained decimal-completion setting here.
+\paragraph{Mechanistic studies of pretrained arithmetic.} Prior work has directly investigated arithmetic computations in pretrained models. Stolfo et al. use causal mediation on arithmetic questions and report information transfer from operands and operators toward the answer position, followed by result-related processing in MLP modules \cite{stolfo2023causal}. Yu and Ananiadou study arithmetic heads and feed-forward neurons in Llama-7B and report related analyses in GPT-J \cite{yu2024cna}. Nikankin et al. analyze arithmetic circuits across pretrained Llama 3, Pythia, and GPT-J models and characterize collections of heuristic neurons that contribute to answer logits \cite{nikankin2025heuristics}. These are direct precedents for mechanistic arithmetic analysis and for the broader question of algorithmic computation versus narrower patterns. The present work is not a replication of those studies: it uses GPT-2 Small, short next-token decimal prompts, a low-accuracy behavioral setting, and an equal-operand contrast. Its narrower contribution is to document that contrast and the limits of the saved evidence available to interpret it. Differences in models and methods prevent treating either set of findings as confirmation of the other.
 
-\paragraph{Other mathematical and circuit methods.} Ye et al. analyze internal processes in synthetic grade-school math settings, including GPT-2-family models trained on generated data \cite{ye2024physics}. Their results motivate separating behavioral competence from internal-process evidence, but do not transfer to the present prompts. Circuit evaluation work on indirect-object identification and automated circuit discovery motivates explicit behavioral metrics and causal validation \cite{wang2023ioi,conmy2023acdc}. Those papers supply methodological context only; all measurements below come from this project's saved artifacts.
+\paragraph{Arithmetic in trained models and other tasks.} Nanda et al. study small transformers trained on modular addition and use activation, weight, and intervention analyses to validate a learned Fourier algorithm \cite{nanda2023progress}. Zhong et al. show that learned modular-addition solutions vary with architecture and training conditions \cite{zhong2023clock}. Lee et al. study how training data and formats affect arithmetic learning in small transformers \cite{lee2024teaching}. Ye et al. analyze internal processes in synthetic grade-school math settings, including GPT-2-family models trained on generated data \cite{ye2024physics}. These studies offer useful comparisons, but their training regimes or tasks differ from the pretrained short-completion setting here.
+
+\paragraph{Circuit-evaluation methods.} Work on indirect-object identification and automated circuit discovery motivates explicit behavioral metrics and causal validation \cite{wang2023ioi,conmy2023acdc}. These papers supply methodological context; all measurements below come from this project's saved artifacts.
 
 \section{Methods}
 
 \subsection{Model, prompts, and saved records}
 
-The reported model is GPT-2 Small (124M parameters). Prompts use short textual arithmetic forms, principally \texttt{a + b =}. The repository preserves a full-record notebook with saved outputs, a 79-row addition grid, a 39-row digit-addition double/control score file, aggregate format and operator summaries, and an artifact manifest. The notebook was not independently rerun for this manuscript. We therefore distinguish saved-run observations from independent reproduction.
+The reported model is GPT-2 Small (124M parameters). Prompts use short textual arithmetic forms, principally \texttt{a + b =}. The repository preserves the full-record notebook, the supplied clean-rerun output tables, raw corpus query logs, a 79-row addition grid, a 39-row digit-addition double/control score file, and a checksummed artifact manifest. The exported format and operator tables report target-level summaries; their full prompt-level scores are not included.
 
 The behavioral report includes an all-pairs zero-shot cohort ($N=36$), a separate held-out zero-shot cohort ($N=32$), and a held-out few-shot cohort ($N=32$). These are distinct evaluations and are not pooled. The dense equal-operand scan covers the seven even target sums $T\in\{4,6,8,10,12,14,16\}$. For each target, it compares the single double prompt $(T/2)+(T/2)$ with the available ordered, unequal, single-digit splits that sum to $T$.
 
@@ -61,7 +63,7 @@ For each even target $T$, the equal-operand advantage is
 A_T=S(p_{d,d},T)-\frac{1}{|C_T|}\sum_{(a,b)\in C_T}S(p_{a,b},T),\qquad d=T/2,
 \label{eq:adv}
 \end{equation}
-where $p_{a,b}$ is the prompt \texttt{a + b =} and $C_T$ contains the evaluated ordered unequal splits with $a+b=T$. The reported mean and standard error summarize these seven target-level advantages. With one double prompt per target and only seven target values, the summary is treated descriptively; the normalized $A_T/\mathrm{SD}$ quantities are not significance tests.
+where $p_{a,b}$ is the prompt \texttt{a + b =} and $C_T$ contains the evaluated ordered unequal splits with $a+b=T$. The reported mean and standard error summarize these seven target-level advantages. The inferential unit is the target level ($n=7$). We use an exact sign-flip test over all $2^7$ sign assignments and a 10,000-resample percentile bootstrap over target levels (seed 20261008). The normalized $A_T/\mathrm{SD}$ quantities remain descriptive and are not significance tests.
 
 The addition-grid analysis records whether the sign of the measured symmetric logit contrast matches target parity. Grid cells share target values and are not independent observations.
 
@@ -73,9 +75,9 @@ Intervention summaries compare zero-ablation with mean-ablation and report candi
 
 \subsection{Format, operator, and corpus comparisons}
 
-Format summaries compare digit--digit, digit--word, and word--word prompts. Prompt-level formatted control scores are not available, so the pooled format dispersions cannot be independently recomputed. Operator and connector summaries compare strings such as \texttt{+}, \texttt{-}, \texttt{*}, \texttt{and}, and \texttt{then}. For non-addition strings, the analysis still scores the arithmetic sum token; these comparisons therefore test the persistence of a logit preference across strings, not whether the model correctly performs subtraction or multiplication.
+Format and operator analyses are archived as seven matched target-level means per condition, with paired target-level tests and Holm correction. The underlying format/operator prompt-level scores are not included. Operator and connector conditions use the source strings \texttt{+}, Unicode subtraction and multiplication, \texttt{and}, and \texttt{then}. For non-addition strings, the analysis still scores the arithmetic sum token; these comparisons do not test whether the model performs those operations.
 
-The corpus audit uses Infini-gram counts from the Dolma v1.7 index \texttt{v4\_dolma-v1\_7\_llama} as a proxy for possible textual co-occurrence. It queries exact double strings and matched unequal-operand controls. The raw collector intentionally applies no eligibility floor and computes no correlation. Dolma is not GPT-2's exact training corpus.
+The corpus audit uses Infini-gram counts from the Dolma v1.7 index \texttt{v4\_dolma-v1\_7\_llama} as a proxy for possible textual co-occurrence. It queries exact double strings and matched unequal-operand controls. The raw collector applies no eligibility floor and computes no correlation. Its raw request/response records are archived alongside a seven-target no-floor summary. Dolma is not GPT-2's exact training corpus.
 
 \section{Results}
 
@@ -85,12 +87,12 @@ Full-vocabulary top-1 accuracy is 2/36 (5.56\%) on the all-pairs zero-shot cohor
 
 \subsection{Parity agreement varies across the addition grid}
 
-In the committed 79-cell grid, target parity predicts the sign of the measured logit contrast in 68/79 cells. Agreement is 63/64 for sums $\leq 13$ and 5/15 for sums $\geq 14$. Because cells share target sums and have different prompt compositions, these fractions are descriptive rather than independent-trial estimates. The pattern is not uniform across the tested range.
+In the committed 79-cell grid, target parity predicts the sign of the measured logit contrast in 68/79 cells. Agreement is 63/64 for sums $\leq 13$ and 5/15 for high-sum rows (sums $\geq 14$). Because cells share target sums and have different prompt compositions, these fractions are descriptive rather than independent-trial estimates. The pattern is not uniform across the tested range. In the separate seven-target parity-control comparison, mean advantage is $+0.1865$ (exact sign-flip $p=0.140625$; 95\% bootstrap interval $[-0.0068,+0.3863]$), so this comparison does not reject a zero mean under the stated test.
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=0.88\linewidth]{addition_grid_heatmap.png}
-\caption{Addition-grid symmetric logit differences across the 79 committed prompt pairs. The grid shows target-dependent structure; cells sharing a target are not independent observations. Figure regenerated from the committed grid.}
+\includegraphics[width=0.88\linewidth]{figures/addition_grid_heatmap.pdf}
+\caption{Addition-grid symmetric logit differences across the 79 prompt pairs. The grid shows target-dependent structure; cells sharing a target are not independent observations. Rendered from the canonical grid data.}
 \label{fig:addition-grid}
 \end{figure}
 
@@ -104,7 +106,10 @@ Zero-ablation changed the residual-stream scale in the reported prompt. Under me
 
 The 39-row digit--digit scan reports the following target-level summaries:
 
-\begin{center}
+\begin{table}[t]
+\centering
+\caption{Target-level equal-operand advantage for the seven even sums. The normalized $A_T/\mathrm{SD}$ values are descriptive ratios, not significance tests. Exact sign-flip inference uses seven target-level contrasts.}
+\label{tab:doubles-targets}
 \small
 \begin{tabular}{rrrrrr}
 \toprule
@@ -119,40 +124,40 @@ Target $T$ & Double score & Control mean & Advantage $A_T$ & $A_T/\mathrm{SD}$ &
 16 & $+0.719$ & $+0.037$ & $+0.682$ & $+10.83$ & 2 \\
 \bottomrule
 \end{tabular}
-\end{center}
+\end{table}
 
-The reported mean advantage is $+0.247$ (SE $0.102$), with positive advantages at six of seven target sums. The target-level pattern is heterogeneous: effects are largest at some sums and near zero at others. The $A_T/\mathrm{SD}$ column is descriptive and must not be read as a $t$ statistic or significance test. The result is a preference in the tested prompt and scoring setup; it does not identify a mechanism.
+The mean advantage is $+0.2474$ across seven target levels, positive at six of seven. An exact target-level sign-flip test gives $p=0.03125$; a 10,000-resample target bootstrap gives a 95\% percentile interval of $[+0.0738,+0.4374]$. The inference is based on seven target-level contrasts and does not establish generalization beyond this grid. The $A_T/\mathrm{SD}$ column remains descriptive, and the result does not identify a mechanism.
 
-Format-level summaries report mean advantages of $+0.418$ for digit--digit, $+0.750$ for digit--word, and $+1.349$ for word--word at targets 8, 10, 12, and 16. These are aggregate summaries without the prompt-level formatted controls required to recompute all pooled standard deviations. The presence of an advantage in digit--word prompts means literal repetition of the same written digit is not necessary in these displayed conditions; it does not exclude lexical-equivalence, template, or familiarity explanations.
+Across the seven target levels, the digit+digit versus digit+word paired difference is $-0.2190$ (raw $p=0.015625$, Holm-adjusted $p=0.046875$). The other two format comparisons have Holm-adjusted $p=0.21875$. This does not show a monotonic format effect or identify its source. The available format exports contain target-level means, not every prompt-level formatted score, so pooled dispersions cannot be recomputed from these exports.
 
-Across the reported operator and connector strings, aggregate advantages are present, but the task is not semantically matched: the same sum token is scored under strings for addition, subtraction, multiplication, and connectives. The largest raw advantage is reported under \texttt{then} ($+0.549$), while the largest normalized ratio is reported under subtraction (6.15). These summaries are descriptive, lack prompt-level scores, and do not establish operator-insensitive arithmetic.
+Across five operator and connector strings, seven target-level means are available. Plus-versus-other paired tests have Holm-adjusted $p=0.6875$ for all four comparisons. No difference was detected at this sample size; this is not evidence of equivalence. The task is not semantically matched: the same arithmetic sum token is scored under addition, subtraction, multiplication, and connectives, so it does not establish arithmetic under those strings. Prompt-level operator scores are not included.
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=0.96\linewidth]{operator_swap_heatmap.png}
-\caption{Reported normalized advantage-to-control-standard-deviation ratios for operator and connector strings. This is an aggregate descriptive summary without prompt-level scores; the same arithmetic-sum token is scored in every condition, so it is not a test that the model computes each operation.}
+\includegraphics[width=0.96\linewidth]{figures/operator_target_advantages.pdf}
+\caption{Target-level mean equal-operand advantage for each operator/connector string across seven targets. Same sum token is scored in every condition; this does not test whether the model computes each operation.}
 \label{fig:operator-summary}
 \end{figure}
 
 \subsection{Candidate-component screens do not establish a circuit}
 
-The saved notebook identifies \texttt{10\_mlp\_out}, L9H9, and L10H2 as candidates for further study. The component DLA screen reports $q_{\mathrm{FDR}}=0.513$ and the two-sided mean-ablation screen reports $q_{\mathrm{FDR}}=0.150$; neither passes the stated 0.05 threshold. Transfer is mixed, targets were not a blind holdout, and filler prompts also show effects. The aggregate removal-fraction calculation also has a documented discrepancy. These screens do not establish necessity, sufficiency, minimality, or a validated addition circuit.
+The saved notebook identifies \texttt{10\_mlp\_out}, L9H9, and L10H2 as candidates for further study. The nominated-component causal screen has nominal one-sided $p=0.03125$ for each of the three selected candidates, but one-sided FDR $q=0.09375$ and two-sided FDR $q=0.15$; none passes $q<0.05$. Prospective-range signed advantage change decreases at five targets and increases at two; the clean contrasts at targets 26 and 34 are negative. Transfer is exploratory, and filler prompts also show effects. Target-level completeness ratios are unstable where full effects are small. These screens do not establish necessity, sufficiency, minimality, or a validated addition circuit.
 
 \subsection{Corpus-frequency relationship remains unresolved}
 
-The repository notebook's raw collector output records 79 query attempts and no failed attempts. A later saved collector output records 80 attempts and one failure. Both display the same seven-target summary, but per-attempt response logs are not available to identify the additional attempt. Neither raw collector reports a correlation or applies an eligibility floor. The data therefore do not establish whether corpus co-occurrence tracks the equal-operand preference. The relationship also cannot be interpreted as GPT-2 training exposure because Dolma is only a proxy.
+The supplied raw CSV/JSONL export records 79 API attempts, all HTTP 200 with no logged errors. The archived no-floor summary shows positive double-versus-control joint log ratios at all seven targets and mixed conditional log ratios. No association test was run and no eligibility floor was applied, so the corpus counts do not establish whether co-occurrence tracks the model effect. A separate saved output reports 80 attempts and one failure, which remains a distinct unreconciled run. Dolma is a proxy, not GPT-2's training corpus.
 
 \section{Discussion}
 
 The study began with a possible addition-circuit interpretation. The behavioral baseline does not demonstrate reliable exact-answer performance on the tested cohorts. The parity grid shows structured but range-dependent logit preferences. Attribution and intervention audits narrow several component-level explanations. Against this background, the equal-operand scan provides a specific, reproducible prompt-level pattern in the committed score file: a positive mean advantage across seven target sums, with substantial target variation. The cause of this pattern has not been identified.
 
-This evidence differs from Hanna et al.'s positive greater-than circuit account: the model family is shared, but the task differs and the present candidate screens do not validate a circuit \cite{hanna2023greater}. It also differs from the modular-addition literature, where models are trained directly on a formal arithmetic task and the learned algorithm is supported by weight, activation, and intervention evidence \cite{nanda2023progress,zhong2023clock}. The current results are best understood as a cautious audit of arithmetic-like behavior in a pretrained text model, not as a failed replication of those studies or evidence against their findings.
+These findings should be read alongside prior mechanistic studies of arithmetic in pretrained models, including causal mediation, attention/MLP analyses, and heuristic-neuron accounts \cite{stolfo2023causal,yu2024cna,nikankin2025heuristics}. The present measurements do not reproduce or challenge those studies: they address different models and prompt/evaluation setups. The GPT-2 Small greater-than work is the closest model-family comparison, but it validates a circuit for another task \cite{hanna2023greater}. Modular-addition studies provide a complementary controlled-training comparison \cite{nanda2023progress,zhong2023clock}. Accordingly, the result here is a model- and prompt-specific behavioral audit with an exploratory equal-operand contrast, not a new general theory of how language models perform arithmetic.
 
 The most direct follow-up would test whether the equal-operand preference survives independent target selection, prompt-level token and format controls, and preregistered causal interventions. Such a study should retain per-prompt outputs, use matched clean and corrupted baselines, reserve held-out targets, and evaluate both necessity and restoration. A single-operand control and semantically appropriate scoring for operator variants are also needed before interpreting these patterns as arithmetic computations.
 
 \section{Limitations}
 
-The study examines one model, a narrow set of short prompts, and a small number of target sums. Several cohort definitions and few-shot prefixes differ and are not pooled. Some reported values are saved notebook outputs rather than outputs independently regenerated from a clean environment. Formatted and operator-specific prompt-level scores, corpus API responses, and some intermediate outputs are absent from the repository. The corpus collector does not perform an association test, and one later run's attempt count differs from the repository notebook output. The single-operand comparison remains untested. Candidate-component results are exploratory and cannot support a circuit claim.
+The study examines one model, a narrow set of short prompts, and a small number of target sums. Several cohort definitions and few-shot prefixes differ and are not pooled. The supplied clean-rerun exports are archived, including raw corpus API responses, but format and operator exports are target-level summaries rather than full prompt-level score tables. The corpus collector does not perform an association test, and the separate 80/1 saved output remains distinct from the archived 79/0 log. The single-operand comparison remains untested. Candidate-component results are exploratory and cannot support a circuit claim.
 
 The equal-operand advantage is based on one double prompt per target and a small target set; the reported SE is descriptive and does not convert target sums into independent replications. The operator comparisons score the arithmetic-sum token even when the prompt string denotes a different operation. The corpus proxy is not the model's training corpus. These limitations constrain both mechanistic and generalization claims.
 
@@ -162,7 +167,7 @@ On the evaluated prompts, the evidence does not establish a general addition-spe
 
 \section*{Data and code availability}
 
-The research notebook, committed score tables, audit trail, and scripts are available at \url{https://github.com/anaykatiyar-lang/mechanistic_interpretability}. The notebook contains saved outputs and was not independently rerun for this manuscript. The manifest identifies generated outputs and per-prompt records that are not available in the repository. The later corpus collector output is described in the audit record; its raw per-attempt log was not archived.
+The research notebook, committed score tables, audit trail, and scripts are available at \url{https://github.com/anaykatiyar-lang/mechanistic_interpretability}. The repository includes the notebook, supplied clean-rerun output tables, raw corpus request/response logs, and a SHA-256 data manifest. Format and operator artifacts are target-level summaries; see the manifest for the scope of each export.
 
 \section*{AI assistance disclosure}
 
@@ -200,17 +205,35 @@ N.~Nanda, L.~Chan, T.~Lieberum, J.~Smith, and J.~Steinhardt.
 \newblock In \emph{International Conference on Learning Representations}, 2023.
 \newblock \url{https://arxiv.org/abs/2301.05217}.
 
+\bibitem{nikankin2025heuristics}
+Y.~Nikankin, A.~Reusch, A.~Mueller, and Y.~Belinkov.
+\newblock Arithmetic without algorithms: Language models solve math with a bag of heuristics.
+\newblock In \emph{International Conference on Learning Representations}, 2025.
+\newblock \url{https://arxiv.org/abs/2410.21272}.
+
 \bibitem{radford2019gpt2}
 A.~Radford et~al.
 \newblock Language models are unsupervised multitask learners.
 \newblock OpenAI technical report, 2019.
 \newblock \url{https://cdn.openai.com/better-language-models/language_models_are_unsupervised_multitask_learners.pdf}.
 
+\bibitem{stolfo2023causal}
+A.~Stolfo, Y.~Belinkov, and M.~Sachan.
+\newblock A mechanistic interpretation of arithmetic reasoning in language models using causal mediation analysis.
+\newblock In \emph{Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing}, pages 7035--7052, 2023.
+\newblock \url{https://aclanthology.org/2023.emnlp-main.435/}.
+
 \bibitem{wang2023ioi}
 K.~Wang, A.~Variengien, A.~Conmy, B.~Shlegeris, and J.~Steinhardt.
 \newblock Interpretability in the wild: A circuit for indirect object identification in GPT-2 small.
 \newblock In \emph{International Conference on Learning Representations}, 2023.
 \newblock \url{https://arxiv.org/abs/2211.00593}.
+
+\bibitem{yu2024cna}
+Z.~Yu and S.~Ananiadou.
+\newblock Interpreting arithmetic mechanism in large language models through comparative neuron analysis.
+\newblock In \emph{Proceedings of the 2024 Conference on Empirical Methods in Natural Language Processing}, pages 3293--3306, 2024.
+\newblock \url{https://aclanthology.org/2024.emnlp-main.193/}.
 
 \bibitem{ye2024physics}
 T.~Ye, Z.~Xu, Y.~Li, and Z.~Allen-Zhu.
