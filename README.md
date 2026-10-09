@@ -9,7 +9,7 @@ This project traces an apparent addition-circuit signal through behavioral basel
 
 ## Research flow
 
-**Circuit hypothesis** → behavior baseline → DLA audit → intervention controls → prompt/parity map  
+**Circuit hypothesis** → behavior baseline → DLA audit → intervention controls → prompt/parity map<br>
 **Equal-operand pattern** (+0.247; 6/7) → boundary checks → corpus audit → no circuit established → causal follow-up
 
 Follow the links for the [methods](docs/METHODOLOGY.md), [limitations](docs/LIMITATIONS.md), [research flow](docs/RESEARCH_FLOW.md), and [audit trail](docs/audit_trail.md).
