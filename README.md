@@ -9,18 +9,8 @@ This project traces an apparent addition-circuit signal through behavioral basel
 
 ## Research flow
 
-```mermaid
-flowchart TD
-    subgraph first[ ]
-      direction LR
-      H[Initial hypothesis<br/>Addition-specific circuit] --> B[Behavioral baseline<br/>Compare with simple baselines] --> A[Attribution and intervention audit<br/>Correct DLA; test component claims] --> P[Map prompt structure<br/>Parity and target-range controls] --> D[Surviving pattern<br/>Equal-operand scan: +0.247; 6/7 positive]
-    end
-    subgraph second[ ]
-      direction LR
-      G[Test boundaries<br/>Formats and operator/connector substitutions] --> C[Corpus proxy<br/>Two saved runs; one-attempt discrepancy] --> S[Candidate screen<br/>Exploratory; no circuit established] --> R[Evidence-bounded result<br/>Target-dependent preference] --> N[Next study<br/>Independent prompts and causal specificity]
-    end
-    D --> G
-```
+**Circuit hypothesis** → behavior baseline → DLA audit → intervention controls → prompt/parity map  
+**Equal-operand pattern** (+0.247; 6/7) → boundary checks → corpus audit → no circuit established → causal follow-up
 
 Follow the links for the [methods](docs/METHODOLOGY.md), [limitations](docs/LIMITATIONS.md), [research flow](docs/RESEARCH_FLOW.md), and [audit trail](docs/audit_trail.md).
 
