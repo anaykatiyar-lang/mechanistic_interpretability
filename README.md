@@ -24,8 +24,7 @@
 ---
 
 ## The question
-
-Can a model produce arithmetic-like answers without necessarily implementing a general arithmetic algorithm?
+What would it take to show that GPT-2 is adding—not just matching patterns?
 
 This project began by investigating a possible addition circuit in GPT-2 Small. As baselines, attribution methods, and causal controls were scrutinized, several early circuit interpretations weakened. The investigation then shifted toward a more specific observation: **a target-dependent advantage associated with equal operands.**
 
