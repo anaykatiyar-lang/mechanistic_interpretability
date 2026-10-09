@@ -106,4 +106,4 @@ See the [full audit trail](docs/audit_trail.md) for the entries and source value
 
 ## AI assistance
 
-Claude Sonnet 5.5, ChatGPT, Gemini 3.1 Pro, and Codex assisted with parts of the research code, analysis review, literature mapping, and writing. The author is responsible for the data, analyses, claims, and citations; AI-assisted work is not a substitute for source records or independent reproduction. See the brief [AI-use disclosure](docs/AI_USE.md).
+Claude Sonnet 5.5, ChatGPT, and Gemini 3.1 Pro were used to stress-test the analysis by questioning assumptions and identifying potential weaknesses. Their suggestions were treated as prompts for review, not as evidence; the author is responsible for the data, analysis, and conclusions.
