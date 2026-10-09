@@ -124,23 +124,15 @@ def generate_operator_swap_svg(data_path: str, output_path: str, variant: str) -
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Regenerate the repository SVG figures from committed artifacts")
-    parser.add_argument("--grid-csv", default="data/addition_grid_79cell.csv")
-    parser.add_argument("--operator-json", default="data/operator_swap_results.json")
+    parser.add_argument("--grid-csv", default="data/current/addition_grid_79cell.csv")
+    parser.add_argument("--operator-json", default="data/current/operator_swap_results.json")
     parser.add_argument("--operator-variant", default="reported_unicode")
-    parser.add_argument("--grid-svg", default="figures/addition_grid_heatmap.svg")
-    parser.add_argument("--operator-svg", default="figures/operator_swap_heatmap.svg")
+    parser.add_argument("--grid-svg", default="figures/static/addition_grid_heatmap.svg")
+    parser.add_argument("--operator-svg", default="figures/static/operator_swap_heatmap.svg")
     args = parser.parse_args()
 
     generate_addition_grid_svg(args.grid_csv, args.grid_svg)
     generate_operator_swap_svg(args.operator_json, args.operator_svg, args.operator_variant)
-
-    # The manuscript embeds a duplicate copy; keep both paths generated together.
-    paper_grid = Path("paper/figures/addition_grid_heatmap.svg")
-    paper_operator = Path("paper/figures/operator_swap_heatmap.svg")
-    paper_grid.parent.mkdir(parents=True, exist_ok=True)
-    paper_grid.write_bytes(Path(args.grid_svg).read_bytes())
-    paper_operator.write_bytes(Path(args.operator_svg).read_bytes())
-
 
 if __name__ == "__main__":
     main()

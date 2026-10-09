@@ -106,7 +106,8 @@ The corpus analysis is intended as contextual evidence rather than a direct meas
 - **API**: Infini-gram (`https://api.infini-gram.io/`).
 - **Index**: `v4_dolma-v1_7_llama`. Corpus-size claims require a source citation and are not used here.
 - **Queries**: Joint exact string (`"a + b = T"`) and prompt prefix (`"a + b ="`).
-- **Corrected query**: The query uses the `index` request field, no extra leading-space anchor, retry and explicit failure handling, a fresh results list, and a tokenization check. Its selected query-total floor gives seven usable targets. The exploratory associations are joint $\rho=+0.46$, $p=.294$ and conditional $\rho=-0.14$, $p=.760$ ($n=7$); neither is significant. Rounded per-target summaries are in `data/corpus_frequency_requery_summary.csv`. Individual control-query counts and raw API responses are not committed.
+- **Earlier corrected summary**: A previous run reported joint $\rho=+0.46$, $p=.294$ and conditional $\rho=-0.14$, $p=.760$ ($n=7$). Those values are historical, not results of the final notebook's raw-query collector.
+- **Final notebook collector**: The final notebook uses the `index` request field, no extra leading-space anchor, retry and explicit failure handling, a fresh result list, and tokenization checks. Its saved output reports 79 query records and zero failed attempts, but the raw CSV/JSONL response logs were not included with the uploaded notebook. No correlation is reported from that final collector. The corpus-frequency relationship is unresolved until the raw logs are exported and the filtering rule and statistic are specified.
 - **Reliability and scope**: The historical files disagree on the count-floor rule. The audit script reports candidate floor bases separately and marks API failures explicitly. Dolma is a proxy rather than GPT-2's exact training data, so these counts cannot establish or exclude broader memorization or distributional effects.
 
 

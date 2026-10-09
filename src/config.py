@@ -25,7 +25,7 @@ DOUBLES_CONFIG = {
 assert tuple(len(DOUBLES_CONFIG[t]["controls"]) for t in POSITIVE_TARGETS) == (6, 8, 6, 2)
 assert tuple(len(DOUBLES_CONFIG[t]["controls"]) for t in NULL_TARGETS) == (4, 4)
 
-# The research log records the multiplication and subtraction glyphs as × and −.
+# The source records use × and − for multiplication and subtraction.
 # ASCII alternatives can be run as a separate tokenizer-sensitivity analysis.
 OPERATOR_VARIANTS = {
     "reported_unicode": {

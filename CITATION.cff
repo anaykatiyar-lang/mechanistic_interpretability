@@ -1,0 +1,9 @@
+cff-version: 1.2.0
+message: "If you use this repository, please cite the research draft."
+title: "Arithmetic Prompt Processing in GPT-2 Small: Auditing Circuit Claims and an Equal-Operand Preference"
+authors:
+  - family-names: Katiyar
+    given-names: Anay
+type: software
+license: MIT
+repository-code: "https://github.com/anaykatiyar-lang/mechanistic_interpretability"

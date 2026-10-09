@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Interactive guide to an audited GPT-2 Small arithmetic interpretability study.">
+  <title>GPT-2 Small: research explorer</title>
+  <style>
+    :root { color-scheme: light; --ink:#17212b; --muted:#536475; --paper:#f4f7fa; --card:#fff; --line:#dbe3eb; --accent:#245f88; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--paper); color:var(--ink); font:16px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif; }
+    header { padding:3rem max(1.25rem,calc((100% - 960px)/2)); background:#102d42; color:white; }
+    header p { max-width:760px; color:#d5e2ed; }
+    main { max-width:960px; margin:auto; padding:1.5rem 1.25rem 4rem; }
+    nav { display:flex; flex-wrap:wrap; gap:.65rem; margin:1.25rem 0 2rem; }
+    nav a,.button { display:inline-block; padding:.55rem .85rem; border:1px solid var(--line); border-radius:.55rem; background:var(--card); color:var(--accent); text-decoration:none; font-weight:650; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:1rem; }
+    article,details.panel { background:var(--card); border:1px solid var(--line); border-radius:.8rem; padding:1rem 1.1rem; }
+    .status { color:#7a4b00; font-weight:700; }
+    .muted { color:var(--muted); }
+    details { margin:1rem 0; }
+    details summary { cursor:pointer; font-weight:700; color:var(--accent); }
+    iframe { display:block; width:100%; height:620px; border:0; border-top:1px solid var(--line); margin-top:1rem; }
+    table { width:100%; border-collapse:collapse; background:white; }
+    th,td { text-align:left; vertical-align:top; padding:.65rem; border:1px solid var(--line); }
+    footer { margin-top:2rem; color:var(--muted); font-size:.9rem; }
+    @media(max-width:600px) { header { padding:2rem 1.25rem; } iframe { height:500px; } }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>GPT-2 Small: research explorer</h1>
+    <p>This study asks whether GPT-2 Small shows reliable addition behavior and whether a target-dependent equal-operand preference has an identified mechanism. The tested work does not establish a general addition circuit; the latest component screen is exploratory.</p>
+    <a class="button" href="https://colab.research.google.com/github/anaykatiyar-lang/mechanistic_interpretability/blob/main/notebooks/00_full_record.ipynb">Open the full notebook in Colab</a>
+  </header>
+  <main>
+    <nav aria-label="Research navigation">
+      <a href="#claims">Claims</a><a href="#figures">Interactive figures</a><a href="#audit">Audit record</a><a href="#reproduce">Reproduce</a>
+    </nav>
+    <section id="claims">
+      <h2>What the evidence supports</h2>
+      <div class="grid">
+        <article><h3>Behavior</h3><p>On the tested cohorts, zero-shot top-1 accuracy was 2/36 and 2/32. The held-out constant guess scored 8/32.</p><p class="muted">Scoped to these prompts and cohorts.</p></article>
+        <article><h3>Equal operands</h3><p>The saved digit-addition scan reports a target-dependent preference, positive at 6/7 targets.</p><p class="muted">The mechanism remains unresolved.</p></article>
+        <article><h3>Candidate components</h3><p><code>10_mlp_out</code>, L9H9, and L10H2 are exploratory candidates.</p><p class="status">No confirmed circuit: DLA q=0.513; two-sided causal q=0.150.</p></article>
+      </div>
+      <p><a href="docs/FINDINGS.md">Open the full claims ledger</a> · <a href="docs/RESEARCH_FLOW.md">Read the experimental flow</a> · <a href="docs/LITERATURE_MAP.md">See how prior work is used</a></p>
+    </section>
+    <section id="figures">
+      <h2>Explore the saved figures</h2>
+      <p class="muted">Expand a panel to load its interactive Plotly figure. These are saved notebook outputs, not fresh model runs.</p>
+      <details class="panel"><summary>Residual-stream patching</summary><iframe loading="lazy" title="Residual-stream patching heatmap" src="figures/interactive/residual_stream_patching.html"></iframe></details>
+      <details class="panel"><summary>Attention-head patching</summary><iframe loading="lazy" title="Attention-head patching heatmap" src="figures/interactive/attention_head_patching.html"></iframe></details>
+      <details class="panel"><summary>L9H9 attention pattern</summary><iframe loading="lazy" title="L9H9 attention pattern" src="figures/interactive/l9h9_attention_pattern.html"></iframe></details>
+      <details class="panel"><summary>L10H2 attention pattern</summary><iframe loading="lazy" title="L10H2 attention pattern" src="figures/interactive/l10h2_attention_pattern.html"></iframe></details>
+      <p>Attention patterns show attention allocation; they do not by themselves establish causal routing or arithmetic specificity. See the <a href="docs/FIGURES.md">figure notes</a>.</p>
+    </section>
+    <section id="audit">
+      <h2>How the claims were narrowed</h2>
+      <table><thead><tr><th>Audit finding</th><th>Current reading</th></tr></thead><tbody>
+        <tr><td>DLA omitted final LayerNorm scaling and a static bias term.</td><td>Corrected values change attribution magnitudes and reconcile selected token contrasts.</td></tr>
+        <tr><td>Zero-ablation shifted residual scale.</td><td>Mean-ablation reduced the reported L11H0 shift from +0.0658 to +0.0013.</td></tr>
+        <tr><td>Operator-position patch lacked a corrupt baseline.</td><td>“Operator binding falsified” is not established.</td></tr>
+        <tr><td>The final notebook's corpus query logs are not attached here.</td><td>Corpus-frequency relationship is unresolved; prior correlations are historical.</td></tr>
+      </tbody></table>
+      <p><a href="docs/audits.md">Open the audit index</a> · <a href="docs/audit_trail.md">Read the canonical audit trail</a> · <a href="docs/LIMITATIONS.md">Review limitations</a></p>
+    </section>
+    <section id="reproduce">
+      <h2>Reproduce and inspect</h2>
+      <ul>
+        <li><a href="notebooks/00_full_record.ipynb">Final full-record notebook</a> · <a href="notebooks/00_full_record.md">Markdown export</a></li>
+        <li><a href="data/MANIFEST.csv">Data and provenance manifest</a></li>
+        <li><a href="docs/ENVIRONMENT.md">Recorded software environment and unresolved version gap</a></li>
+        <li><a href="paper/draft_paper.md">Research draft</a></li>
+      </ul>
+      <p class="muted">The uploaded notebook has saved outputs and was not rerun while preparing this repository update. The manifest identifies exports that still need to be downloaded from the Colab runtime.</p>
+    </section>
+    <footer>Research draft · not peer reviewed · all claims are limited to the stated prompts, model, and controls.</footer>
+  </main>
+</body>
+</html>

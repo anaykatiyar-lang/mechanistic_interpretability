@@ -58,12 +58,12 @@ The external corpus-frequency analysis was inconclusive. Sparse joint-query coun
 1. **Corpus Proxy Discrepancy**:
    Dolma v1.7 is used as a proxy for WebText. Because WebText is proprietary and unreleased, true pretraining co-occurrence statistics cannot be measured directly. The corpus-size figure is omitted until supported by a verified source.
 2. **Incomplete Query Records**:
-   The corrected query uses the `index` field and no extra leading-space anchor. All seven targets pass the selected query-total floor. Rounded per-target summaries are available, but individual control-query counts and raw API responses are not. The earlier JSON is a legacy artifact.
+   The final notebook uses the `index` field and no extra leading-space anchor; its saved output reports 79 query records with zero failed attempts. The raw CSV/JSONL responses are not in this repository, and the final notebook does not report a correlation from them. Prior summary values are historical and recorded in audit A30.
 3. **Run 1 Artifact Retraction**:
    An initial analysis reported a correlation ($\rho = +0.82$, $p = 0.023$) between corpus frequency and model advantage. The statistic was retracted after the audit identified a query-format artifact. It must not be used as a finding.
 
-4. **Corrected Exploratory Result**:
-   With the corrected queries, the notebook reports joint-count Spearman $\rho=+0.46$, $p=.294$, and conditional-count $\rho=-0.14$, $p=.760$ ($n=7$). Neither association is statistically significant. This small proxy-corpus analysis is inconclusive and does not establish or rule out a memorization explanation.
+4. **Earlier Exploratory Summary**:
+   A previous summary reported joint-count Spearman $\rho=+0.46$, $p=.294$, and conditional-count $\rho=-0.14$, $p=.760$ ($n=7$). These are historical, not results of the final raw-query collector. The current corpus-frequency relationship is unresolved until raw responses are exported and the eligibility rule and statistic are specified.
 
 5. **Multi-Token Representation Limitation**: Some external arithmetic examples produce answers that do not correspond cleanly to a single GPT-2 token. Analyses that rely on `model.to_single_token` are restricted to examples whose target and foil representations satisfy the required single-token condition. Results from this restricted subset should not be generalized to arbitrary multi-token arithmetic answers.
 
@@ -84,7 +84,7 @@ The notebook's saved outputs document reported runs but are not independent reru
 
 - The operator-swap summary lacks prompt-level scores, and a fresh model evaluation of the corrected ordered-control design has not been completed.
 - The single-operand comparison (`4 + 3` and `4 + 5`, scoring token `' 8'`) has no run output.
-- The formatted prompt-level controls needed to recompute all pooled SDs are unavailable; `data/variance_scaling.csv` contains per-target means, while `data/variance_scaling_legacy.csv` preserves the prior table.
-- The notebook contains M1, DLA, ablation, and N=84 code with saved outputs; these analyses have not been independently rerun from a clean environment.
+- The formatted prompt-level controls needed to recompute all pooled SDs are unavailable; `data/current/variance_scaling.csv` contains per-target means. Superseded rounded values are summarized in audit A23; the old table has been retired.
+- The final notebook contains saved outputs; these analyses have not been independently rerun from a clean environment.
 - In the multiplication controls, `1 × 7 = 7` at target 8 and `1 × 9 = 9` at target 10 match the lower-neighbor foil (`T−1`). This may mechanically lower the control mean and requires explicit assessment.
 - The current comparisons do not separate equality, lexical equivalence, and string familiarity. There is one double prompt per target.

@@ -1,9 +1,9 @@
-AUDIT_TRAIL.md
+Audit trail for GPT-2 Small arithmetic-prompt analyses
 Methodological and code-audit history of the GPT-2 Small addition project.
 Each entry: Original, Problem, Correction, Effect on conclusion, Numbers.
 Entries focus on issues that affect result validity, interpretation, or unresolved evidence. Numbered identifiers are retained for cross-document references.
 Tags: [VERIFIED RESULT] [INTERPRETATION] [HYPOTHESIS] [LIMITATION].
-Project status: CLOSED.
+Project status: final notebook outputs recorded; clean rerun and raw corpus-log export remain outstanding.
 ## A01. Direct Logit Attribution without final LayerNorm scaling
 - Original: component outputs from `get_full_resid_decomposition` projected directly onto W_U[:,target] − W_U[:,foil].
 - Problem: components are pre-LayerNorm; LN divides by σ of the full summed stream. Raw sums overshoot.
@@ -103,6 +103,55 @@ Project status: CLOSED.
 - Items: (i) one control per target and noisy controls (two controls for one target disagreed by ~0.6); (ii) the DiD v1 sweep (A24) wrongly showed no doubles advantage; (iii) the LOG's §12 equation labels (6+6=12 … 16+16=32) mismatch the values (3+3=6 … 8+8=16); (iv) the dense scan counts both operand orders, so unique controls are half the printed n; T16's z=10.83 is the gap between two orders; (v) the format-sweep "replication" re-tested pre-identified targets (forking-paths concern); (vi) raw advantage growing with word forms was initially read as a stronger effect.
 - Correction: unique splits, both orders averaged; normalized adv/SD; scale check; operator swaps; explicit forking-paths caveat.
 - Effect: the doubles effect was kept as corroborated and target-dependent, not "confirmed." The word-form growth is mostly scale (adv/SD 5.22 / 4.40 / 4.93). Weak-baseline explanation ruled out (controls do not fall).
+
+### Retired legacy format table
+
+The superseded `data/variance_scaling_legacy.csv` was reviewed before retirement. Its rounded records are transcribed below for audit context; the current analysis uses `data/current/variance_scaling.csv`. Missing prompt-level source rows still prevent independent recomputation of pooled control SDs.
+
+| target | format | double_score | control_mean | advantage | control_sd | adv_over_sd | cohort |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 4 | digit+digit | 0.251 | 0.203 | 0.049 | 0.169 | 0.29 | null |
+| 6 | digit+digit | 0.230 | 0.213 | 0.017 | 0.131 | 0.13 | null |
+| 8 | digit+digit | 0.606 | 0.315 | 0.291 | 0.088 | 3.31 | positive |
+| 10 | digit+digit | 0.647 | 0.113 | 0.535 | 0.056 | 9.54 | positive |
+| 12 | digit+digit | 0.401 | 0.236 | 0.165 | 0.101 | 1.63 | positive |
+| 14 | digit+digit | -0.238 | -0.232 | -0.006 | 0.050 | -0.12 | null |
+| 16 | digit+digit | 0.719 | 0.037 | 0.682 | 0.063 | 10.83 | positive |
+| 4 | digit+word | 0.380 | 0.203 | 0.177 | 0.210 | 0.84 | null |
+| 6 | digit+word | 0.267 | 0.213 | 0.054 | 0.180 | 0.30 | null |
+| 8 | digit+word | 0.996 | 0.454 | 0.542 | 0.155 | 3.50 | positive |
+| 10 | digit+word | 1.329 | 0.396 | 0.933 | 0.172 | 5.42 | positive |
+| 12 | digit+word | 0.935 | 0.499 | 0.436 | 0.184 | 2.37 | positive |
+| 14 | digit+word | -0.200 | -0.232 | 0.032 | 0.160 | 0.20 | null |
+| 16 | digit+word | 1.255 | 0.164 | 1.091 | 0.175 | 6.23 | positive |
+| 4 | word+word | 0.303 | 0.203 | 0.100 | 0.310 | 0.32 | null |
+| 6 | word+word | -0.077 | 0.213 | -0.290 | 0.295 | -0.98 | null |
+| 8 | word+word | 1.542 | 0.336 | 1.206 | 0.260 | 4.64 | positive |
+| 10 | word+word | 2.057 | 0.465 | 1.592 | 0.278 | 5.73 | positive |
+| 12 | word+word | 1.180 | 0.459 | 0.721 | 0.285 | 2.53 | positive |
+| 14 | word+word | -0.387 | -0.232 | -0.155 | 0.250 | -0.62 | null |
+| 16 | word+word | 1.950 | 0.071 | 1.879 | 0.268 | 7.01 | positive |
+| mean_positive_T8_10_12_16 | digit+digit | 0.593 | 0.175 | 0.418 | 0.080 | 5.22 | summary_positive |
+| mean_positive_T8_10_12_16 | digit+word | 1.129 | 0.378 | 0.750 | 0.171 | 4.40 | summary_positive |
+| mean_positive_T8_10_12_16 | word+word | 1.682 | 0.333 | 1.349 | 0.273 | 4.93 | summary_positive |
+| mean_null_T4_6_14 | digit+digit | 0.081 | 0.061 | 0.020 | 0.117 | 0.17 | summary_null |
+| mean_null_T4_6_14 | digit+word | 0.149 | 0.061 | 0.087 | 0.183 | 0.48 | summary_null |
+| mean_null_T4_6_14 | word+word | -0.054 | 0.061 | -0.115 | 0.285 | -0.40 | summary_null |
+
+### Retired prior corpus summary
+
+The earlier summary below is historical only. Its per-query response files were not archived with the repository, and it is not a result from the final raw-query collector.
+
+| target | addition_advantage | double_joint_count | mean_control_joint_count | log10_joint_ratio | log10_conditional_ratio |
+| --- | --- | --- | --- | --- | --- |
+| 4 | 0.049 | 28489 | 4305.000000 | 0.820618 | 0.040013 |
+| 6 | 0.017 | 5076 | 2506.750000 | 0.306323 | 0.132547 |
+| 8 | 0.291 | 3191 | 1907.166667 | 0.223447 | -0.030785 |
+| 10 | 0.535 | 3812 | 1490.875000 | 0.407534 | 0.054164 |
+| 12 | 0.165 | 1547 | 1151.200000 | 0.128256 | -0.030864 |
+| 14 | -0.006 | 854 | 696.500000 | 0.088422 | 0.079600 |
+| 16 | 0.682 | 1083 | 420.500000 | 0.410232 | 0.122524 |
+
 ## A24. Tokenization and multi-token answers
 - Items: (i) the DiD v1 sweep scored tokens without the leading space (`"8"` vs `" 8"`), producing a spurious format effect; (ii) a fixed foil `"9"` for all targets (for target 16, a one-digit vs two-digit contrast); (iii) a "neutral" filler (`3 x 5 y`) that kept the operands and changed the final token; (iv) Hard-tier answers were suspected of being multi-token. A summary (EXT) reports ` 41` (6073) and ` 432` (46393) are single tokens, but `to_single_token` for every Hard target/foil was not confirmed; (v) the Llama tokenizer used by infini-gram splits numbers into single digits.
 - Correction: leading-space targets, T±1 foils, a neutral filler; tokenization audit for 7/13/14/15; `to_single_token` errors would flag multi-token strings.
@@ -124,6 +173,14 @@ Project status: CLOSED.
 ## A29. Cross-record value and label discrepancies
 - The reported rank for `' 8'` differs across Run 2 and a table (rank 4) versus the controlled matrix (rank 7). One DLA table labels the contrast as `' 8'`/`' 6'`, while the controlled matrix uses `' 8'`/`' 9'`. L11H0 values −0.0448 (Run 1) and −0.1188 (Run 2) refer to different runs and must remain separate.
 - Effect: these source-label discrepancies remain unresolved pending the corresponding run outputs; they are not silently reconciled.
+
+## A30. Final notebook mechanism screen and corpus-log status
+- **Source:** Uploaded final notebook `notebooks/00_full_record.ipynb`, cells 145–167. Saved outputs are preserved; the notebook was not rerun during repository integration.
+- **Candidate screen:** `10_mlp_out`, L9H9, and L10H2 are exploratory candidates. The component DLA screen reports q_FDR = 0.513 for these candidates; the two-sided causal screen reports q_FDR = 0.150. Neither screen passes q < .05.
+- **Transfer and specificity:** At previously examined targets 8 and 14, joint ablation reduces the target-level advantage at 8 and increases it at 14. In the new target range 24–36, the displayed advantage decreases at five of seven targets and increases at two. This range is exploratory, not independent confirmation. Filler prompts also show effects.
+- **Aggregate-ratio discrepancy:** The final audit prints a removal fraction of +0.893908 alongside a full-model mean +0.289386 and an ablated mean +0.097351. The ratio formed from those aggregate means is approximately +0.664, so +0.893908 uses a different aggregation and must not be reported without defining it.
+- **Corpus query:** The final notebook records 79 raw query records and zero failed attempts, and says it saved CSV/JSONL logs in the notebook runtime. Those raw response files were not among the uploaded files or repository artifacts. The final notebook does not report a correlation from that raw collector. The prior summary reported joint ρ=+0.46, p=.294 and conditional ρ=−0.14, p=.760 (n=7), but its raw API records are unavailable. These values are historical and not from the final collector; the corpus-frequency relationship remains unresolved pending raw-log export and a specified analysis rule.
+- **Environment:** The notebook prints Python as `3.10+`, but its install output paths contain `python3.13`. The exact interpreter version is unresolved.
 ## Summary of research-relevant corrections
 | Issue | Changed conclusion? |
 |---|---|
@@ -137,5 +194,5 @@ Project status: CLOSED.
 | A22 (invariance) | Yes (retired) |
 | A23, A24 (doubles design and tokenization) | Yes (v1 artifact retired; effect corroborated, not confirmed) |
 | A25 (M1) | Closed as a scoped limitation; cohort definitions separated |
-| A26 (frequency) | Earlier ρ = +0.82 discarded; corrected seven-target query finds no significant association |
+| A26 and A30 (frequency) | Earlier ρ = +0.82 discarded; final raw-query collector has no reported correlation and is unresolved |
 | A04, A07–A10, A12–A13, A20, A29 | No change to the surviving claim; data-integrity limits retained |

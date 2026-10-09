@@ -1,7 +1,7 @@
 """Reproduce the equal-operand comparison across operator strings.
 
 The default operator strings follow the Unicode glyphs recorded in
-``docs/RESEARCH_LOG.md``. ASCII ``*`` and ``-`` are available as a separate
+``docs/audit_trail.md``. ASCII ``*`` and ``-`` are available as a separate
 tokenization-sensitivity condition. The older aggregate JSON is preserved;
 this script writes a new detailed output so an unverified legacy artifact is
 not overwritten silently.

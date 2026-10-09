@@ -5,7 +5,7 @@
 
 This project examines whether GPT-2 Small (124M parameters) uses a general addition-specific mechanism on simple decimal addition prompts. The tested experiments do not establish such a mechanism. They identify a target-dependent preference for equal-operand prompts under selected conditions, but its cause remains unresolved. This manuscript is a research draft and has not been peer reviewed.
 
-**Explore:** [Key findings](#findings) · [Research path](#research-path) · [Interactive figures](#interactive-figures) · [Run the notebook](#reproduce) · [Evidence and audits](#evidence-and-scope)
+**Explore:** [Claims ledger](docs/FINDINGS.md) · [Research path](#research-path) · [Interactive research explorer](index.html) · [Run the notebook](#reproduce) · [Audits](docs/audits.md)
 
 ## Research path
 
@@ -25,7 +25,8 @@ Follow the links for the [methods](docs/METHODOLOGY.md), [limitations](docs/LIMI
 - **Behavioral baseline:** top-1 accuracy was 2/36 (5.56%) on the all-pairs zero-shot set and 2/32 (6.25%) on the held-out zero-shot set. The best constant guess on the held-out set scored 8/32 (25%). These are separate cohorts.
 - **Addition grid:** parity predicted the sign of the measured logit difference in 68/79 rows overall, 63/64 rows for sums ≤13, and 5/15 rows for sums ≥14. Rows share target sums and are not independent.
 - **Equal operands:** the digit+digit scan reports a mean advantage of +0.247 (SE 0.102), positive at 6 of 7 targets. The effect is target-dependent; the mechanism is not identified. The normalized `adv/SD` ratio is descriptive, not a significance test.
-- **Corpus comparison:** the corrected seven-target analysis found no significant association for joint counts (ρ=+0.46, p=.294) or conditional counts (ρ=−0.14, p=.760). The earlier ρ=+0.82 result is retracted.
+- **Candidate-component screen:** the final notebook labels `10_mlp_out`, L9H9, and L10H2 as exploratory candidates. DLA q-values are 0.513; two-sided causal-screen q-values are 0.150. Transfer is mixed, so no circuit is established.
+- **Corpus comparison:** unresolved in the final notebook. Its raw-query cell records 79 queries with no failed attempts, but the per-query log files are not included in this repository and no correlation is reported in that final run. Earlier correlations are historical, not current findings.
 
 These findings apply to the tested model, prompts, targets, and controls. They do not show that GPT-2 Small lacks all arithmetic-related representations or computations.
 
@@ -33,20 +34,22 @@ These findings apply to the tested model, prompts, targets, and controls. They d
 
 The script-generated figures summarize the addition grid and operator comparison:
 
-![Addition grid symmetric logit-difference heatmap](figures/addition_grid_heatmap.svg)
+![Addition grid symmetric logit-difference heatmap](figures/static/addition_grid_heatmap.svg)
 
-![Operator-swap normalized advantage heatmap](figures/operator_swap_heatmap.svg)
+![Operator-swap normalized advantage heatmap](figures/static/operator_swap_heatmap.svg)
 
 Open the saved interactive HTML figures:
 
-- [Residual-stream patching](figures/colab/residual_stream_patching.html)
-- [Attention-head patching](figures/colab/attention_head_patching.html)
-- [L9H9 attention pattern](figures/colab/l9h9_attention_pattern.html)
-- [L10H2 attention pattern](figures/colab/l10h2_attention_pattern.html)
+- [Residual-stream patching](figures/interactive/residual_stream_patching.html)
+- [Attention-head patching](figures/interactive/attention_head_patching.html)
+- [L9H9 attention pattern](figures/interactive/l9h9_attention_pattern.html)
+- [L10H2 attention pattern](figures/interactive/l10h2_attention_pattern.html)
 
-The notebook can also be opened in Colab:
+The final full-record notebook can also be opened in Colab:
 
-[![Open notebook in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/anaykatiyar-lang/mechanistic_interpretability/blob/main/notebooks/mechanistic_interpretability.ipynb)
+[![Open notebook in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/anaykatiyar-lang/mechanistic_interpretability/blob/main/notebooks/00_full_record.ipynb)
+
+The [interactive research explorer](index.html) groups the figures and evidence on one page. To publish it as a live website, select **Settings → Pages → Deploy from a branch → `main` / `(root)`** in the GitHub repository.
 
 Figure sources and measurement scope are described in [docs/FIGURES.md](docs/FIGURES.md). Attention views are descriptive; patching displays should be read with the notebook's clean and corrupt baselines.
 
@@ -59,7 +62,7 @@ The patching figures show normalized recovery for the tested prompts. Values bel
 
 ## Reproduce
 
-The dependency ranges in `requirements.txt` are not a lockfile. The original runtime environment was not recorded, so exact historical package versions cannot be asserted.
+The notebook records TransformerLens 3.6.0, PyTorch 2.11.0+cpu, Transformers 5.18.0, and NumPy 2.1.3. Its Python line says only `3.10+`, while the install log path names Python 3.13; the exact interpreter version remains unverified. The ranges in `requirements.txt` are not a complete lockfile.
 
 ```bash
 git clone https://github.com/anaykatiyar-lang/mechanistic_interpretability.git
@@ -77,7 +80,7 @@ The operator comparison and corpus query scripts are documented in their module 
 
 ## Evidence and scope
 
-The notebook contains saved outputs for the behavioral benchmark, DLA, interventions, operator comparisons, and corpus query. These outputs document the reported runs but have not all been independently regenerated from a clean environment. The committed digit+digit scores support the dense-scan table; formatted prompt-level control scores and individual corpus API responses are not available. The single-operand comparison remains unverified. See [Study limitations](docs/LIMITATIONS.md), the [research flow](docs/RESEARCH_FLOW.md), the [literature-to-claim map](docs/LITERATURE_MAP.md), and the [audit trail](docs/audit_trail.md) for the detailed evidence and correction record.
+The final notebook is preserved at [`notebooks/00_full_record.ipynb`](notebooks/00_full_record.ipynb), with a [Markdown export](notebooks/00_full_record.md). Its saved outputs document the uploaded run; this repository did not rerun the notebook. The committed digit+digit scores support the earlier dense-scan table; formatted prompt-level control scores and the final notebook's raw corpus query logs are not available here. The single-operand comparison remains unverified. See the [claims ledger](docs/FINDINGS.md), [study limitations](docs/LIMITATIONS.md), [research flow](docs/RESEARCH_FLOW.md), [literature-to-claim map](docs/LITERATURE_MAP.md), and [audit trail](docs/audit_trail.md). File-level provenance is in [`data/MANIFEST.csv`](data/MANIFEST.csv).
 
 <details>
 <summary>Audit highlights</summary>
@@ -88,7 +91,7 @@ The notebook contains saved outputs for the behavioral benchmark, DLA, intervent
 | Zero-ablation | Treat off-distribution zero-ablation cautiously; the mean-ablation control reduced the L11H0 shift from +0.0658 to +0.0013. |
 | Position-1 control | Corrected the operand corruption rule; the earlier positive reading was leakage. |
 | Operator patching | The original metric lacked a corrupt baseline, so the strong falsification claim is not established. |
-| Corpus-frequency result | The earlier ρ=+0.82 result is retracted; the corrected seven-target comparison was not significant. |
+| Corpus-frequency result | The earlier ρ=+0.82 result is retracted; the final raw-query collection reports no correlation, so the relationship remains unresolved. |
 | Candidate components | `10_mlp_out`, L9H9, and L10H2 remain exploratory; they are not a confirmed circuit. |
 
 See the [full audit trail](docs/audit_trail.md) for the entries and source values.
@@ -97,10 +100,11 @@ See the [full audit trail](docs/audit_trail.md) for the entries and source value
 
 ## Repository contents
 
-- `data/` — prompt scores, aggregate tables, and corpus summaries.
-- `docs/` — methodology, study limitations, literature mapping, research flow, and audit records.
+- `data/` — committed prompt scores, aggregate tables, and the artifact manifest.
+- `docs/` — claims ledger, methodology, limitations, literature map, research flow, and canonical audit record.
+- `index.html` — interactive research explorer for GitHub Pages.
 - `figures/` — generated SVGs and interactive notebook figures.
-- `notebooks/` — analysis notebook with saved outputs.
+- `notebooks/` — full-record notebook and Markdown export.
 - `paper/draft_paper.md` — manuscript draft.
 - `src/` — metric definitions, plotting, operator comparison, and corpus audit scripts.
 
