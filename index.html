@@ -18,18 +18,16 @@
     article,details.panel { background:var(--card); border:1px solid var(--line); border-radius:.8rem; padding:1rem 1.1rem; }
     .status { color:#7a4b00; font-weight:700; }
     .muted { color:var(--muted); }
-    .flow-row { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:1.25rem; margin:1rem 0; }
-    .flow-step { min-height:112px; position:relative; display:flex; flex-direction:column; justify-content:center; text-align:center; background:var(--card); border:1px solid var(--line); border-radius:.8rem; padding:.8rem; }
-    .flow-step:not(:last-child)::after { content:"→"; position:absolute; right:-1.12rem; top:50%; transform:translateY(-50%); color:var(--accent); font-size:1.25rem; font-weight:800; }
-    .flow-step strong { color:var(--accent); display:block; margin-bottom:.25rem; }
-    .flow-next { max-width:48rem; margin:1rem auto 0; padding:.75rem 1rem; border-left:4px solid #4b8b67; background:#edf5ef; border-radius:.4rem; }
+    .flow-line { display:flex; align-items:center; justify-content:space-between; gap:.55rem; margin:.45rem 0; padding:.7rem .85rem; border:1px solid var(--line); border-radius:.6rem; background:var(--card); font-size:.92rem; }
+    .flow-line strong { color:var(--accent); }
+    .flow-arrow { color:var(--accent); font-weight:800; }
     details { margin:1rem 0; }
     details summary { cursor:pointer; font-weight:700; color:var(--accent); }
     iframe { display:block; width:100%; height:620px; border:0; border-top:1px solid var(--line); margin-top:1rem; }
     table { width:100%; border-collapse:collapse; background:white; }
     th,td { text-align:left; vertical-align:top; padding:.65rem; border:1px solid var(--line); }
     footer { margin-top:2rem; color:var(--muted); font-size:.9rem; }
-    @media(max-width:760px) { .flow-row { grid-template-columns:repeat(2,minmax(0,1fr)); gap:.75rem; } .flow-step:not(:last-child)::after { content:none; } }
+    @media(max-width:760px) { .flow-line { justify-content:flex-start; flex-wrap:wrap; } }
     @media(max-width:600px) { header { padding:2rem 1.25rem; } iframe { height:500px; } }
   </style>
 </head>
@@ -54,22 +52,20 @@
     </section>
     <section id="flow">
       <h2>Research flow: from circuit tracing to an equal-operand effect</h2>
-      <p class="muted">Read each row from left to right, then continue to the next row.</p>
-      <div class="flow-row" aria-label="Research flow, stages one through five">
-        <div class="flow-step"><strong>1 · Hypothesis</strong>Addition-specific circuit</div>
-        <div class="flow-step"><strong>2 · Baseline</strong>Behavior vs. constant guess</div>
-        <div class="flow-step"><strong>3 · Attribution audit</strong>Correct DLA scale and bias</div>
-        <div class="flow-step"><strong>4 · Interventions</strong>Test candidate components</div>
-        <div class="flow-step"><strong>5 · Prompt structure</strong>Parity varies by target range</div>
+      <div class="flow-line" aria-label="Research flow, first line">
+        <span><strong>Hypothesis:</strong> addition circuit</span><span class="flow-arrow" aria-hidden="true">→</span>
+        <span>behavior baseline</span><span class="flow-arrow" aria-hidden="true">→</span>
+        <span>DLA audit</span><span class="flow-arrow" aria-hidden="true">→</span>
+        <span>intervention controls</span><span class="flow-arrow" aria-hidden="true">→</span>
+        <span>prompt and parity map</span>
       </div>
-      <div class="flow-row" aria-label="Research flow, stages six through ten">
-        <div class="flow-step"><strong>6 · Surviving pattern</strong>Equal-operand preference: +0.247; 6/7 targets</div>
-        <div class="flow-step"><strong>7 · Boundaries</strong>Formats, operators, connectors</div>
-        <div class="flow-step"><strong>8 · Corpus proxy</strong>Raw logs differ; no correlation test</div>
-        <div class="flow-step"><strong>9 · Candidate screen</strong>No circuit established</div>
-        <div class="flow-step"><strong>10 · Next study</strong>Test causal specificity on held-out prompts</div>
+      <div class="flow-line" aria-label="Research flow, second line">
+        <span><strong>Equal-operand effect:</strong> +0.247; 6/7 targets</span><span class="flow-arrow" aria-hidden="true">→</span>
+        <span>boundary checks</span><span class="flow-arrow" aria-hidden="true">→</span>
+        <span>corpus audit</span><span class="flow-arrow" aria-hidden="true">→</span>
+        <span>no circuit established</span><span class="flow-arrow" aria-hidden="true">→</span>
+        <span>causal follow-up</span>
       </div>
-      <p class="flow-next"><strong>Research direction:</strong> The audit narrowed the question from “Does GPT-2 Small use a general addition circuit?” to “What causes the measured, target-dependent equal-operand preference, and does it survive independent causal tests?”</p>
       <p><a href="docs/RESEARCH_FLOW.md">See the detailed evidence table</a> · <a href="docs/LITERATURE_MAP.md">See how prior work informs the methods</a>.</p>
     </section>
     <section id="figures">
