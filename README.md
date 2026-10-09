@@ -1,11 +1,22 @@
 <p align="center">
+  <img
+    src="https://upload.wikimedia.org/wikipedia/commons/d/d0/Google_Colaboratory_SVG_Logo.svg"
+    alt="Google Colab logo"
+    width="110"
+  />
+  <br><br>
   <a href="https://colab.research.google.com/github/anaykatiyar-lang/mechanistic_interpretability/blob/main/notebooks/00_full_record.ipynb">
     <img
-      src="https://upload.wikimedia.org/wikipedia/commons/d/d0/Google_Colaboratory_SVG_Logo.svg"
-      alt="Open notebook in Google Colab"
-      width="100"
+      src="https://colab.research.google.com/assets/colab-badge.svg"
+      alt="Open in Colab"
     />
   </a>
+</p>
+
+<h1 align="center">Arithmetic Probes in GPT-2 Small</h1>
+
+<p align="center">
+  <em>When GPT-2 sees 3 + 3 =, is it adding—or responding to a familiar pattern?</em>
 </p>
 
 <h1 align="center">Arithmetic Probes in GPT-2 Small</h1>
