@@ -16,4 +16,4 @@ For all seven targets, the raw joint count for the double string exceeds the mea
 
 The supplied raw export resolves the former absence of per-attempt logs. The historical `ρ=+0.82, p=0.023` result remains retracted. The earlier `ρ=+0.46` / `ρ=−0.14` correlations are retained as notebook analyses, separate from the descriptive summary reconstructed from this raw log.
 
-See [audit trail A26, A30, and A32](audit_trail.md) and the [data manifest](../data/MANIFEST.csv) for provenance.
+See [audit trail A26, A30, and A32](Audit_Trail.md) and the [data manifest](../data/MANIFEST.csv) for provenance.

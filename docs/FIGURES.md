@@ -13,4 +13,4 @@ Regenerate the SVG figures with `python src/plot_heatmaps.py`; the manuscript ve
 
 ## Activation patching and attention
 
-Interactive figures are saved HTML artifacts for inspection. Attention patterns describe where a head attends; they do not alone demonstrate causal routing or arithmetic specificity. In particular, the L9H9 path-patching result remains unverified (see [audit trail A12](audit_trail.md#a12-invalid-path-patching-l9h9)).
+Interactive figures are saved HTML artifacts for inspection. Attention patterns describe where a head attends; they do not alone demonstrate causal routing or arithmetic specificity. In particular, the L9H9 path-patching result remains unverified (see [audit trail A12](Audit_Trail.md#a12-invalid-path-patching-l9h9)).

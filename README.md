@@ -50,7 +50,7 @@ Explore the evidence and methods:
 - [Methodology](docs/METHODOLOGY.md)
 - [Limitations](docs/LIMITATIONS.md)
 - [Research flow](docs/RESEARCH_FLOW.md)
-- [Audit trail](docs/audit_trail.md)
+- [Audit trail](docs/Audit_Trail.md)
 - [Interactive research explorer](index.html)
 
 ## Visual evidence
