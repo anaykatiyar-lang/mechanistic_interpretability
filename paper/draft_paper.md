@@ -7,7 +7,7 @@ Independent Researcher
 
 ## Abstract
 
-We tested whether GPT-2 Small (124M parameters) uses a general addition-specific mechanism on simple decimal addition prompts. The evaluated suite does not establish such a mechanism: top-1 accuracy was 2/32 (6.25%) on the held-out zero-shot cohort, compared with 8/32 (25%) for its best constant guess. Across the 79-cell addition grid, parity predicted the sign of the measured logit difference in 68/79 cells, but the pattern was concentrated at sums ≤13 (63/64) and weak at sums ≥14 (5/15); cells share target sums and are not independent. A target-dependent equal-operand preference appears in the digit-addition scan (mean advantage +0.2474 across seven targets; exact sign-flip p = 0.03125; 95% target-bootstrap interval [+0.0738, +0.4374]), but its mechanism is unresolved. Corrected attribution accounts for final LayerNorm scaling and unembedding bias. The archived raw corpus log contains 79 requests and no errors; its no-floor summary shows positive joint log ratios at all seven targets and mixed conditional ratios. No association test was run; earlier correlation summaries are historical and the corpus-frequency relationship remains unresolved. These results do not establish a universal operator-blind mechanism or the absence of arithmetic-related representations in GPT-2 Small.
+We tested whether GPT-2 Small (124M parameters) uses a general addition-specific mechanism on simple decimal addition prompts. The evaluated suite does not establish such a mechanism: top-1 accuracy was 2/32 (6.25%) on the held-out zero-shot cohort, compared with 8/32 (25%) for its best constant guess. Across the 79-cell addition grid, parity predicted the sign of the measured logit difference in 68/79 cells, but the pattern was concentrated at sums ≤13 (63/64) and weak at sums ≥14 (5/15); cells share target sums and are not independent. A target-dependent equal-operand pattern is present in the saved digit-addition scores (mean advantage +0.2474 across seven targets; exact sign-flip p = 0.03125; 95% target-bootstrap interval [+0.0738, +0.4374]), but the estimate is sensitive to target and control choices: sign-test and neighbor-token exclusion p-values are both 0.125. Corrected attribution accounts for final LayerNorm scaling and unembedding bias. The archived raw corpus log contains 79 requests and no errors; its no-floor summary shows positive joint log ratios at all seven targets and mixed conditional ratios. No association test was run; earlier correlation summaries are historical and the corpus-frequency relationship remains unresolved. These results do not establish a universal operator-blind mechanism or the absence of arithmetic-related representations in GPT-2 Small.
 
 ---
 
@@ -109,19 +109,19 @@ We conducted a dense scan across all even target sums $T \in [4, 16]$, evaluatin
 
 **Table 3: Dense scan metrics across even target sums.**
 
-| Target ($T$) | Double Prompt | Ordered Control Prompts ($n$) | Double Score | Control Mean | Advantage | Normalized $adv/\text{SD}$ |
-|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-| **4** | `2 + 2 =` | 2 | +0.251 | +0.203 | +0.049 | +0.29 |
-| **6** | `3 + 3 =` | 4 | +0.230 | +0.213 | +0.017 | +0.13 |
-| **8** | `4 + 4 =` | 6 | +0.606 | +0.315 | **+0.291** | **+3.31** |
-| **10** | `5 + 5 =` | 8 | +0.647 | +0.113 | **+0.535** | **+9.54** |
-| **12** | `6 + 6 =` | 6 | +0.401 | +0.236 | **+0.165** | **+1.63** |
-| **14** | `7 + 7 =` | 4 | -0.238 | -0.232 | -0.006 | -0.12 |
-| **16** | `8 + 8 =` | 2 | +0.719 | +0.037 | **+0.682** | **+10.83** |
+| Target ($T$) | Double Prompt | Ordered Control Prompts ($n$) | Double Score | Control Mean | Advantage |
+|:---:|:---:|:---:|:---:|:---:|:---:|
+| **4** | `2 + 2 =` | 2 | +0.251 | +0.203 | +0.049 |
+| **6** | `3 + 3 =` | 4 | +0.230 | +0.213 | +0.017 |
+| **8** | `4 + 4 =` | 6 | +0.606 | +0.315 | **+0.291** |
+| **10** | `5 + 5 =` | 8 | +0.647 | +0.113 | **+0.535** |
+| **12** | `6 + 6 =` | 6 | +0.401 | +0.236 | **+0.165** |
+| **14** | `7 + 7 =` | 4 | -0.238 | -0.232 | -0.006 |
+| **16** | `8 + 8 =` | 2 | +0.719 | +0.037 | **+0.682** |
 
 These digit+digit values can be recomputed from [`data/current/doubles_scan_scores.csv`](../data/current/doubles_scan_scores.csv), which contains all 39 double and ordered-control prompt scores. The format-level means are in [`data/current/variance_scaling.csv`](../data/current/variance_scaling.csv); prior rounded values are summarized in [audit entry A23](../docs/audit_trail.md#a23-doubles-analyses). In the digit+digit summary, advantages are positive at 8, 10, 12, and 16 and near zero at 4, 6, and 14; this does not establish null effects across all formats. Format-specific mean double/control scores changed for targets 4, 6, and 14 while their advantages remained effectively unchanged. The formatted prompt-level scores needed to independently recompute all three formats' pooled SDs are not exported.
 
-Across the seven target-level advantages, the mean is +0.2474. The exact two-sided sign-flip test gives p = 0.03125, and a 10,000-resample target bootstrap (seed 20261008) gives a 95% percentile interval [+0.0738, +0.4374]. The inference unit is the target level; these results do not establish generalization beyond the tested grid.
+Across the seven target-level advantages, the mean is +0.2474. The exact two-sided sign-flip test gives p = 0.03125, and a 10,000-resample target bootstrap (seed 20261008) gives a 95% percentile interval [+0.0738, +0.4374]. Six of seven targets are positive (two-sided sign test p = 0.125), leave-one-target-out sign-flip values are 0.03125 or 0.0625, and excluding controls with operands T−1 or T+1 leaves six targets with mean +0.2561 and p = 0.125. The inference unit is the target level; these results do not establish generalization beyond the tested grid.
 
 ### 4.2 Invariance to Lexical and Format Variations
 To test whether the doubling effect is driven by token-level repetition of identical surface strings, we evaluated cross-format variants: digit+word (`4 + four =`) and word+word (`four + four =`).
@@ -140,7 +140,7 @@ Paired comparisons use the seven matched target levels. Only digit+digit versus 
 
 ### 4.3 Exploratory Candidate-Component Screen
 
-The clean-rerun component screen uses discovery target sums 4, 6, 10, 12, and 16. It names `10_mlp_out`, L9H9, and L10H2 as candidates for follow-up, not as a confirmed circuit. For these candidates, one-sided causal tests have raw p = 0.03125 but one-sided FDR q = 0.09375; two-sided FDR q = 0.15. No nominated component passes q < 0.05.
+The clean-rerun component screen uses discovery target sums 4, 6, 10, 12, and 16. It names `10_mlp_out`, L9H9, and L10H2 as candidates for follow-up, not as a confirmed circuit. The candidate adjustment family contains 12 components. For the nominated candidates, one-sided causal tests have raw p = 0.03125 but one-sided FDR q = 0.09375; two-sided FDR q = 0.15. With five discovery targets, the minimum one-sided exact p is 1/32 = 0.03125, so the screen has limited resolution and a null finding is compatible with low power. No nominated component passes q < 0.05.
 
 Activation patching reports modest, variable recovery. In the exploratory transfer check, joint ablation lowers the advantage at target 8 and raises it at target 14. Across the prospective range 24–36, the signed contrast change is negative at five targets and positive at two; the clean contrasts at targets 26 and 34 are already negative. The transfer is exploratory, and filler prompts also show effects. Target-level completeness ratios vary and become unstable when the full effect is small, so no aggregate removal fraction is used as a headline result.
 
@@ -171,7 +171,7 @@ We evaluated all double and control prompts across 5 operator configurations, tr
 ### Operator inference and interpretation
 The supplied clean-rerun export contains matched target-level means for all five strings. Prompt-level operator scores are not included. The figure and table use those seven-target means, not the older aggregate adv/SD summary.
 
-The paired plus-versus-other comparisons have Holm-adjusted $p=0.6875$. This does not show that the conditions are equivalent, and the same arithmetic sum token is scored under every string. Operator-position patching (A19) is a separate experiment and does not validate or invalidate these comparisons.
+At target 8, saved advantages for `and` (+0.321) and `then` (+0.344) equal or exceed plus (+0.291), a descriptive observation consistent with the effect not being addition-specific. The paired plus-versus-other comparisons have Holm-adjusted $p=0.6875$. This does not show that the conditions are equivalent, and the same arithmetic sum token is scored under every string. Operator-position patching (A19) is a separate experiment and does not validate or invalidate these comparisons.
 
 ---
 

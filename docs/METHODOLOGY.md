@@ -40,6 +40,9 @@ Evaluates equal addends (`a + a =`) against all valid single-digit non-double sp
 - Target tokens: `' 4'`, `' 6'`, `' 8'`, `' 10'`, `' 12'`, `' 14'`, `' 16'`.
 - Symmetric foils: $T - 1$ and $T + 1$.
 
+### 2.5 Exploratory Transfer Cohort
+The selected-component transfer analysis uses even targets $T\in\{24,26,28,30,32,34,36\}$. Each target has one equal-operand prompt and matched ordered unequal splits. Candidate components were selected in the earlier discovery analysis; this range is therefore exploratory transfer, not an independent confirmation. The reported signed advantage change is negative at five targets and positive at two. The unablated equal-operand contrasts at targets 26 and 34 are negative.
+
 ---
 
 ## 3. Mathematical Definitions of Metrics
@@ -71,7 +74,7 @@ $$\text{adv}/\text{SD} = \frac{\overline{\text{Advantage}}}{s_{\text{pooled}}}$$
 
 ### 3.4 Target-level inference
 
-The digit+digit primary result uses the seven even target levels as its inference units. The exact sign-flip test enumerates all $2^7$ sign assignments and uses a two-sided tail probability. The percentile bootstrap resamples the seven target-level advantages with replacement for 10,000 draws (seed 20261008). The format and operator comparisons pair values by target and apply Holm correction within the reported comparison families. These tests characterize the fixed seven-target set; they do not make prompt instances or target levels into independent model replications.
+The digit+digit primary result uses the seven even target levels as its inference units. The exact sign-flip test enumerates all $2^7$ sign assignments and uses a two-sided tail probability. The percentile bootstrap resamples the seven target-level advantages with replacement for 10,000 draws (seed 20261008). A neighbor-token sensitivity removes unequal controls containing either operand $T-1$ or $T+1$; target 4 then has no eligible controls, leaving six target contrasts. The format and operator comparisons pair values by target and apply Holm correction within the reported comparison families. The format-family p-value is not adjusted across all project analyses. These tests characterize the fixed target sets; they do not make prompt instances or target levels into independent model replications.
 
 ## 4. Mechanistic Attribution and Intervention Protocols
 
@@ -111,7 +114,7 @@ The corpus analysis is intended as contextual evidence rather than a direct meas
 - **Index**: `v4_dolma-v1_7_llama`. Corpus-size claims require a source citation and are not used here.
 - **Queries**: Joint exact string (`"a + b = T"`) and prompt prefix (`"a + b ="`).
 - **Historical summary**: Earlier joint and conditional Spearman values are historical and are not results of the archived raw-query log.
-- **Current raw export**: The supplied clean-rerun CSV/JSONL contains 79 logged requests and zero failures. Its seven-target summary is archived and derived from the query log using the notebook aggregation. No association test or eligibility floor was applied. A distinct saved output reports 80 requests/one failure; it remains a separate run. See [CORPUS_AUDIT.md](CORPUS_AUDIT.md).
+- **Current raw export**: The supplied clean-rerun CSV/JSONL contains 79 logged requests and zero failures. Its seven-target summary is archived and derived from the query log using the notebook aggregation. No association test or eligibility floor was applied. See [CORPUS_AUDIT.md](CORPUS_AUDIT.md).
 - **Reliability and scope**: The raw collector leaves the floor unapplied pending prespecification. Dolma is a proxy rather than GPT-2's exact training data, so these counts cannot establish or exclude broader memorization or distributional effects.
 
 

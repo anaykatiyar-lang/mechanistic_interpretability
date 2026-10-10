@@ -179,13 +179,7 @@ The earlier summary below is historical only. Its per-query response files were 
 - **Candidate screen:** `10_mlp_out`, L9H9, and L10H2 are exploratory candidates. The component DLA screen reports q_FDR = 0.513; the two-sided causal screen reports q_FDR = 0.150. Neither passes q < .05.
 - **Transfer and specificity:** At targets 8 and 14, joint ablation lowers the target-level advantage at 8 and raises it at 14. In the prospective range 24–36, the signed advantage change is negative at five targets and positive at two; clean contrasts at 26 and 34 are negative. This remains exploratory transfer, not confirmation. Filler prompts also show effects.
 - **Completeness:** The target-level completeness ratios vary from 0.54 to 1.54; the largest ratio occurs where the full effect is small. Do not summarize these ratios as a stable circuit-level removal fraction.
-- **Original corpus log status:** At the time of this record, raw per-request files were not part of the repository. The supplied 79/0 raw CSV/JSONL and reconstructed no-floor summary are now archived under `data/current/` (A32). A separate 80/1 output remains distinct. Neither collector applies a floor or reports an association test; prior correlations remain historical. See [CORPUS_AUDIT.md](CORPUS_AUDIT.md).
-
-## A31. Separate corpus collector output
-- **Source:** A separately saved corpus collector output.
-- **Observed output:** 80 query attempts and 1 failed attempt.
-- **Boundary:** The archived clean-rerun log has 79 attempts and zero errors; it does not identify the extra failed attempt in this separate output. Keep the outputs distinct. The corpus-frequency relationship remains unresolved because neither run reports a prespecified association analysis.
-- **Current status:** The request/response files for the 79/0 run are now archived, superseding the former statement that no raw per-attempt log was available. The separate 80/1 output is retained as a distinct provenance record.
+- **Original corpus log status:** At the time of this record, raw per-request files were not part of the repository. The supplied raw CSV/JSONL and reconstructed no-floor summary are now archived under `data/current/` (A32). No eligibility floor or association test was applied to this export; prior correlation results are historical. See [CORPUS_AUDIT.md](CORPUS_AUDIT.md).
 
 ## A32. Supplied clean-rerun exports integrated into canonical data
 - **Source:** Clean-rerun CSV/JSONL outputs. Canonical outputs are stored once under `data/current/`; row counts and SHA-256 digests are in `data/MANIFEST.csv`.
@@ -194,7 +188,9 @@ The earlier summary below is historical only. Its per-query response files were 
 - **Format inference:** Digit+digit versus digit+word paired difference −0.2189595, raw p = 0.015625, Holm p = 0.046875. Other format contrasts have Holm p = 0.21875. The contrast is target-level and does not establish general invariance.
 - **Operator inference:** Plus-versus-other paired Holm p = 0.6875 for each comparison. This is failure to detect a difference, not evidence of equivalence.
 - **Candidate causal screen:** For nominated components, one-sided raw p = 0.03125 each, but one-sided FDR q = 0.09375; two-sided FDR q = 0.15. No nominated component passes q < 0.05. Prospective-range signed advantage change decreases at five targets and increases at two; clean advantages at targets 26 and 34 are already negative. These outputs do not establish a circuit.
-- **Corpus export:** Raw CSV and JSONL contain 79 request attempts, 0 errors, and 79 HTTP 200 responses. A seven-target no-floor summary is reconstructed from the raw log using notebook cell 147. Double joint counts exceed mean ordered-control joint counts for all seven targets; conditional log ratios vary in sign. No association test or eligibility floor was applied. A separate saved 80/1 output remains a distinct run; its failed attempt is not found in this log. Historical correlations remain historical and `ρ=+0.82, p=0.023` remains retracted.
+- **Inference sensitivity added to manuscript:** The seven-target primary sign-flip result (mean +0.2473847, p = 0.03125) is accompanied by the sign test (6/7 positive, p = 0.125), leave-one-target-out tests (p = 0.03125 or 0.0625), and the neighbor-operand exclusion check (six eligible targets, mean +0.256077, exact sign-flip p = 0.125; target 4 has no retained controls). These checks are sensitivity analyses and do not change the saved measurements.
+- **Candidate-screen scope clarified:** The discovery cohort contains five targets; the FDR adjustment family contains 12 nominated components. The prospective transfer cohort is even targets 24, 26, 28, 30, 32, 34, and 36. Its selected-component results are exploratory and not independent confirmation.
+- **Corpus export:** Raw CSV and JSONL contain 79 request attempts, 0 errors, and 79 HTTP 200 responses. A seven-target no-floor summary is reconstructed from the raw log using notebook cell 147. Double joint counts exceed mean ordered-control joint counts for all seven targets; conditional log ratios vary in sign. No association test or eligibility floor was applied. Historical correlations remain historical and `ρ=+0.82, p=0.023` remains retracted.
 - **Scope:** The supplied output exports do not include every format/operator prompt score. The single-operand control remains untested. No data values were silently reconciled.
 
 ## Summary of research-relevant corrections
@@ -210,5 +206,5 @@ The earlier summary below is historical only. Its per-query response files were 
 | A22 (invariance) | Yes (retired) |
 | A23, A24 (doubles design and tokenization) | Yes (v1 artifact retired; effect corroborated, not confirmed) |
 | A25 (M1) | Closed as a scoped limitation; cohort definitions separated |
-| A26, A30, A31, and A32 (frequency) | Earlier ρ = +0.82 discarded; 79/0 raw logs are archived; a separate 80/1 output remains distinct; no association is reported and the relationship remains unresolved |
+| A26, A30, and A32 (frequency) | Earlier ρ = +0.82 discarded; the 79-request raw log is archived; no association is reported and the relationship remains unresolved |
 | A04, A07–A10, A12–A13, A20, A29 | No change to the surviving claim; data-integrity limits retained |

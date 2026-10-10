@@ -27,7 +27,7 @@ The project began by testing whether simple addition prompts were supported by a
 general internal addition circuit. Subsequent causal, attributional, population,
 tokenization, and baseline analyses weakened several initial circuit hypotheses.
 
-The surviving phenomenon is a reproducible equal-operand/doubles advantage. The
+The saved prompt scores show a positive mean equal-operand/doubles contrast in the tested seven-target scan. The
 later experiments therefore investigate whether this phenomenon is specific to
 addition or reflects a more general computation associated with repeated operands.
 
@@ -5021,7 +5021,7 @@ The preceding analyses began with a search for a general addition circuit.
 
 That hypothesis did not survive the complete audit.
 
-However, a different phenomenon remained reproducible: prompts with equal operands
+However, a different pattern was present in the saved scores: prompts with equal operands
 such as `4 + 4 =` tended to produce a larger target-token preference than matched
 non-equal operands such as `5 + 3 =`, while preserving the same target and foil
 tokens.

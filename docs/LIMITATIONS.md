@@ -35,6 +35,10 @@ This document catalogs the exact scope limitations, tokenization artifacts, stat
    The committed grid has 79 cells and repeated target sums (for example, target 10 has five operand pairs). Parity predicts sign in 68/79 cells (86.1%) overall, 63/64 for sums ≤13, and 5/15 for sums ≥14. The cells are not independent; the lower-sum agreement should not be generalized across all sums. The earlier ~87% summary used a different row count and is retained only as history.
 3. **Dense Scan Sample Limitations**:
    Because each target sum has only one true double ($d+d$), target 4 ($2+2$) and target 16 ($8+8$) have only one unique control pair (evaluated in two operand orders). These estimates therefore have greater sampling uncertainty and should not be interpreted as equally precise across all target values.
+4. **Equal-Operand Inference Sensitivity**:
+   The primary mean is +0.2474 with exact sign-flip $p=0.03125$, but six of seven targets are positive (two-sided sign test $p=0.125$), leave-one-target-out sign-flip values are $0.03125$ or $0.0625$, and excluding unequal controls containing a target-neighbor operand leaves six targets with mean +0.2561 and $p=0.125$. The result is sensitive to the target/control definition and should be treated as exploratory.
+5. **Candidate-Screen Resolution**:
+   The causal screen uses five discovery targets and adjusts over 12 nominated components. The minimum attainable one-sided exact sign-flip $p$ is $1/32=0.03125$ before family correction. Thus, failure to pass the FDR threshold does not distinguish no component effect from limited power.
 
 ---
 
@@ -58,7 +62,7 @@ The external corpus-frequency analysis remains inconclusive. The seven-target co
 1. **Corpus Proxy Discrepancy**:
    Dolma v1.7 is used as a proxy for WebText. Because WebText is proprietary and unreleased, true pretraining co-occurrence statistics cannot be measured directly. The corpus-size figure is omitted until supported by a verified source.
 2. **Run distinction and analysis scope**:
-   The supplied clean-rerun CSV/JSONL logs contain 79 attempts with zero recorded failures; the seven-target no-floor summary is archived. A separate saved output reports 80 attempts and one failure, which is not identified by this log. Neither raw collection applies an eligibility floor or reports an association test. The corpus-frequency relationship therefore remains unresolved; see [CORPUS_AUDIT.md](CORPUS_AUDIT.md) and audit A30–A32.
+   The supplied clean-rerun CSV/JSONL logs contain 79 attempts with zero recorded failures; the seven-target no-floor summary is archived. The archived raw collection applies no eligibility floor and reports no association test, so the relationship between corpus counts and model effects remains unresolved; see [CORPUS_AUDIT.md](CORPUS_AUDIT.md) and audit A30 and A32.
 3. **Run 1 Artifact Retraction**:
    An initial analysis reported a correlation ($\rho = +0.82$, $p = 0.023$) between corpus frequency and model advantage. The statistic was retracted after the audit identified a query-format artifact. It must not be used as a finding.
 

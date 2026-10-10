@@ -14,6 +14,6 @@ For all seven targets, the raw joint count for the double string exceeds the mea
 | 14 | 854 | 2759 | 4 | 696.500 | 2703.500 | +0.0884 | +0.0796 |
 | 16 | 1083 | 3787 | 2 | 420.500 | 1952.000 | +0.4102 | +0.1225 |
 
-The supplied raw export resolves the former absence of per-attempt logs. A separate saved output reported 80 attempts and one failure; the extra failed attempt is not identifiable from this 79-attempt export, so the two runs remain distinct. The historical `ρ=+0.82, p=0.023` result remains retracted, and the earlier `ρ=+0.46` / `ρ=−0.14` summaries remain historical rather than results of this raw log.
+The supplied raw export resolves the former absence of per-attempt logs. The historical `ρ=+0.82, p=0.023` result remains retracted. The earlier `ρ=+0.46` / `ρ=−0.14` correlations are retained as notebook analyses, separate from the descriptive summary reconstructed from this raw log.
 
-See [audit trail A26, A30–A32](audit_trail.md) and the [data manifest](../data/MANIFEST.csv) for provenance.
+See [audit trail A26, A30, and A32](audit_trail.md) and the [data manifest](../data/MANIFEST.csv) for provenance.
